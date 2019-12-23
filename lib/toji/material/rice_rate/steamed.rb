@@ -18,7 +18,7 @@ module Toji
         end
 
 
-        DEFAULT = new(0.33, 0.41, 0.33)
+        DEFAULT = new(0.33, nil, 0.41, 0.33)
 
         def self.soaked_rate(val)
           @@rates.select{|r| r.soaked_rate==val}.first

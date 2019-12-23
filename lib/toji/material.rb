@@ -1,7 +1,7 @@
-require 'toji/rice'
-require 'toji/rice_rate'
-require 'toji/koji'
-require 'toji/koji_rate'
+require 'toji/material/rice'
+require 'toji/material/rice_rate'
+require 'toji/material/koji'
+require 'toji/material/koji_rate'
 
 module Toji
   module Material
