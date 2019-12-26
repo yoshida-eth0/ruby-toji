@@ -1,5 +1,5 @@
 module Toji
-  module Material
+  module Recipe
     module RiceRate
       module Base
         # 浸漬米吸水率

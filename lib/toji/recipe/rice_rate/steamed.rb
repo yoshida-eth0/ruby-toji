@@ -1,5 +1,5 @@
 module Toji
-  module Material
+  module Recipe
     module RiceRate
       class Steamed
         include Base
@@ -32,6 +32,7 @@ module Toji
           @@rates.select{|r| r.cooled_rate==val}.first
         end
       end
+
 
       def self.steamed(soaked_rate, before_steaming_rate, steamed_rate, cooled_rate)
         Steamed.new(soaked_rate, before_steaming_rate, steamed_rate, cooled_rate)
