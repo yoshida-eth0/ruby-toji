@@ -1,7 +1,7 @@
 require 'toji'
 require 'terminal-table'
 
-recipe = Toji::Recipe::ThreeStepMashing.new(Toji::Material::Yeast::RedStar, 2000)
+recipe = Toji::Recipe::ThreeStepMashing.new(Toji::Ingredient::Yeast::RedStar, 2000)
 
 table = Terminal::Table.new do |t|
   t << [""] + recipe.class::STEP_NAMES

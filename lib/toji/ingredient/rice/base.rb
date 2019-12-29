@@ -1,5 +1,5 @@
 module Toji
-  module Material
+  module Ingredient
     module Rice
       module Base
         # 白米

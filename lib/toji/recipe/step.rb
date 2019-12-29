@@ -6,8 +6,8 @@ module Toji
       attr_reader :water
 
       def initialize(rice, koji, water)
-        @rice = Material::Rice::Expected.create(rice)
-        @koji = Material::Koji::Expected.create(koji)
+        @rice = Ingredient::Rice::Expected.create(rice)
+        @koji = Ingredient::Koji::Expected.create(koji)
         @water = water.to_f
       end
 

@@ -1,6 +1,6 @@
 require "toji/version"
 
-require 'toji/material'
+require 'toji/ingredient'
 require 'toji/recipe'
 
 module Toji

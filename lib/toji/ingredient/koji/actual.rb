@@ -1,5 +1,5 @@
 module Toji
-  module Material
+  module Ingredient
     module Koji
       class Actual
         include Base

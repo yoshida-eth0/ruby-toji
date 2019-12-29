@@ -1,5 +1,5 @@
 module Toji
-  module Material
+  module Ingredient
     module Rice
       module ExpectedSteamable
         def soaking_water

@@ -1,11 +1,11 @@
-require 'toji/material/koji/base'
-require 'toji/material/koji/expected_fermentable'
-require 'toji/material/koji/expected'
-require 'toji/material/koji/actual_fermentable'
-require 'toji/material/koji/actual'
+require 'toji/ingredient/koji/base'
+require 'toji/ingredient/koji/expected_fermentable'
+require 'toji/ingredient/koji/expected'
+require 'toji/ingredient/koji/actual_fermentable'
+require 'toji/ingredient/koji/actual'
 
 module Toji
-  module Material
+  module Ingredient
     module Koji
       def self.expected(raw, rice_rate: Recipe::RiceRate::Cooked::DEFAULT, koji_rate: Recipe::KojiRate::DEFAULT)
         Expected.new(raw, rice_rate: rice_rate, koji_rate: koji_rate)

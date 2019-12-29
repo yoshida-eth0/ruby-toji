@@ -1,5 +1,5 @@
 module Toji
-  module Material
+  module Ingredient
     module Yeast
       # RedStar酵母
       #

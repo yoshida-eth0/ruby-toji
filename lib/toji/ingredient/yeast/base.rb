@@ -1,5 +1,5 @@
 module Toji
-  module Material
+  module Ingredient
     module Yeast
       module Base
         # 1リットル醸造のために必要な酵母の量

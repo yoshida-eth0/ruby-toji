@@ -1,11 +1,11 @@
-require 'toji/material/rice/base'
-require 'toji/material/rice/expected_steamable'
-require 'toji/material/rice/expected'
-require 'toji/material/rice/actual_steamable'
-require 'toji/material/rice/actual'
+require 'toji/ingredient/rice/base'
+require 'toji/ingredient/rice/expected_steamable'
+require 'toji/ingredient/rice/expected'
+require 'toji/ingredient/rice/actual_steamable'
+require 'toji/ingredient/rice/actual'
 
 module Toji
-  module Material
+  module Ingredient
     module Rice
       def self.expected(raw, rice_rate: Recipe::RiceRate::Cooked::DEFAULT)
         Expected.new(raw, rice_rate: rice_rate)
