@@ -12,7 +12,7 @@ module Toji
           @steaming_water = steaming_water
           @steamed = steamed
           @cooled = cooled
-          @tanikoji = tanekoji
+          @tanekoji = tanekoji
           @dekoji = dekoji
         end
       end

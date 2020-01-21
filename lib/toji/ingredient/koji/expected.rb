@@ -39,7 +39,7 @@ module Toji
 
         def *(other)
           if Integer===other || Float===other
-            self.class.new(@raw * other, rice_rate: @rice_rate, koji_rate: @koji_rate)
+            Expected.new(@raw * other, rice_rate: @rice_rate, koji_rate: @koji_rate)
           else
             x, y = other.coerce(self)
             x * y
