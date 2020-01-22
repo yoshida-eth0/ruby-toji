@@ -1,5 +1,5 @@
 module Toji
-  module Progress
+  module Product
     class Job
       HOUR = 60 * 60
       DAY = 24 * HOUR
@@ -86,7 +86,7 @@ module Toji
         end
       end
 
-      def baume_display
+      def display_baume
         if @baume || @nihonshudo
           b = baume
           if b<3.0
@@ -94,6 +94,14 @@ module Toji
           else
             b
           end
+        end
+      end
+
+      def display_time(format="%m/%d %H:%M")
+        if @time
+          time.strftime(format)
+        else
+          Time.at(elapsed_time).strftime(format)
         end
       end
 
@@ -142,6 +150,7 @@ module Toji
         {
           time: time,
           elapsed_time: elapsed_time,
+          display_time: display_time,
           id: id,
           preset_temp: preset_temp,
           before_temp: before_temp,

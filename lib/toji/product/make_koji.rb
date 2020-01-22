@@ -1,5 +1,5 @@
 module Toji
-  module Progress
+  module Product
     class MakeKoji
       extend JobAccessor
 

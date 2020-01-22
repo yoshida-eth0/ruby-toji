@@ -1,7 +1,6 @@
 module Toji
-  module Progress
-    class Moromi
-      extend JobAccessor
+  module Product
+    class Moromi < Base
 
       TEMPLATES = {
         default: [
@@ -170,25 +169,16 @@ module Toji
       job_reader :naka
       job_reader :tome
 
-      def initialize(jobs=[])
-        @jobs = Jobs.new(jobs)
-      end
-
-      def add(job)
-        @jobs << job
-        self
-      end
-
-      def jobs
-        @jobs.to_a
+      def initialize(jobs=[], date_line: 0)
+        super(jobs, date_line: date_line)
       end
 
       def days
-        (jobs.last.elapsed_time.to_f / Job::DAY).ceil + 1
+        (to_a.last.elapsed_time.to_f / Job::DAY).ceil + 1
       end
 
       def moromi_days
-        tome = @jobs[:tome]
+        tome = self[:tome]
         if tome
           tome_day = (tome.elapsed_time.to_f / Job::DAY).floor + 1
           days - tome_day
@@ -198,9 +188,9 @@ module Toji
       def day_labels
         texts = Array.new(days)
         [:soe, :naka, :tome].each {|id|
-          j = jobs.select{|j| j.id==id}.first
+          j = select{|j| j.id==id}.first
           if j
-            i = ((j.elapsed_time + @jobs.day_offset) / Job::DAY.to_f).floor
+            i = ((j.elapsed_time + day_offset) / Job::DAY.to_f).floor
             texts[i] = id
           end
         }
@@ -221,25 +211,8 @@ module Toji
         }
       end
 
-      def plot_data
-        @jobs.plot_data
-      end
-
-      def plot
-        Plotly::Plot.new(
-          data: plot_data,
-          layout: {
-            xaxis: {
-              dtick: Job::DAY,
-              tickvals: days.times.map{|d| d*Job::DAY},
-              ticktext: day_labels
-            }
-          }
-        )
-      end
-
-      def bmd_plot_data
-        @jobs.bmd_plot_data
+      def progress
+        Graph::Progress.new(self)
       end
 
       def bmd_plot
@@ -265,7 +238,7 @@ module Toji
       end
 
       def ab(coef=1.5)
-        Graph::Ab.new(coef).actual(@jobs)
+        Graph::Ab.new(coef).actual(self)
       end
 
       def self.template(key=:default)

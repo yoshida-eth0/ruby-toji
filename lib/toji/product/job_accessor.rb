@@ -1,5 +1,5 @@
 module Toji
-  module Progress
+  module Product
     module JobAccessor
       def job_reader(*args)
         args.each {|arg|

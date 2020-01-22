@@ -9,8 +9,8 @@ module Toji
         @expects = []
       end
 
-      def actual(jobs, name=:actual)
-        data = jobs.map{|j| [j.time || j.elapsed_time + jobs.day_offset, j.alcohol, j.baume]}.select{|a| a[1] && a[2]}
+      def actual(moromi, name=:actual)
+        data = moromi.map{|j| [j.time || j.elapsed_time + moromi.day_offset, j.alcohol, j.baume]}.select{|a| a[1] && a[2]}
         xs = data.map{|a| a[1]}
         ys = data.map{|a| a[2]}
         texts = data.map{|a| "%s<br />alc=%s, be=%s" % a}

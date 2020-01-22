@@ -1,7 +1,6 @@
 module Toji
-  module Progress
-    class Shubo
-      extend JobAccessor
+  module Product
+    class Shubo < Base
 
       TEMPLATES = {
         default: [
@@ -115,39 +114,19 @@ module Toji
       job_reader :wake
 
       def initialize(jobs=[])
-        @jobs = Jobs.new(jobs)
-      end
-
-      def add(job)
-        @jobs << job
-        self
-      end
-
-      def jobs
-        @jobs.to_a
+        super(jobs)
       end
 
       def days
-        (jobs.last.elapsed_time.to_f / Job::DAY).ceil + 1
+        (to_a.last.elapsed_time.to_f / Job::DAY).ceil + 1
       end
 
-      def plot_data
-        @jobs.plot_data
+      def day_labels
+        days.times.map(&:succ)
       end
 
-      def plot
-        _days = days
-
-        Plotly::Plot.new(
-          data: plot_data,
-          layout: {
-            xaxis: {
-              dtick: 24*60*60,
-              tickvals: _days.times.map{|d| d*Job::DAY},
-              ticktext: (1.._days).to_a
-            }
-          }
-        )
+      def progress
+        Graph::Progress.new(self)
       end
 
       def self.template(key=:default)
