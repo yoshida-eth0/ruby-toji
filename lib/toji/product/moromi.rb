@@ -215,26 +215,8 @@ module Toji
         Graph::Progress.new(self)
       end
 
-      def bmd_plot
-        data = [bmd_plot_data]
-        max_moromi_day = moromi_days || 0
-        max_moromi_day = [max_moromi_day, 14].max
-
-        Plotly::Plot.new(
-          data: data,
-          layout: {
-            xaxis: {
-              title: "Moromi day",
-              dtick: Job::DAY,
-              range: [1, max_moromi_day].map{|d| d*Job::DAY},
-              tickvals: days.times.map{|d| d*Job::DAY},
-              ticktext: days.times.map(&:succ)
-            },
-            yaxis: {
-              title: "BMD",
-            }
-          }
-        )
+      def bmd
+        Graph::Bmd.new.actual(self)
       end
 
       def ab(coef=1.5)

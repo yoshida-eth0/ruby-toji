@@ -65,16 +65,16 @@ module Toji
         @_arr.each(&block)
       end
 
-      def bmd_plot_data
-        _normalization
+      #def bmd_plot_data
+      #  _normalization
 
-        data = map{|j| [j.time || j.elapsed_time + day_offset, j.moromi_time, j.moromi_day, j.baume, j.bmd]}.select{|a| a[1] && a[4]}
-        xs = data.map{|a| a[1]}
-        ys = data.map{|a| a[4]}
-        texts = data.map{|a| "%s<br />moromi day=%d, be=%s, bmd=%s" % [a[0], a[2], a[3], a[4]]}
+      #  data = map{|j| [j.time || j.elapsed_time + day_offset, j.moromi_time, j.moromi_day, j.baume, j.bmd]}.select{|a| a[1] && a[4]}
+      #  xs = data.map{|a| a[1]}
+      #  ys = data.map{|a| a[4]}
+      #  texts = data.map{|a| "%s<br />moromi day=%d, be=%s, bmd=%s" % [a[0], a[2], a[3], a[4]]}
 
-        {x: xs, y: ys, text: texts, name: :bmd}
-      end
+      #  {x: xs, y: ys, text: texts, name: :bmd}
+      #end
     end
   end
 end

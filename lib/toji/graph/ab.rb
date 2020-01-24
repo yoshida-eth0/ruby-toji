@@ -10,26 +10,26 @@ module Toji
       end
 
       def actual(moromi, name=:actual)
-        data = moromi.map{|j| [j.time || j.elapsed_time + moromi.day_offset, j.alcohol, j.baume]}.select{|a| a[1] && a[2]}
-        xs = data.map{|a| a[1]}
-        ys = data.map{|a| a[2]}
-        texts = data.map{|a| "%s<br />alc=%s, be=%s" % a}
-        @actuals << {x: xs, y: ys, text: texts, name: name}
-
+        @actuals << [moromi, name]
         self
       end
 
       def expect(alcohol, nihonshudo)
         @expects << [alcohol.to_f, nihonshudo.to_f]
-
         self
       end
 
       def data
         result = []
 
-        @actuals.each {|a|
-          result << a
+        @actuals.each {|moromi, name|
+          data = moromi.map{|j| [j.time || j.elapsed_time + moromi.day_offset, j.alcohol, j.baume]}.select{|a| a[1] && a[2]}
+
+          xs = data.map{|a| a[1]}
+          ys = data.map{|a| a[2]}
+          texts = data.map{|a| "%s<br />alc=%s, be=%s" % a}
+
+          result << {x: xs, y: ys, text: texts, name: name}
         }
 
         @expects.each {|alcohol, nihonshudo|
@@ -44,18 +44,22 @@ module Toji
         result
       end
 
+      def min_baume
+        data.map{|h| h[:y].min}.min || 0
+      end
+
+      def max_baume
+        data.map{|h| h[:y].max}.max || 0
+      end
+
       def plot
-        d = data
+        #_min_baume = [min_baume-1, 0].min
+        _min_baume = 0
 
-        #min_baume = d.map{|h| h[:y].min}.min || 0
-        #min_baume = [min_baume-1, 0].min
-        min_baume = 0
-
-        max_baume = d.map{|h| h[:y].max}.max || 0
-        max_baume = [max_baume+1, 10].max
+        _max_baume = [max_baume+1, 10].max
 
         Plotly::Plot.new(
-          data: d,
+          data: data,
           layout: {
             xaxis: {
               title: "Alcohol",
@@ -65,7 +69,7 @@ module Toji
             yaxis: {
               title: "Baume",
               dtick: 1,
-              range: [min_baume, max_baume],
+              range: [_min_baume, _max_baume],
             }
           }
         )
