@@ -50,6 +50,22 @@ module Toji
         result
       end
 
+      def annotations
+        @product.select{|j| j.id}.map {|j|
+          {
+            x: j.elapsed_time + @product.day_offset,
+            y: j.temps.first || 0,
+            xref: 'x',
+            yref: 'y',
+            text: j.id,
+            showarrow: true,
+            arrowhead: 7,
+            ax: 0,
+            ay: -40
+          }
+        }
+      end
+
       def plot
         Plotly::Plot.new(
           data: data,
@@ -58,7 +74,8 @@ module Toji
               dtick: Product::Job::DAY,
               tickvals: @product.days.times.map{|d| d*Product::Job::DAY},
               ticktext: @product.day_labels
-            }
+            },
+            annotations: annotations,
           }
         )
       end

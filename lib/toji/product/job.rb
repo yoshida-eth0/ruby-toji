@@ -13,8 +13,7 @@ module Toji
       attr_accessor :time
       attr_accessor :elapsed_time
       attr_accessor :id
-      attr_accessor :before_temp
-      attr_accessor :after_temp
+      attr_accessor :temps
 
       attr_accessor :preset_temp
       attr_accessor :room_temp
@@ -30,15 +29,14 @@ module Toji
       attr_accessor :note
 
       def initialize(
-        time: nil, elapsed_time: nil, id: nil, before_temp: nil, after_temp: nil,
+        time: nil, elapsed_time: nil, id: nil, temps: nil,
         preset_temp: nil, room_temp: nil, room_psychrometry: nil,
         baume: nil, nihonshudo: nil, acid: nil, amino_acid: nil, alcohol: nil,
         warming: nil, note: nil)
         @time = time
         @elapsed_time = elapsed_time
         @id = id
-        @before_temp = before_temp
-        @after_temp = after_temp
+        self.temps = temps
 
         @preset_temp = preset_temp
         @room_temp = room_temp
@@ -54,18 +52,8 @@ module Toji
         @note = note
       end
 
-      def temps
-        result = []
-
-        if @before_temp
-          result << @before_temp
-        end
-
-        if @after_temp
-          result << @after_temp
-        end
-
-        result
+      def temps=(val)
+        @temps = [val].flatten.select{|t| t}
       end
 
       def baume
@@ -153,8 +141,6 @@ module Toji
           display_time: display_time,
           id: id,
           preset_temp: preset_temp,
-          before_temp: before_temp,
-          after_temp: after_temp,
           temps: temps,
           room_temp: room_temp,
           room_psychrometry: room_psychrometry,

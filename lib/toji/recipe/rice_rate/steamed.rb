@@ -19,18 +19,6 @@ module Toji
 
 
         DEFAULT = new(0.33, nil, 0.41, 0.33)
-
-        def self.soaked_rate(val)
-          @@rates.select{|r| r.soaked_rate==val}.first
-        end
-
-        def self.steamed_rate(val)
-          @@rates.select{|r| r.steamed_rate==val}.first
-        end
-
-        def self.cooled_rate(val)
-          @@rates.select{|r| r.cooled_rate==val}.first
-        end
       end
 
 
