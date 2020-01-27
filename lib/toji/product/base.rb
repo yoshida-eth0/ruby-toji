@@ -23,6 +23,7 @@ module Toji
       end
 
       def <<(job)
+        job = Job.create(job)
         if job.id
           if @_hash[job.id]
             @_arr.delete(@_hash[job.id])

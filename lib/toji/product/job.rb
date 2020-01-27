@@ -120,6 +120,14 @@ module Toji
         end
       end
 
+      def expected_alcohol(target_alc, target_nihonshudo, coef)
+        _baume = baume
+
+        if _baume
+          target_alc - (_baume - target_nihonshudo * -0.1) * coef
+        end
+      end
+
       def warmings
         result = []
         if @warming & WARM_DAKI
@@ -154,6 +162,14 @@ module Toji
           bmd: bmd,
           note: note,
         }
+      end
+
+      def self.create(j)
+        if Job===j
+          j
+        else
+          new(**j.to_h)
+        end
       end
     end
   end
