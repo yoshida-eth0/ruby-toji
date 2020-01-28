@@ -166,46 +166,54 @@ module Toji
       job_reader :naka
       job_reader :tome
 
-      def initialize(jobs=[], date_line: 0)
+      def initialize(jobs=[], date_line: 0, day_labels: nil)
         super(jobs, date_line: date_line)
-      end
 
-      def days
-        (to_a.last.elapsed_time.to_f / Job::DAY).ceil + 1
+        if day_labels
+          @day_labels = [day_labels].flatten
+        end
       end
 
       def moromi_days
-        tome = self[:tome]
-        if tome
-          tome_day = (tome.elapsed_time.to_f / Job::DAY).floor + 1
-          days - tome_day
+        if @day_labels
+          days - @day_labels.length
+        else
+          tome = self[:tome]
+          if tome
+            tome_day = (tome.elapsed_time.to_f / Job::DAY).floor + 1
+            days - tome_day
+          end
         end
       end
 
       def day_labels
-        texts = Array.new(days)
-        [:soe, :naka, :tome].each {|id|
-          j = select{|j| j.id==id}.first
-          if j
-            i = ((j.elapsed_time + day_offset) / Job::DAY.to_f).floor
-            texts[i] = id
-          end
-        }
+        if @day_labels
+          @day_labels + moromi_days.times.map{|i| i+2}
+        else
+          texts = Array.new(days)
+          [:soe, :naka, :tome].each {|id|
+            j = select{|j| j.id==id}.first
+            if j
+              i = ((j.elapsed_time + day_offset) / Job::DAY.to_f).floor
+              texts[i] = id
+            end
+          }
 
-        soe_i = texts.index(:soe)
-        tome_i = texts.index(:tome)
-        moromi_day = 1
-        texts.map.with_index {|text,i|
-          if text
-            text
-          elsif !soe_i || i<soe_i
-            :moto
-          elsif !tome_i || i<tome_i
-            :odori
-          else
-            moromi_day += 1
-          end
-        }
+          soe_i = texts.index(:soe)
+          tome_i = texts.index(:tome)
+          moromi_day = 1
+          texts.map.with_index {|text,i|
+            if text
+              text
+            elsif !soe_i || i<soe_i
+              :moto
+            elsif !tome_i || i<tome_i
+              :odori
+            else
+              moromi_day += 1
+            end
+          }
+        end
       end
 
       def progress

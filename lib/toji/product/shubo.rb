@@ -114,10 +114,6 @@ module Toji
         super(jobs)
       end
 
-      def days
-        (to_a.last.elapsed_time.to_f / Job::DAY).ceil + 1
-      end
-
       def day_labels
         days.times.map(&:succ)
       end

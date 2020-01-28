@@ -78,6 +78,14 @@ module Toji
         super(jobs, date_line: date_line)
       end
 
+      def day_labels
+        days.times.map(&:succ)
+      end
+
+      def progress
+        Graph::Progress.new(self)
+      end
+
       def self.template(key=:default)
         new(TEMPLATES[key])
       end

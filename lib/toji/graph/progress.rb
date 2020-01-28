@@ -59,7 +59,7 @@ module Toji
             yref: 'y',
             text: j.id,
             showarrow: true,
-            arrowhead: 7,
+            arrowhead: 1,
             ax: 0,
             ay: -40
           }
