@@ -2,6 +2,14 @@
 
 Management tools for brewing japanese sake.
 
+- Koji making recipe and weight estimation.
+- Koji making progress graph.
+- Step mashing recipe and weight estimation.
+- Shubo progress graph.
+- Moromi progress graph.
+- Moromi BMD graph.
+- Moromi A-B graph.
+
 
 ## Installation
 
@@ -26,7 +34,7 @@ TODO: Write usage instructions here
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/toji.
+Bug reports and pull requests are welcome on GitHub at https://github.com/yoshida-eth0/ruby-toji.
 
 ## License
 
