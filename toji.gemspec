@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Yoshida Tetsuya"]
   spec.email         = ["yoshida.eth0@gmail.com"]
 
-  spec.summary       = %q{}
-  spec.description   = %q{}
+  spec.summary       = %q{Management tools for brewing japanese sake.}
+  spec.description   = %q{Management tools for brewing japanese sake.}
   spec.homepage      = "https://github.com/yoshida-eth0/ruby-toji"
   spec.license       = "MIT"
 

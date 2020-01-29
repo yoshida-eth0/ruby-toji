@@ -2,8 +2,11 @@ module Toji
   module Graph
     class Progress
 
-      def initialize(product)
+      attr_accessor :enable_annotations
+
+      def initialize(product, enable_annotations: true)
         @product = product
+        @enable_annotations = enable_annotations
       end
 
       def data(keys=nil)
@@ -75,7 +78,7 @@ module Toji
               tickvals: @product.days.times.map{|d| d*Product::Job::DAY},
               ticktext: @product.day_labels
             },
-            annotations: annotations,
+            annotations: @enable_annotations ? annotations : [],
           }
         )
       end

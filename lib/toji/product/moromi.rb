@@ -216,8 +216,8 @@ module Toji
         end
       end
 
-      def progress
-        Graph::Progress.new(self)
+      def progress(enable_annotations: true)
+        Graph::Progress.new(self, enable_annotations: enable_annotations)
       end
 
       def bmd

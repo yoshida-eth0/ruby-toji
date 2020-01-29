@@ -4,7 +4,7 @@ module Toji
       def job_reader(*args)
         args.each {|arg|
           define_method(arg) {
-            @jobs[arg]
+            self[arg]
           }
         }
       end
