@@ -18,13 +18,15 @@ module Toji
       #]
 
       attr_reader :yeast
+      attr_reader :lactic_acid
       attr_reader :steps
 
-      def initialize(yeast_cls, total, template=@@template)
+      def initialize(yeast_cls, lactic_acid_cls, total, template=@@template)
         @total = total
         rate = total / template.map(&:weight_total).sum
 
         @yeast = yeast_cls.new(total)
+        @lactic_acid = lactic_acid_cls.new(total)
 
         @steps = template.map {|step|
           step * rate

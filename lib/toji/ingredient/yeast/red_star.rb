@@ -15,14 +15,8 @@ module Toji
 
         def initialize(total)
           @total = total
-        end
-
-        def yeast_rate
-          5.0 / 20.0
-        end
-
-        def water_rate
-          10.0
+          @yeast_rate = 5.0 / 20.0
+          @water_rate = 10.0
         end
       end
     end

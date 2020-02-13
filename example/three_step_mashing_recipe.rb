@@ -1,7 +1,7 @@
 require 'toji'
 require 'terminal-table'
 
-recipe = Toji::Recipe::ThreeStepMashing.new(Toji::Ingredient::Yeast::RedStar, 2000)
+recipe = Toji::Recipe::ThreeStepMashing.new(Toji::Ingredient::Yeast::RedStar, Toji::Ingredient::LacticAcid::WithoutShubo, 2000)
 
 table = Terminal::Table.new do |t|
   t << [""] + recipe.class::STEP_NAMES
@@ -9,7 +9,7 @@ table = Terminal::Table.new do |t|
   t << ["[原料]"]
   t << ["酵母(g)", recipe.yeast.yeast&.round(2)]
   t << ["酵母吸水", recipe.yeast.water&.round(2)]
-  t << ["乳酸(ml)"]
+  t << ["乳酸(ml)", recipe.lactic_acid.moto, recipe.lactic_acid.soe]
   t << ["掛米(g)"] + recipe.steps.map(&:rice).map(&:raw).map{|v| v&.round(2)}
   t << ["麹米(g)"] + recipe.steps.map(&:koji).map(&:raw).map{|v| v&.round(2)}
   t << ["汲水(ml)"] + recipe.steps.map(&:water).map{|v| v&.round(2)}

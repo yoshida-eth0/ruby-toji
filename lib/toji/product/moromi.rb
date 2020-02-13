@@ -165,6 +165,7 @@ module Toji
       job_reader :soe
       job_reader :naka
       job_reader :tome
+      job_reader :yodan
 
       def initialize(jobs=[], date_line: 0, day_labels: nil)
         super(jobs, date_line: date_line)
