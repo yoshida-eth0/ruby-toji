@@ -1,5 +1,5 @@
 module Toji
-  module Product
+  module Brew
     class Builder
 
       def initialize(cls)
@@ -20,8 +20,7 @@ module Toji
       end
 
       def build
-        data = Data.new(@records, @date_line)
-        @cls.new(data)
+        @cls.new(@records, @date_line)
       end
     end
   end

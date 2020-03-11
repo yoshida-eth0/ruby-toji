@@ -1,5 +1,5 @@
 module Toji
-  module Product
+  module Brew
     class StateRecord
       KEYS = [
         :time,

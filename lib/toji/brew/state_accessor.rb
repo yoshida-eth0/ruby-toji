@@ -1,5 +1,5 @@
 module Toji
-  module Product
+  module Brew
     module StateAccessor
       def state_reader(*args)
         args.each {|arg|

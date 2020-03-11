@@ -1,11 +1,11 @@
 module Toji
-  module Product
-    class Data
+  module Brew
+    class Base
       include Enumerable
+      extend StateAccessor
 
       attr_reader :day_offset
       attr_accessor :day_labels
-      attr_accessor :moromi_start_day
 
       def initialize(records, date_line)
         @date_line = date_line
@@ -56,6 +56,10 @@ module Toji
         ((@states.last.elapsed_time_with_offset.to_f + 1) / DAY).ceil
       end
 
+      def day_labels
+        days.times.map(&:succ)
+      end
+
       def [](mark)
         @hash[mark]
       end
@@ -66,6 +70,18 @@ module Toji
 
       def each(&block)
         @states.each(&block)
+      end
+
+      def self.create(records, date_line: 0)
+        if Base===records
+          records
+        else
+          builder.add(records).date_line(date_line).build
+        end
+      end
+
+      def self.builder
+        Builder.new(self)
       end
     end
   end

@@ -1,7 +1,7 @@
 require 'forwardable'
 
 module Toji
-  module Product
+  module Brew
     class State
       extend Forwardable
 
@@ -9,7 +9,7 @@ module Toji
       attr_accessor :time
       attr_accessor :day_label
       attr_reader :record
-      attr_reader :data
+      attr_reader :brew
 
       def_delegators :@record, :mark
       def_delegators :@record, :temps
@@ -24,10 +24,10 @@ module Toji
 
       def_delegators :@record, :has_keys
 
-      def initialize(elapsed_time, record, data)
+      def initialize(elapsed_time, record, brew)
         @elapsed_time = elapsed_time
         @record = record
-        @data = data
+        @brew = brew
       end
 
       def day
@@ -35,11 +35,11 @@ module Toji
       end
 
       def day_label
-        @data.day_labels[day - 1]
+        @brew.day_labels[day - 1]
       end
 
       def elapsed_time_with_offset
-        @elapsed_time + @data.day_offset
+        @elapsed_time + @brew.day_offset
       end
 
       def baume
@@ -78,11 +78,11 @@ module Toji
       end
 
       def moromi_day
-        _start_day = @data.moromi_start_day
+        _tome_day = @brew.moromi_tome_day
         _now_day = day
 
-        if _start_day && _start_day < _now_day
-          _now_day - _start_day + 1
+        if _tome_day && _tome_day < _now_day
+          _now_day - _tome_day + 1
         end
       end
 
