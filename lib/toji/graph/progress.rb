@@ -4,15 +4,14 @@ module Toji
 
       attr_accessor :enable_annotations
 
-      def initialize(product, enable_annotations: true)
-        @product = product
+      def initialize(rows, enable_annotations: true)
+        @rows = rows
         @enable_annotations = enable_annotations
       end
 
       def data(keys=nil)
-        data = @product.map(&:to_h).map(&:compact)
         if !keys
-          keys = data.map(&:keys).flatten.uniq
+          keys = @rows.map(&:has_keys).flatten.uniq
         end
 
         result = []
@@ -23,12 +22,13 @@ module Toji
           xs = []
           ys = []
           text = []
-          data.each {|h|
-            if h[key]
-              [h[key]].flatten.each_with_index {|v,i|
-                xs << h[:elapsed_time] + i + @product.day_offset
+          @rows.each {|r|
+            val = r.send(key)
+            if val
+              [val].flatten.each_with_index {|v,i|
+                xs << r.elapsed_time_with_offset + i
                 ys << v
-                text << h[:display_time]
+                text << r.display_time
               }
             end
           }
@@ -41,7 +41,7 @@ module Toji
           result << {x: xs, y: ys, text: text, name: key, line: {shape: line_shape}}
         }
 
-        if 0<@product.day_offset
+        if 0<rows.length && 0<@rows.first.day_offset
           result = result.map{|h|
             h[:x].unshift(0)
             h[:y].unshift(nil)
@@ -54,13 +54,13 @@ module Toji
       end
 
       def annotations
-        @product.select{|j| j.id}.map {|j|
+        @rows.select{|r| r.job.id}.map {|r|
           {
-            x: j.elapsed_time + @product.day_offset,
-            y: j.temps.first || 0,
+            x: r.elapsed_time_with_offset,
+            y: r.job.temps.first || 0,
             xref: 'x',
             yref: 'y',
-            text: j.id,
+            text: r.job..id,
             showarrow: true,
             arrowhead: 1,
             ax: 0,
@@ -75,8 +75,8 @@ module Toji
           layout: {
             xaxis: {
               dtick: Product::Job::DAY,
-              tickvals: @product.days.times.map{|d| d*Product::Job::DAY},
-              ticktext: @product.day_labels
+              tickvals: @rows.days.times.map{|d| d*Product::Job::DAY},
+              ticktext: @rows.day_labels
             },
             annotations: @enable_annotations ? annotations : [],
           }

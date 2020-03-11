@@ -1,10 +1,10 @@
 module Toji
   module Product
-    module JobAccessor
-      def job_reader(*args)
+    module StateAccessor
+      def state_reader(*args)
         args.each {|arg|
           define_method(arg) {
-            self[arg]
+            @data[arg]
           }
         }
       end
