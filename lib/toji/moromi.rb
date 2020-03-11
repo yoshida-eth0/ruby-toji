@@ -172,64 +172,76 @@ module Toji
     state_reader :tome
     state_reader :yodan
 
-    def initialize(data, day_labels: nil)
-      if day_labels
-        @day_labels = [day_labels].flatten
+    def initialize(data, prefix_day_labels: nil)
+      if prefix_day_labels
+        @prefix_day_labels = [prefix_day_labels].flatten
       end
 
       self.data = data
+      @data.moromi_start_day = moromi_start_day
+    end
+
+    def prefix_day_labels
+      if @prefix_day_labels
+        @day_labels
+      elsif !@data[:soe] && !@data[:tome]
+        nil
+      else
+        labels = []
+        [:soe, :naka, :tome].each {|mark|
+          s = @data[mark]
+          if s
+            i = s.day - 1
+            labels[i] = mark
+          end
+        }
+
+        soe_i = labels.index(:soe)
+        labels.map.with_index {|label,i|
+          if label
+            label
+          elsif !soe_i || i<soe_i
+            :moto
+          else
+            :odori
+          end
+        }
+      end
+    end
+
+    def moromi_start_day
+      prefix_day_labels&.length
     end
 
     def moromi_days
-      if @day_labels
-        @data.days - @day_labels.length
-      else
-        @data.states.last.moromi_day || @data.days
+      _start_day = moromi_start_day
+      _days = @data.days
+
+      if _start_day && _start_day<_days
+        _days - _start_day
       end
     end
 
     def day_labels
-      if @day_labels
-        @day_labels + moromi_days.times.map{|i| i+2}
-      elsif !@data[:soe] && !@data[:tome]
-        @data.days.times.map{|i| i+1}
-      else
-        texts = Array.new(@data.days)
-        [:soe, :naka, :tome].each {|mark|
-          j = @data[mark]
-          if j
-            i = (j.elapsed_time_with_offset / DAY.to_f).floor
-            texts[i] = mark
-          end
-        }
+      _prefix = prefix_day_labels
 
-        soe_i = texts.index(:soe)
-        tome_i = texts.index(:tome)
-        moromi_day = 1
-        texts.map.with_index {|text,i|
-          if text
-            text
-          elsif !soe_i || i<soe_i
-            :moto
-          elsif !tome_i || i<tome_i
-            :odori
-          else
-            moromi_day += 1
-          end
-        }
+      if _prefix
+        _prefix + moromi_days.times.map{|i| i+2}
+      else
+        @data.days.times.map{|i| i+1}
       end
     end
 
     def progress(enable_annotations: true)
-      Graph::Progress.new(self, enable_annotations: enable_annotations)
+      Graph::Progress.new(@data, enable_annotations: enable_annotations)
     end
 
     def bmd
-      Graph::Bmd.new.actual(self)
+      Graph::Bmd.new.actual(@data)
     end
 
     def ab(coef=1.5)
-      Graph::Ab.new(coef).actual(self)
+      Graph::Ab.new(coef).actual(@data)
     end
 
     def self.template(key=:default)

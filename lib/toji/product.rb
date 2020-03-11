@@ -26,7 +26,6 @@ module Toji
     end
 
     def self.included(cls)
-      #cls.extend StateAccessor
       cls.extend ClassMethods
     end
 

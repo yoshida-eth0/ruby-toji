@@ -3,6 +3,10 @@ module Toji
     class Data
       include Enumerable
 
+      attr_reader :day_offset
+      attr_accessor :day_labels
+      attr_accessor :moromi_start_day
+
       def initialize(records, date_line)
         @date_line = date_line
         self.records = records
@@ -30,15 +34,11 @@ module Toji
 
         # day_offset
         t = @states.first&.time
-        day_offset = 0
+        @day_offset = 0
         if t
-          day_offset = t - Time.mktime(t.year, t.month, t.day)
+          @day_offset = t - Time.mktime(t.year, t.month, t.day)
         end
-        day_offset += ((24 - @date_line) % 24) * HOUR
-
-        @states.each {|s|
-          s.day_offset = day_offset
-        }
+        @day_offset += ((24 - @date_line) % 24) * HOUR
 
         # day_label
         @states.each {|s|
@@ -54,12 +54,6 @@ module Toji
 
       def days
         ((@states.last.elapsed_time_with_offset.to_f + 1) / DAY).ceil
-      end
-
-      def day_labels=(day_labels)
-        @states.each {|s|
-          s.day_label = day_labels[s.day - 1]
-        }
       end
 
       def [](mark)

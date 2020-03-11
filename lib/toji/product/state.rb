@@ -7,7 +7,6 @@ module Toji
 
       attr_accessor :elapsed_time
       attr_accessor :time
-      attr_accessor :day_offset
       attr_accessor :day_label
       attr_reader :record
       attr_reader :data
@@ -23,22 +22,24 @@ module Toji
       def_delegators :@record, :warming
       def_delegators :@record, :note
 
+      def_delegators :@record, :has_keys
+
       def initialize(elapsed_time, record, data)
         @elapsed_time = elapsed_time
         @record = record
         @data = data
       end
 
-      def has_keys
-        @record.to_h.compact.keys
+      def day
+        ((elapsed_time_with_offset.to_f + 1) / DAY).ceil
       end
 
-      def day
-        (elapsed_time_with_offset.to_f / DAY).floor + 1
+      def day_label
+        @data.day_labels[day - 1]
       end
 
       def elapsed_time_with_offset
-        @elapsed_time + @day_offset
+        @elapsed_time + @data.day_offset
       end
 
       def baume
@@ -76,27 +77,12 @@ module Toji
         end
       end
 
-      def moromi_time
-        tome = @data[:tome]
-        if tome
-          time = elapsed_time - tome.elapsed_time
-          if 0<time
-            return time
-          end
-        end
-        nil
-      end
-
       def moromi_day
-        tome = @data[:tome]
+        _start_day = @data.moromi_start_day
+        _now_day = day
 
-        if tome
-          now_day = (elapsed_time_with_offset.to_f / DAY).floor
-          tome_day = (tome.elapsed_time_with_offset.to_f / DAY).floor
-
-          if tome_day<=now_day
-            now_day - tome_day + 2
-          end
+        if _start_day && _start_day < _now_day
+          _now_day - _start_day + 1
         end
       end
 

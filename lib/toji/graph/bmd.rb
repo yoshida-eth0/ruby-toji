@@ -16,11 +16,11 @@ module Toji
         result = []
 
         @actuals.each {|moromi, name|
-          jobs = moromi.select{|j| j.moromi_time && j.bmd}
+          jobs = moromi.states.select{|s| s.moromi_time && s.bmd}
 
           xs = jobs.map(&:moromi_time)
           ys = jobs.map(&:bmd)
-          texts = jobs.map{|j| "%s<br />moromi day=%d, be=%s, bmd=%s" % [j.time || j.elapsed_time + moromi.day_offset, j.moromi_day, j.baume, j.bmd]}
+          texts = jobs.map{|j| "%s<br />moromi day=%d, be=%s, bmd=%s" % [j.time || j.elapsed_time + data.day_offset, j.moromi_day, j.baume, j.bmd]}
 
           result << {x: xs, y: ys, text: texts, name: name}
         }
@@ -40,9 +40,9 @@ module Toji
           layout: {
             xaxis: {
               title: "Moromi day",
-              dtick: Product::Job::DAY,
-              range: [1, _max_moromi_day].map{|d| d*Product::Job::DAY},
-              tickvals: _max_moromi_day.times.map{|d| d*Product::Job::DAY},
+              dtick: Product::DAY,
+              range: [1, _max_moromi_day].map{|d| d*Product::DAY},
+              tickvals: _max_moromi_day.times.map{|d| d*Product::DAY},
               ticktext: _max_moromi_day.times.map(&:succ)
             },
             yaxis: {

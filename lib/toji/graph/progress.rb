@@ -4,14 +4,14 @@ module Toji
 
       attr_accessor :enable_annotations
 
-      def initialize(rows, enable_annotations: true)
-        @rows = rows
+      def initialize(data, enable_annotations: true)
+        @data = data
         @enable_annotations = enable_annotations
       end
 
-      def data(keys=nil)
+      def plot_data(keys=nil)
         if !keys
-          keys = @rows.map(&:has_keys).flatten.uniq
+          keys = @data.map(&:has_keys).flatten.uniq
         end
 
         result = []
@@ -22,7 +22,7 @@ module Toji
           xs = []
           ys = []
           text = []
-          @rows.each {|r|
+          @data.each {|r|
             val = r.send(key)
             if val
               [val].flatten.each_with_index {|v,i|
@@ -41,7 +41,7 @@ module Toji
           result << {x: xs, y: ys, text: text, name: key, line: {shape: line_shape}}
         }
 
-        if 0<rows.length && 0<@rows.first.day_offset
+        if 0<@data.states.length && 0<@data.day_offset
           result = result.map{|h|
             h[:x].unshift(0)
             h[:y].unshift(nil)
@@ -54,7 +54,7 @@ module Toji
       end
 
       def annotations
-        @rows.select{|r| r.job.id}.map {|r|
+        @data.select{|r| r.job.id}.map {|r|
           {
             x: r.elapsed_time_with_offset,
             y: r.job.temps.first || 0,
@@ -71,12 +71,12 @@ module Toji
 
       def plot
         Plotly::Plot.new(
-          data: data,
+          data: plot_data,
           layout: {
             xaxis: {
-              dtick: Product::Job::DAY,
-              tickvals: @rows.days.times.map{|d| d*Product::Job::DAY},
-              ticktext: @rows.day_labels
+              dtick: Product::DAY,
+              tickvals: @data.days.times.map{|d| d*Product::DAY},
+              ticktext: @data.day_labels
             },
             annotations: @enable_annotations ? annotations : [],
           }

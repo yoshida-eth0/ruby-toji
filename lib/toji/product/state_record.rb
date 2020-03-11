@@ -18,7 +18,7 @@ module Toji
         :note,
       ].freeze
 
-      RO_KEY = [
+      RO_KEYS = [
         :display_time,
         :warmings,
       ].freeze
@@ -57,6 +57,12 @@ module Toji
           result << :mat
         end
         result
+      end
+
+      def has_keys
+        KEYS.select {|k|
+          !!send(k)
+        }
       end
 
       def to_h
