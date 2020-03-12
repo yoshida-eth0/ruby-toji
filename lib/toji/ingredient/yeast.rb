@@ -1,9 +1,19 @@
-require 'toji/ingredient/yeast/base'
-require 'toji/ingredient/yeast/red_star'
-
 module Toji
   module Ingredient
-    module Yeast
+    class Yeast
+
+      def initialize(total, rate: Recipe::YeastRate::RED_STAR)
+        @total = total
+        @rate = rate
+      end
+
+      def yeast
+        @total * @rate.yeast_rate / 1000.0
+      end
+
+      def water
+        yeast * @rate.water_rate
+      end
     end
   end
 end
