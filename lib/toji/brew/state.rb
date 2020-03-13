@@ -7,7 +7,6 @@ module Toji
 
       attr_accessor :elapsed_time
       attr_accessor :time
-      attr_accessor :day_label
       attr_reader :record
       attr_reader :brew
 
@@ -23,21 +22,10 @@ module Toji
       def_delegators :@record, :warmings
       def_delegators :@record, :note
 
-      def_delegators :@record, :has_keys
-
       def initialize(elapsed_time, record, brew)
         @elapsed_time = elapsed_time
         @record = record
         @brew = brew
-      end
-
-      def has_keys
-        result = [:elapsed_time, :time, :day, :day_label, :display_time]
-        keys = [:moromi_day, :display_baume, :bmd] + StateRecord::KEYS
-
-        result += keys.select {|k|
-          !!send(k)
-        }
       end
 
       def day

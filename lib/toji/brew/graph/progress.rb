@@ -10,13 +10,9 @@ module Toji
           @enable_annotations = enable_annotations
         end
 
-        def has_keys
-          @data.map(&:has_keys).flatten.uniq
-        end
-
         def plot_data(keys=nil)
           if !keys
-            keys = has_keys
+            keys = @data.has_keys
           end
 
           result = []
@@ -76,7 +72,7 @@ module Toji
 
         def table_data(keys=nil)
           if !keys
-            keys = has_keys
+            keys = @data.has_keys
             keys.delete(:elapsed_time)
             keys.delete(:time)
             keys.delete(:day)
@@ -84,7 +80,7 @@ module Toji
             keys.delete(:baume)
             keys.delete(:nihonshudo)
           else
-            keys &= has_keys
+            keys &= @data.has_keys
           end
 
           cells = @data.map {|s|

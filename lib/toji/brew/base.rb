@@ -4,8 +4,34 @@ module Toji
       include Enumerable
       extend StateAccessor
 
+      REQUIRED_KEYS = [
+        :time,
+        :elapsed_time,
+        :day,
+        :day_label,
+        :display_time,
+      ].freeze
+
+      OPTIONAL_KEYS = [
+        :moromi_day,
+        :mark,
+        :temps,
+        :preset_temp,
+        :room_temp,
+        :room_psychrometry,
+        :baume,
+        :nihonshudo,
+        :display_baume,
+        :acid,
+        :amino_acid,
+        :alcohol,
+        :bmd,
+        :warming,
+        :warmings,
+        :note,
+      ].freeze
+
       attr_reader :day_offset
-      attr_accessor :day_labels
 
       def initialize(records, date_line)
         @date_line = date_line
@@ -14,8 +40,8 @@ module Toji
 
       def records=(records)
         records = records.map{|r| StateRecord.create(r)}
-        min_time = records.select{|j| j.time}.map(&:time).sort.first
-        @states = records.map{|j| State.new(j.elapsed_time, j, self)}
+        min_time = records.select{|r| r.time}.map(&:time).sort.first
+        @states = records.map{|r| State.new(r.elapsed_time, r, self)}
 
         # time
         if min_time
@@ -40,11 +66,6 @@ module Toji
         end
         @day_offset += ((24 - @date_line) % 24) * HOUR
 
-        # day_label
-        @states.each {|s|
-          s.day_label = s.day + 1
-        }
-
         # mark hash
         @hash = {}
         @states.select{|s| s.record.mark}.each {|s|
@@ -60,6 +81,10 @@ module Toji
         days.times.map(&:succ)
       end
 
+      def moromi_tome_day
+        nil
+      end
+
       def [](mark)
         @hash[mark]
       end
@@ -70,6 +95,14 @@ module Toji
 
       def each(&block)
         @states.each(&block)
+      end
+
+      def has_keys
+        result = REQUIRED_KEYS.clone
+
+        result += OPTIONAL_KEYS.select {|k|
+          @states.find {|s| s.send(k).present?}
+        }
       end
 
       def self.create(records, date_line: 0)
