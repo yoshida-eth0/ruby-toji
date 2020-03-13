@@ -20,6 +20,7 @@ module Toji
       def_delegators :@record, :amino_acid
       def_delegators :@record, :alcohol
       def_delegators :@record, :warming
+      def_delegators :@record, :warmings
       def_delegators :@record, :note
 
       def_delegators :@record, :has_keys
@@ -28,6 +29,15 @@ module Toji
         @elapsed_time = elapsed_time
         @record = record
         @brew = brew
+      end
+
+      def has_keys
+        result = [:elapsed_time, :time, :day, :day_label, :display_time]
+        keys = [:moromi_day, :display_baume, :bmd] + StateRecord::KEYS
+
+        result += keys.select {|k|
+          !!send(k)
+        }
       end
 
       def day

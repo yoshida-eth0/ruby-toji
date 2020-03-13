@@ -10,14 +10,18 @@ module Toji
           @enable_annotations = enable_annotations
         end
 
+        def has_keys
+          @data.map(&:has_keys).flatten.uniq
+        end
+
         def plot_data(keys=nil)
           if !keys
-            keys = @data.map(&:has_keys).flatten.uniq
+            keys = has_keys
           end
 
           result = []
 
-          keys &= [:temps, :preset_temp, :room_temp, :room_psychrometry, :baume, :acid, :amino_acid, :alcohol]
+          keys &= [:temps, :preset_temp, :room_temp, :room_psychrometry, :baume, :acid, :amino_acid, :alcohol, :bmd]
 
           keys.each {|key|
             xs = []
@@ -70,9 +74,40 @@ module Toji
           }
         end
 
-        def plot
+        def table_data(keys=nil)
+          if !keys
+            keys = has_keys
+            keys.delete(:elapsed_time)
+            keys.delete(:time)
+            keys.delete(:day)
+            keys.delete(:moromi_day)
+            keys.delete(:baume)
+            keys.delete(:nihonshudo)
+          else
+            keys &= has_keys
+          end
+
+          cells = @data.map {|s|
+            keys.map {|k|
+              v = s.send(k)
+              if Array===v
+                v.map(&:to_s).join(", ")
+              elsif Float===v
+                v.round(3)
+              elsif v
+                v
+              else
+                ""
+              end
+            }
+          }
+
+          {header: keys, cells: cells.transpose}
+        end
+
+        def plot(keys=nil)
           Plotly::Plot.new(
-            data: plot_data,
+            data: plot_data(keys),
             layout: {
               xaxis: {
                 dtick: DAY,
@@ -80,6 +115,24 @@ module Toji
                 ticktext: @data.day_labels
               },
               annotations: @enable_annotations ? annotations : [],
+            }
+          )
+        end
+
+        def table(keys=nil)
+          data = table_data(keys)
+
+          Plotly::Plot.new(
+            data: [{
+              type: :table,
+              header: {
+                values: data[:header]
+              },
+              cells: {
+                values: data[:cells]
+              },
+            }],
+            layout: {
             }
           )
         end
