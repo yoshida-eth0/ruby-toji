@@ -79,6 +79,7 @@ module Toji
             keys.delete(:moromi_day)
             keys.delete(:baume)
             keys.delete(:nihonshudo)
+            keys.delete(:warming)
           else
             keys &= @data.has_keys
           end
