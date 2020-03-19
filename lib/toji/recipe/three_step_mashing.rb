@@ -2,43 +2,32 @@ module Toji
   module Recipe
     class ThreeStepMashing
 
-      STEP_NAMES = ["酒母", "初添", "仲添", "留添"]
-
-      @@template = [
-        Step.new(93, 47, 170),
-        Step.new(217, 99, 270),
-        Step.new(423, 143, 670),
-        Step.new(813, 165, 1330),
-      ]
-      #@@template = [
-      #  Step.new(45, 20, 70),
-      #  Step.new(100, 40, 130),
-      #  Step.new(215, 60, 330),
-      #  Step.new(360, 80, 630),
-      #]
-
-      attr_reader :yeast
-      attr_reader :lactic_acid
       attr_reader :steps
+      attr_reader :yeast
 
-      def initialize(yeast_rate, lactic_acid_rate, total, template=@@template)
-        @total = total
-        rate = total / template.map(&:weight_total).sum
+      def initialize(steps, yeast_rate)
+        @steps = steps
 
-        @yeast = Ingredient::Yeast.new(total, rate: yeast_rate)
-        @lactic_acid = Ingredient::LacticAcid.new(total, rate: lactic_acid_rate)
+        @yeast_rate = yeast_rate
+        weight_total = @steps.map(&:weight_total).sum
+        @yeast = Ingredient::Yeast.new(weight_total, rate: yeast_rate)
+      end
 
-        @steps = template.map {|step|
+      def scale(rice_total, yeast_rate=@yeast_rate)
+        rate = rice_total / @steps.map(&:rice_total).sum
+        new_steps = @steps.map {|step|
           step * rate
         }
+
+        self.class.new(new_steps, yeast_rate)
       end
 
       # 内容量の累計
       def cumulative_weight_totals
-        total = @steps.map(&:weight_total)
+        weight_total = @steps.map(&:weight_total)
 
-        total.map.with_index {|x,i|
-          total[0..i].inject(:+)
+        weight_total.map.with_index {|x,i|
+          weight_total[0..i].inject(:+)
         }
       end
 
@@ -84,6 +73,66 @@ module Toji
           step.rice_total / @steps[0].rice_total
         }
       end
+
+
+      TEMPLATES = {
+        # 酒造教本による標準型仕込配合
+        # 出典: 酒造教本 P97
+        sokujo_textbook: new(
+          [
+            Step.new(
+              rice: 45,
+              koji: 20,
+              water: 70,
+              lactic_acid: 70*6.85/1000
+            ),
+            Step.new(
+              rice: 100,
+              koji: 40,
+              water: 130
+            ),
+            Step.new(
+              rice: 215,
+              koji: 60,
+              water: 330
+            ),
+            Step.new(
+              rice: 360,
+              koji: 80,
+              water: 630
+            ),
+          ],
+          YeastRate::RED_STAR,
+        ),
+        # 灘における仕込配合の平均値
+        # 出典: http://www.nada-ken.com/main/jp/index_shi/234.html
+        sokujo_nada: new(
+          [
+            Step.new(
+              rice: 93,
+              koji: 47,
+              water: 170,
+              lactic_acid: 170*6.85/1000
+            ),
+            Step.new(
+              rice: 217,
+              koji: 99,
+              water: 270
+            ),
+            Step.new(
+              rice: 423,
+              koji: 143,
+              water: 670
+            ),
+            Step.new(
+              rice: 813,
+              koji: 165,
+              water: 1330
+            ),
+          ],
+          YeastRate::RED_STAR,
+        ),
+      }.freeze
     end
   end
 end

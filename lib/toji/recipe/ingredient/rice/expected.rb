@@ -16,6 +16,10 @@ module Toji
             @cooled_rate = rice_rate.cooled_rate
           end
 
+          def round(ndigit=0, half: :up)
+            self.class.new(@raw.round(ndigit, half: half), rice_rate: @rice_rate)
+          end
+
           def +(other)
             if Base===other
               Actual.new(raw + other.raw, soaked + other.soaked, steaming_water + other.steaming_water, steamed + other.steamed, cooled + other.cooled)

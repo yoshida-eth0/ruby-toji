@@ -21,6 +21,10 @@ module Toji
             @dekoji_rate = koji_rate.dekoji_rate
           end
 
+          def round(ndigit=0, half: :up)
+            self.class.new(@raw.round(ndigit, half: half), rice_rate: @rice_rate, koji_rate: @koji_rate)
+          end
+
           def self.create(x)
             if self===x
               x

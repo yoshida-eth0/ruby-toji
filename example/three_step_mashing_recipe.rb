@@ -1,15 +1,17 @@
 require 'toji'
 require 'terminal-table'
 
-recipe = Toji::Recipe::ThreeStepMashing.new(Toji::Recipe::YeastRate::SAKE_LEES, Toji::Recipe::LacticAcidRate::SIMPLE_SOKUJO, 2000)
+STEP_NAMES = ["酒母", "初添", "仲添", "留添"].freeze
+
+recipe = Toji::Recipe::ThreeStepMashing::TEMPLATES[:sokujo_nada].scale(900)
 
 table = Terminal::Table.new do |t|
-  t << [""] + recipe.class::STEP_NAMES
+  t << [""] + STEP_NAMES
   t << :separator
   t << ["[原料]"]
   t << ["酵母(g)", recipe.yeast.yeast&.round(2)]
   t << ["酵母吸水", recipe.yeast.water&.round(2)]
-  t << ["乳酸(ml)", recipe.lactic_acid.moto, recipe.lactic_acid.soe]
+  t << ["乳酸(ml)"] + recipe.steps.map(&:lactic_acid).map{|v| v&.round(6)}
   t << ["掛米(g)"] + recipe.steps.map(&:rice).map(&:raw).map{|v| v&.round(2)}
   t << ["麹米(g)"] + recipe.steps.map(&:koji).map(&:raw).map{|v| v&.round(2)}
   t << ["汲水(ml)"] + recipe.steps.map(&:water).map{|v| v&.round(2)}
@@ -31,7 +33,7 @@ puts
 
 puts "掛米"
 table = Terminal::Table.new do |t|
-  t << ["工程", "原料"] + recipe.class::STEP_NAMES
+  t << ["工程", "原料"] + STEP_NAMES
   t << :separator
   t << ["洗米・浸漬", "白米(g)"] + recipe.steps.map(&:rice).map(&:raw).map{|v| v&.round(2)}
   t << ["", "吸水増加量(ml)"] + recipe.steps.map(&:rice).map(&:soaking_water).map{|v| v&.round(2)}
@@ -46,7 +48,7 @@ puts
 
 puts "麹"
 table = Terminal::Table.new do |t|
-  t << ["工程", "原料"] + recipe.class::STEP_NAMES
+  t << ["工程", "原料"] + STEP_NAMES
   t << :separator
   t << ["洗米・浸漬", "白米(g)"] + recipe.steps.map(&:koji).map(&:raw).map{|v| v&.round(2)}
   t << ["", "吸水増加量(ml)"] + recipe.steps.map(&:koji).map(&:soaking_water).map{|v| v&.round(2)}

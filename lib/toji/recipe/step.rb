@@ -4,11 +4,13 @@ module Toji
       attr_reader :rice
       attr_reader :koji
       attr_reader :water
+      attr_reader :lactic_acid
 
-      def initialize(rice, koji, water)
+      def initialize(rice:, koji:, water:, lactic_acid: 0)
         @rice = Ingredient::Rice::Expected.create(rice)
         @koji = Ingredient::Koji::Expected.create(koji)
         @water = water.to_f
+        @lactic_acid = lactic_acid.to_f
       end
 
       # 総米
@@ -18,7 +20,7 @@ module Toji
 
       # 総重量
       def weight_total
-        @rice.cooled + @koji.dekoji + @water
+        @rice.cooled + @koji.dekoji + @water + @lactic_acid
       end
 
       # 麹歩合
@@ -43,9 +45,27 @@ module Toji
         @water / rice_total
       end
 
+      def round(ndigit=0, acid_ndigit=nil, half: :up)
+        if !acid_ndigit
+          acid_ndigit = ndigit + 4
+        end
+
+        self.class.new(
+          rice: @rice.round(ndigit, half: half),
+          koji: @koji.round(ndigit, half: half),
+          water: @water.round(ndigit, half: half),
+          lactic_acid: @lactic_acid.round(acid_ndigit, half: half)
+        )
+      end
+
       def +(other)
         if Step===other
-          self.class.new(@rice + other.rice, @koji + other.koji, @water + other.water)
+          self.class.new(
+            rice: @rice + other.rice,
+            koji: @koji + other.koji,
+            water: @water + other.water,
+            lactic_acid: @lactic_acid + other.lactic_acid
+          )
         else
           x, y = other.coerce(self)
           x + y
@@ -54,7 +74,12 @@ module Toji
 
       def *(other)
         if Integer===other || Float===other
-          self.class.new(@rice * other, @koji * other, @water * other)
+          self.class.new(
+            rice: @rice * other,
+            koji: @koji * other,
+            water: @water * other,
+            lactic_acid: @lactic_acid * other
+           )
         else
           x, y = other.coerce(self)
           x * y
