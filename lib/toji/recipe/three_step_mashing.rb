@@ -22,6 +22,13 @@ module Toji
         self.class.new(new_steps, yeast_rate)
       end
 
+      def round(ndigit=0, half: :up)
+        new_steps = @steps.map {|step|
+          step.round(ndigit, half: half)
+        }
+        self.class.new(new_steps, @yeast_rate)
+      end
+
       # 内容量の累計
       def cumulative_weight_totals
         weight_total = @steps.map(&:weight_total)
