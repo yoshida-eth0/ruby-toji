@@ -2,14 +2,11 @@
 
 Management tools for brewing japanese sake.
 
-- Koji making recipe and weight estimation.
-- Koji making progress graph.
-- Step mashing recipe and weight estimation.
-- Shubo progress graph.
-- Moromi progress graph.
-- Moromi BMD graph.
-- Moromi A-B graph.
-
+- 仕込み配合表の生成。
+- 仕込み日程表の生成。
+- 蒸米や麹米、醪総容量を状態ごとに推定重量を算出。
+- 麹や酒母、醪の経過簿をグラフ化、表生成。
+- 醪のBMD曲線、A-B直線のグラフ化。
 
 ## Installation
 
