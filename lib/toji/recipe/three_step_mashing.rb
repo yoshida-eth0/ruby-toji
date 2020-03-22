@@ -81,29 +81,87 @@ module Toji
         }
       end
 
+      def table_data
+        headers = [""] + @steps.map(&:name) + [:total]
+        keys = [:rice_total, :rice, :koji, :water, :lactic_acid]
 
+        cells = [keys]
+        cells += @steps.map {|step|
+          [step.rice_total, step.rice, step.koji, step.water, step.lactic_acid]
+        }
+        cells << keys.map {|key|
+          @steps.map(&key).compact.sum
+        }
+
+        cells = cells.map {|cell|
+          cell.map {|c|
+            if Ingredient::Rice::Base===c
+              c = c.raw
+            end
+
+            case c
+            when NilClass
+              ""
+            when 0
+              ""
+            else
+              c
+            end
+          }
+        }
+
+        {header: headers, cells: cells}
+      end
+
+      def table
+        data = table_data
+
+        Plotly::Plot.new(
+          data: [{
+            type: :table,
+            header: {
+              values: data[:header]
+            },
+            cells: {
+              values: data[:cells]
+            },
+          }],
+          layout: {
+          }
+        )
+      end
+
+
+      # 乳酸は汲水100L当たり比重1.21の乳酸(90%乳酸と称される)を650〜720ml添加する。
+      # ここでは間をとって685mlとする
+      #
+      # 出典: 酒造教本 P38
       TEMPLATES = {
         # 酒造教本による標準型仕込配合
         # 出典: 酒造教本 P97
         sokujo_textbook: new(
           [
             Step.new(
+              name: :moto,
               rice: 45,
               koji: 20,
               water: 70,
               lactic_acid: 70*6.85/1000
             ),
             Step.new(
+              name: :soe,
               rice: 100,
               koji: 40,
               water: 130
             ),
             Step.new(
+              name: :naka,
               rice: 215,
               koji: 60,
               water: 330
             ),
             Step.new(
+              name: :tome,
               rice: 360,
               koji: 80,
               water: 630
@@ -116,22 +174,26 @@ module Toji
         sokujo_nada: new(
           [
             Step.new(
+              name: :moto,
               rice: 93,
               koji: 47,
               water: 170,
               lactic_acid: 170*6.85/1000
             ),
             Step.new(
+              name: :soe,
               rice: 217,
               koji: 99,
               water: 270
             ),
             Step.new(
+              name: :naka,
               rice: 423,
               koji: 143,
               water: 670
             ),
             Step.new(
+              name: :tome,
               rice: 813,
               koji: 165,
               water: 1330

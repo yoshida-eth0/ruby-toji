@@ -35,6 +35,15 @@ module Toji
           # 出典: 酒造教本 P59
           attr_reader :cooled_rate
           attr_reader :cooled
+
+          def +(other)
+            if Base===other
+              Actual.new(raw + other.raw, soaked + other.soaked, steaming_water + other.steaming_water, steamed + other.steamed, cooled + other.cooled)
+            else
+              x, y = other.coerce(self)
+              x + y
+            end
+          end
         end
       end
     end

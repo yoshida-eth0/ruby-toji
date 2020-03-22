@@ -33,15 +33,6 @@ module Toji
             end
           end
 
-          def +(other)
-            if Base===other
-              Actual.new(raw + other.raw, soaked + other.soaked, steaming_water + other.steaming_water, steamed + other.steamed, cooled + other.cooled, tanekoji + other.tanekoji, dekoji + other.dekoji)
-            else
-              x, y = other.coerce(self)
-              x + y
-            end
-          end
-
           def *(other)
             if Integer===other || Float===other
               Expected.new(@raw * other, rice_rate: @rice_rate, koji_rate: @koji_rate)

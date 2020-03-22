@@ -21,6 +21,15 @@ module Toji
           # 出典: 酒造教本 P67
           attr_reader :dekoji_rate
           attr_reader :dekoji
+
+          def +(other)
+            if Base===other
+              Actual.new(raw + other.raw, soaked + other.soaked, steaming_water + other.steaming_water, steamed + other.steamed, cooled + other.cooled, tanekoji + other.tanekoji, dekoji + other.dekoji)
+            else
+              x, y = other.coerce(self)
+              x + y
+            end
+          end
         end
       end
     end

@@ -1,12 +1,14 @@
 module Toji
   module Recipe
     class Step
+      attr_reader :name
       attr_reader :rice
       attr_reader :koji
       attr_reader :water
       attr_reader :lactic_acid
 
-      def initialize(rice:, koji:, water:, lactic_acid: 0)
+      def initialize(name:, rice:, koji:, water:, lactic_acid: 0)
+        @name = name
         @rice = Ingredient::Rice::Expected.create(rice)
         @koji = Ingredient::Koji::Expected.create(koji)
         @water = water.to_f
@@ -47,10 +49,11 @@ module Toji
 
       def round(ndigit=0, acid_ndigit=nil, half: :up)
         if !acid_ndigit
-          acid_ndigit = ndigit + 4
+          acid_ndigit = ndigit + 3
         end
 
         self.class.new(
+          name: @name,
           rice: @rice.round(ndigit, half: half),
           koji: @koji.round(ndigit, half: half),
           water: @water.round(ndigit, half: half),
@@ -61,6 +64,7 @@ module Toji
       def +(other)
         if Step===other
           self.class.new(
+            name: nil,
             rice: @rice + other.rice,
             koji: @koji + other.koji,
             water: @water + other.water,
@@ -75,6 +79,7 @@ module Toji
       def *(other)
         if Integer===other || Float===other
           self.class.new(
+            name: @name,
             rice: @rice * other,
             koji: @koji * other,
             water: @water * other,

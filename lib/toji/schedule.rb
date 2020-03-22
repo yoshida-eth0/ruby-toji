@@ -2,6 +2,8 @@ module Toji
   module Schedule
 
     class Calendar
+      attr_reader :products
+
       def initialize
         @products = []
       end
