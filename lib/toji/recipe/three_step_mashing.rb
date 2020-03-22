@@ -5,12 +5,18 @@ module Toji
       attr_reader :steps
       attr_reader :yeast
 
-      def initialize(steps, yeast_rate)
+      attr_accessor :moto_days
+      attr_accessor :odori_days
+
+      def initialize(steps, yeast_rate, moto_days: 1, odori_days: 1)
         @steps = steps
 
         @yeast_rate = yeast_rate
         weight_total = @steps.map(&:weight_total).sum
         @yeast = Ingredient::Yeast.new(weight_total, rate: yeast_rate)
+
+        @moto_days = moto_days
+        @odori_days = odori_days
       end
 
       def scale(rice_total, yeast_rate=@yeast_rate)
@@ -19,14 +25,14 @@ module Toji
           step * rate
         }
 
-        self.class.new(new_steps, yeast_rate)
+        self.class.new(new_steps, yeast_rate, moto_days: @moto_days, odori_days: @odori_days)
       end
 
       def round(ndigit=0, half: :up)
         new_steps = @steps.map {|step|
           step.round(ndigit, half: half)
         }
-        self.class.new(new_steps, @yeast_rate)
+        self.class.new(new_steps, @yeast_rate, moto_days: @moto_days, odori_days: @odori_days)
       end
 
       # 内容量の累計
@@ -83,11 +89,11 @@ module Toji
 
       def table_data
         headers = [""] + @steps.map(&:name) + [:total]
-        keys = [:rice_total, :rice, :koji, :water, :lactic_acid]
+        keys = [:rice_total, :rice, :koji, :alcohol, :water, :lactic_acid]
 
         cells = [keys]
         cells += @steps.map {|step|
-          [step.rice_total, step.rice, step.koji, step.water, step.lactic_acid]
+          [step.rice_total, step.rice, step.koji, step.alcohol, step.water, step.lactic_acid]
         }
         cells << keys.map {|key|
           @steps.map(&key).compact.sum
@@ -166,8 +172,15 @@ module Toji
               koji: 80,
               water: 630
             ),
+            Step.new(
+              name: :yodan,
+              rice: 80,
+              water: 120
+            ),
           ],
           YeastRate::RED_STAR,
+          moto_days: 14,
+          odori_days: 1,
         ),
         # 灘における仕込配合の平均値
         # 出典: http://www.nada-ken.com/main/jp/index_shi/234.html
@@ -198,8 +211,52 @@ module Toji
               koji: 165,
               water: 1330
             ),
+            Step.new(
+              name: :alcohol,
+              alcohol: 900
+            ),
           ],
           YeastRate::RED_STAR,
+          moto_days: 14,
+          odori_days: 1,
+        ),
+        # 簡易酒母省略仕込
+        # 出典: https://www.jstage.jst.go.jp/article/jbrewsocjapan1915/60/11/60_11_999/_article/-char/ja/
+        simple_sokujo_himeno: new(
+          [
+            Step.new(
+              name: :moto,
+              rice: 0,
+              koji: 70,
+              water: 245,
+              lactic_acid: 1.6
+            ),
+            Step.new(
+              name: :soe,
+              rice: 130,
+              koji: 0,
+              water: 0
+            ),
+            Step.new(
+              name: :naka,
+              rice: 300,
+              koji: 100,
+              water: 400
+            ),
+            Step.new(
+              name: :tome,
+              rice: 490,
+              koji: 110,
+              water: 800
+            ),
+            Step.new(
+              name: :yodan,
+              water: 255
+            ),
+          ],
+          YeastRate::RED_STAR,
+          moto_days: 1,
+          odori_days: 2,
         ),
       }.freeze
     end

@@ -15,63 +15,28 @@ module Toji
         @description = description
         @recipe = recipe
 
-        @koji_dates = merge_date_enum(koji_dates, koji_date_interval_enumerator)
-        @rice_dates = merge_date_enum(rice_dates, rice_date_interval_enumerator)
+        @koji_dates = DateIntervalEnumerator.new([], 0).merge(koji_dates, recipe.steps.length)
+        @rice_dates = DateIntervalEnumerator.new([recipe.moto_days, recipe.odori_days+1, 1], 1).merge(rice_dates, recipe.steps.length)
 
         @color = color
-      end
-
-      def merge_date_enum(dates, date_enum)
-        dates = [dates].flatten.map{|d| d&.to_time}
-
-        @recipe.steps.length.times {|i|
-          add = date_enum.next
-
-          if i==0
-            dates[i] = dates[i]
-          elsif !dates[i] && dates[i-1]
-            dates[i] = dates[i-1].since(add.days)
-          end
-        }
-
-        dates
-      end
-
-      def date_interval_enumerator(intervals, afterwards)
-        Enumerator.new do |y|
-          y << 0
-          intervals.each {|interval|
-            y << interval
-          }
-          loop {
-            y << afterwards
-          }
-        end.each
-      end
-
-      def koji_date_interval_enumerator
-        date_interval_enumerator([], 0)
-      end
-
-      def rice_date_interval_enumerator
-        date_interval_enumerator([1,2,1], 1)
       end
 
       def events
         events = []
 
-        @koji_dates
-          .each_with_index
-          .select {|d,i| d}
-          .each {|d,i|
-            events << ProductEvent.new(self, :koji, i)
-          }
+        @koji_dates.length.times {|i|
+          events << ProductEvent.new(self, :koji, i)
+        }
 
-        @rice_dates
-          .each_with_index
-          .select {|d,i| d}
-          .each {|d,i|
-            events << ProductEvent.new(self, :rice, i)
+        @rice_dates.length
+          .times.map {|i|
+            ProductEvent.new(self, :rice, i)
+          }
+          .delete_if {|e|
+            4<=e.index && e.weight==0
+          }
+          .each {|e|
+            events << e
           }
 
         events
@@ -83,13 +48,19 @@ module Toji
         elsif Hash===args
           recipe = args.fetch(:recipe)
           if Symbol===recipe
-            recipe = Recipe::ThreeStepMashing::TEMPLATES[recipe]
+            recipe = Recipe::ThreeStepMashing::TEMPLATES.fetch(recipe)
           end
           if args[:scale]
             recipe = recipe.scale(args[:scale])
           end
           if args[:round]
             recipe = recipe.round(args[:round])
+          end
+          if args[:moto_days]
+            recipe.moto_days = args[:moto_days]
+          end
+          if args[:odori_days]
+            recipe.odori_days = args[:odori_days]
           end
 
           new(

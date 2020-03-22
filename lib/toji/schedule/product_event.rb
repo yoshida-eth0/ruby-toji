@@ -20,7 +20,12 @@ module Toji
         method = "#{@type}_dates".to_sym
         dates = @product.send(method)
         date = dates[@index]
-        dates.index(date)
+
+        if @type==:koji && dates.all? {|d| d==date}
+          1
+        else
+          dates.index(date)
+        end
       end
 
       def group_key

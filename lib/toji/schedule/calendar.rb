@@ -58,7 +58,7 @@ module Toji
           headers += [:moto, :soe, :naka, :tome]
         else
           headers += [:moto, :soe, :naka, :tome]
-          (4..rice_len).each {|i|
+          (4...rice_len).each {|i|
             headers << "#{i}dan"
           }
         end

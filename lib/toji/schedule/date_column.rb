@@ -23,7 +23,7 @@ module Toji
           name = es.first.product.name
           weight = "%.17g" % es.map(&:weight).sum
           "#{name}: #{weight}"
-        }.join(", ")
+        }.join("<br>")
       end
     end
   end

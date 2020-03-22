@@ -6,13 +6,15 @@ module Toji
       attr_reader :koji
       attr_reader :water
       attr_reader :lactic_acid
+      attr_reader :alcohol
 
-      def initialize(name:, rice:, koji:, water:, lactic_acid: 0)
+      def initialize(name:, rice: 0, koji: 0, water: 0, lactic_acid: 0, alcohol: 0)
         @name = name
         @rice = Ingredient::Rice::Expected.create(rice)
         @koji = Ingredient::Koji::Expected.create(koji)
         @water = water.to_f
         @lactic_acid = lactic_acid.to_f
+        @alcohol = alcohol.to_f
       end
 
       # 総米
@@ -22,7 +24,7 @@ module Toji
 
       # 総重量
       def weight_total
-        @rice.cooled + @koji.dekoji + @water + @lactic_acid
+        @rice.cooled + @koji.dekoji + @water + @lactic_acid + @alcohol
       end
 
       # 麹歩合
@@ -57,7 +59,8 @@ module Toji
           rice: @rice.round(ndigit, half: half),
           koji: @koji.round(ndigit, half: half),
           water: @water.round(ndigit, half: half),
-          lactic_acid: @lactic_acid.round(acid_ndigit, half: half)
+          lactic_acid: @lactic_acid.round(acid_ndigit, half: half),
+          alcohol: @alcohol.round(ndigit, half: half)
         )
       end
 
@@ -68,7 +71,8 @@ module Toji
             rice: @rice + other.rice,
             koji: @koji + other.koji,
             water: @water + other.water,
-            lactic_acid: @lactic_acid + other.lactic_acid
+            lactic_acid: @lactic_acid + other.lactic_acid,
+            alcohol: @alcohol + other.alcohol
           )
         else
           x, y = other.coerce(self)
@@ -83,7 +87,8 @@ module Toji
             rice: @rice * other,
             koji: @koji * other,
             water: @water * other,
-            lactic_acid: @lactic_acid * other
+            lactic_acid: @lactic_acid * other,
+            alcohol: @alcohol * other
            )
         else
           x, y = other.coerce(self)
