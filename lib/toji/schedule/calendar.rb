@@ -47,21 +47,10 @@ module Toji
           }
         end
 
-        case rice_len
-        when 1
-          headers += [:moto]
-        when 2
-          headers += [:moto, :soe]
-        when 3
-          headers += [:moto, :soe, :naka]
-        when 4
-          headers += [:moto, :soe, :naka, :tome]
-        else
-          headers += [:moto, :soe, :naka, :tome]
-          (4...rice_len).each {|i|
-            headers << "#{i}dan"
-          }
-        end
+        headers += [:moto, :soe, :naka, :tome, :yodan][0...rice_len]
+        (5...rice_len).each {|i|
+          headers << "#{i}dan"
+        }
 
         rows = date_rows
 
@@ -109,6 +98,23 @@ module Toji
           layout: {
           }
         )
+      end
+
+      def self.load_hash(hash)
+        hash = hash.deep_symbolize_keys
+        products = hash[:products] || []
+
+        cal = new
+        products.each {|product|
+          cal.add(Product.create(product))
+        }
+
+        cal
+      end
+
+      def self.load_yaml_file(fname)
+        hash = YAML.load_file(fname)
+        load_hash(hash)
       end
     end
   end

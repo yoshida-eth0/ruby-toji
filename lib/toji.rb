@@ -1,5 +1,6 @@
 require "toji/version"
 require 'active_support/all'
+require 'yaml'
 
 require 'toji/recipe'
 require 'toji/brew'

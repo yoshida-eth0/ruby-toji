@@ -116,6 +116,19 @@ module Toji
       def self.builder
         Builder.new(self)
       end
+
+      def self.load_hash(hash)
+        hash = hash.deep_symbolize_keys
+        date_line = hash[:date_line] || 0
+        records = hash[:records] || []
+
+        builder.add(records).date_line(date_line).build
+      end
+
+      def self.load_yaml_file(fname)
+        hash = YAML.load_file(fname)
+        load_hash(hash)
+      end
     end
   end
 end

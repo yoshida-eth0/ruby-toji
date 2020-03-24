@@ -44,6 +44,10 @@ module Toji
         @temps = [val].flatten.select{|t| t}
       end
 
+      def time=(val)
+        @time = val&.to_time
+      end
+
       def warmings
         result = []
         if @warming & WARM_DAKI
