@@ -72,10 +72,6 @@ module Toji
       def ab(coef=1.5)
         Graph::Ab.new(coef).actual(self)
       end
-
-      def self.template(key=:default)
-        create(TEMPLATES[key])
-      end
     end
   end
 end

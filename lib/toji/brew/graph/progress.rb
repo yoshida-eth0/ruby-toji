@@ -51,6 +51,18 @@ module Toji
             }
           end
 
+          #if 0<@data.states.length && @data.states.last.time.strftime("%T")!="00:00:00"
+          #  t = @data.states.last.elapsed_time_with_offset
+          #  t -= (t % DAY) - DAY
+          #
+          #  result = result.map{|h|
+          #    h[:x] << t
+          #    h[:y] << nil
+          #    h[:text] << nil
+          #    h
+          #  }
+          #end
+
           result
         end
 
@@ -79,7 +91,6 @@ module Toji
             keys.delete(:moromi_day)
             keys.delete(:baume)
             keys.delete(:nihonshudo)
-            keys.delete(:warming)
           else
             keys &= @data.has_keys
           end

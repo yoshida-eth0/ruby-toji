@@ -18,7 +18,6 @@ module Toji
       def_delegators :@record, :acid
       def_delegators :@record, :amino_acid
       def_delegators :@record, :alcohol
-      def_delegators :@record, :warming
       def_delegators :@record, :warmings
       def_delegators :@record, :note
 
@@ -71,7 +70,8 @@ module Toji
         if @time
           @time.strftime(format)
         else
-          Time.at(@elapsed_time).strftime(format)
+          utc_offset = Time.at(0).utc_offset
+          Time.at(@elapsed_time - utc_offset).strftime(format)
         end
       end
 

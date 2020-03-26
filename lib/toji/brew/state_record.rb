@@ -14,12 +14,8 @@ module Toji
         :acid,
         :amino_acid,
         :alcohol,
-        :warming,
-        :note,
-      ].freeze
-
-      RO_KEYS = [
         :warmings,
+        :note,
       ].freeze
 
       attr_accessor :time
@@ -37,29 +33,19 @@ module Toji
       attr_accessor :amino_acid
       attr_accessor :alcohol
 
-      attr_accessor :warming
+      attr_accessor :warmings
       attr_accessor :note
 
       def temps=(val)
-        @temps = [val].flatten.select{|t| t}
+        @temps = [val].flatten.compact
       end
 
       def time=(val)
         @time = val&.to_time
       end
 
-      def warmings
-        result = []
-        if @warming & WARM_DAKI
-          result << :daki
-        end
-        if @warming & WARM_ANKA
-          result << :anka
-        end
-        if @warming & WARM_MAT
-          result << :mat
-        end
-        result
+      def warmings=(val)
+        @warmings = [val].flatten.compact
       end
 
       def self.create(r)

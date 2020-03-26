@@ -2,10 +2,6 @@ module Toji
   module Brew
     HOUR = 60 * 60
     DAY = 24 * HOUR
-
-    WARM_DAKI = 1
-    WARM_ANKA = 1<<1
-    WARM_MAT = 1<<2
   end
 end
 

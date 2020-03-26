@@ -26,7 +26,6 @@ module Toji
         :amino_acid,
         :alcohol,
         :bmd,
-        :warming,
         :warmings,
         :note,
       ].freeze
