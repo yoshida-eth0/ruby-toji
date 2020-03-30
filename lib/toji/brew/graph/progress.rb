@@ -131,7 +131,7 @@ module Toji
           end
 
           if !elapsed_times
-            elapsed_times = @brew.map(&:elapsed_time)
+            elapsed_times = @brew.map(&:elapsed_time_with_offset)
           end
 
           brew_hash = @brew.index_by(&:elapsed_time_with_offset)
