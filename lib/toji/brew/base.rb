@@ -63,7 +63,7 @@ module Toji
         if t
           @day_offset = t - Time.mktime(t.year, t.month, t.day)
         end
-        @day_offset += ((24 - @date_line) % 24) * HOUR
+        @day_offset = (((24 - @date_line) * HOUR) + @day_offset) % DAY
 
         # mark hash
         @hash = {}

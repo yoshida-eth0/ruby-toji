@@ -3,27 +3,60 @@ module Toji
     module Graph
       class Progress
 
+        PLOT_KEYS = [:temps, :preset_temp, :room_temp, :room_psychrometry, :baume, :acid, :amino_acid, :alcohol, :bmd].freeze
+
+        COLORS = [
+          '#1f77b4',  # muted blue
+          '#ff7f0e',  # safety orange
+          '#2ca02c',  # cooked asparagus green
+          '#d62728',  # brick red
+          '#9467bd',  # muted purple
+          '#8c564b',  # chestnut brown
+          '#e377c2',  # raspberry yogurt pink
+          '#7f7f7f',  # middle gray
+          '#bcbd22',  # curry yellow-green
+          '#17becf'   # blue-teal
+        ].freeze
+
+        PLOT_COLORS = Hash[PLOT_KEYS.zip(COLORS)].freeze
+
+        LINE_DASHES = [
+          :solid,
+          :dot,
+          :dashdot,
+        ].freeze
+
+        attr_reader :brew
+        attr_accessor :name
+        attr_accessor :dash
         attr_accessor :enable_annotations
 
-        def initialize(data, enable_annotations: true)
-          @data = data
+        def initialize(brew, name: nil, dash: :solid, enable_annotations: true)
+          @brew = brew
+          @name = name
+          @dash = dash
           @enable_annotations = enable_annotations
         end
 
-        def plot_data(keys=nil)
+        def plot_data(keys=nil, use_name=false)
           if !keys
-            keys = @data.has_keys
+            keys = @brew.has_keys
+          end
+
+          name = ""
+          if @name
+            name = "#{@name} "
           end
 
           result = []
 
-          keys &= [:temps, :preset_temp, :room_temp, :room_psychrometry, :baume, :acid, :amino_acid, :alcohol, :bmd]
+          keys &= PLOT_KEYS
 
           keys.each {|key|
             xs = []
             ys = []
             text = []
-            @data.each {|r|
+            @brew.each {|r|
               val = r.send(key)
               if val
                 [val].flatten.each_with_index {|v,i|
@@ -39,10 +72,10 @@ module Toji
               line_shape = :hv
             end
 
-            result << {x: xs, y: ys, text: text, name: key, line: {shape: line_shape}}
+            result << {x: xs, y: ys, text: text, name: "#{name}#{key}", line: {dash: @dash, shape: line_shape}, marker: {color: PLOT_COLORS[key]}}
           }
 
-          if 0<@data.states.length && 0<@data.day_offset
+          if 0<@brew.states.length && 0<@brew.day_offset
             result = result.map{|h|
               h[:x].unshift(0)
               h[:y].unshift(nil)
@@ -51,8 +84,8 @@ module Toji
             }
           end
 
-          #if 0<@data.states.length && @data.states.last.time.strftime("%T")!="00:00:00"
-          #  t = @data.states.last.elapsed_time_with_offset
+          #if 0<@brew.states.length && @brew.states.last.time.strftime("%T")!="00:00:00"
+          #  t = @brew.states.last.elapsed_time_with_offset
           #  t -= (t % DAY) - DAY
           #
           #  result = result.map{|h|
@@ -67,7 +100,9 @@ module Toji
         end
 
         def annotations
-          @data.select{|s| s.mark}.map {|s|
+          return [] if @enable_annotations
+
+          @brew.select{|s| s.mark}.map {|s|
             {
               x: s.elapsed_time_with_offset,
               y: s.temps.first || 0,
@@ -82,9 +117,9 @@ module Toji
           }
         end
 
-        def table_data(keys=nil)
+        def table_data(keys=nil, elapsed_times=nil)
           if !keys
-            keys = @data.has_keys
+            keys = @brew.has_keys
             keys.delete(:elapsed_time)
             keys.delete(:time)
             keys.delete(:day)
@@ -92,12 +127,20 @@ module Toji
             keys.delete(:baume)
             keys.delete(:nihonshudo)
           else
-            keys &= @data.has_keys
+            keys &= @brew.has_keys
           end
 
-          cells = @data.map {|s|
+          if !elapsed_times
+            elapsed_times = @brew.map(&:elapsed_time)
+          end
+
+          brew_hash = @brew.index_by(&:elapsed_time_with_offset)
+
+          cells = elapsed_times.map {|elapsed_time|
+            s = brew_hash[elapsed_time]
+
             keys.map {|k|
-              v = s.send(k)
+              v = s&.send(k)
               if Array===v
                 v.map(&:to_s).join(", ")
               elsif Float===v
@@ -119,10 +162,10 @@ module Toji
             layout: {
               xaxis: {
                 dtick: DAY,
-                tickvals: @data.days.times.map{|d| d*DAY},
-                ticktext: @data.day_labels
+                tickvals: @brew.days.times.map{|d| d*DAY},
+                ticktext: @brew.day_labels
               },
-              annotations: @enable_annotations ? annotations : [],
+              annotations: annotations,
             }
           )
         end
