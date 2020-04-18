@@ -117,7 +117,28 @@ module Toji
           }
         end
 
-        def table_data(keys=nil, elapsed_times=nil)
+        def state_group_by(group_by)
+          group = {}
+          prev = nil
+
+          @brew.each {|state|
+            val = state.send(group_by) || prev
+            prev = val
+
+            group[val] ||= []
+            group[val] << state
+          }
+
+          group
+        end
+
+        def state_group_count(group_by)
+          state_group_by(group_by).map{|val,states|
+            [val, states.length]
+          }.to_h
+        end
+
+        def table_data(keys=nil, group_by=nil, group_count=nil)
           if !keys
             keys = @brew.has_keys
             keys.delete(:elapsed_time)
@@ -130,26 +151,33 @@ module Toji
             keys &= @brew.has_keys
           end
 
-          if !elapsed_times
-            elapsed_times = @brew.map(&:elapsed_time_with_offset)
+          if group_count
+            brew_hash = state_group_by(group_by)
+          else
+            group_count = state_group_count(:itself)
+            brew_hash = state_group_by(:itself)
           end
 
-          brew_hash = @brew.index_by(&:elapsed_time_with_offset)
+          cells = []
+          group_count.each {|group_value,num|
+            states = brew_hash[group_value] || []
+            num ||= states.length
 
-          cells = elapsed_times.map {|elapsed_time|
-            s = brew_hash[elapsed_time]
+            num.times {|i|
+              state = states[i]
 
-            keys.map {|k|
-              v = s&.send(k)
-              if Array===v
-                v.map(&:to_s).join(", ")
-              elsif Float===v
-                v.round(3)
-              elsif v
-                v
-              else
-                ""
-              end
+              cells << keys.map {|k|
+                v = state&.send(k)
+                if Array===v
+                  v.map(&:to_s).join(", ")
+                elsif Float===v
+                  v.round(3)
+                elsif v
+                  v
+                else
+                  ""
+                end
+              }
             }
           }
 

@@ -68,23 +68,104 @@ module Toji
           )
         end
 
+        def state_group_order(group_by)
+          result = {}
+
+          @progresses.map{|progress|
+            progress.state_group_by(group_by)
+          }.map{|group|
+            group.map{|key,states|
+              [key, states.first.elapsed_time_with_offset]
+            }.to_h
+          }.each {|group|
+            result.merge!(group) {|key,self_val,other_val|
+              [self_val, other_val].min
+            }
+          }
+
+          result.sort_by(&:last).map(&:first)
+        end
+
+        def state_group_count(group_by)
+          result = {}
+
+          @progresses.map{|progress|
+            progress.state_group_count(group_by)
+          }.each {|group|
+            result.merge!(group) {|key,self_val,other_val|
+              [self_val, other_val].max
+            }
+          }
+
+          result2 = {}
+          state_group_order(group_by).each{|val|
+            result2[val] = result[val]
+          }
+          result2
+        end
+
+        def table_group_by(group_by, keys=nil)
+          header = []
+          cells = []
+
+          group_count = state_group_count(group_by)
+
+          header << ["", group_by]
+          cells << group_count.inject([]) {|result,(group,num)|
+            if 0<num
+              result << group
+              (num-1).times {
+                result << ""
+              }
+            end
+            result
+          }
+
+          @progresses.each {|progress|
+            data = progress.table_data(keys, group_by, group_count)
+            header += data[:header].map.with_index{|h,i|
+              name = i==0 ? progress.name : ""
+              [name, h]
+            }
+            cells += data[:cells]
+          }
+
+          Plotly::Plot.new(
+            data: [{
+              type: :table,
+              header: {
+                values: header
+              },
+              cells: {
+                values: cells
+              },
+            }],
+            layout: {
+            }
+          )
+        end
+
         def table(keys=nil, date_format="%m/%d %H:%M")
           header = []
           cells = []
 
-          elapsed_times = @progresses.map {|progress|
-            progress.brew.map(&:elapsed_time_with_offset)
-          }.flatten.sort.uniq
+          elapsed_times = state_group_count(:elapsed_time_with_offset)
 
           header << ["", :elapsed_time]
           utc_offset = Time.at(0).utc_offset
 
-          cells << elapsed_times.map {|elapsed_time|
-            Time.at(elapsed_time - utc_offset).strftime(date_format)
+          cells << elapsed_times.inject([]) {|result,(elapsed_time,num)|
+            if 0<num
+              result << Time.at(elapsed_time - utc_offset).strftime(date_format)
+              (num-1).times {
+                result << ""
+              }
+            end
+            result
           }
 
           @progresses.each {|progress|
-            data = progress.table_data(keys, elapsed_times)
+            data = progress.table_data(keys, :elapsed_time_with_offset, elapsed_times)
             header += data[:header].map.with_index{|h,i|
               name = i==0 ? progress.name : ""
               [name, h]

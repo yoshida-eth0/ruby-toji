@@ -69,6 +69,9 @@ module Toji
       def display_time(format="%m/%d %H:%M")
         if @time
           @time.strftime(format)
+        elsif @brew.min_time
+          time = @brew.min_time + @elapsed_time
+          time.strftime(format)
         else
           utc_offset = Time.at(0).utc_offset
           Time.at(@elapsed_time - utc_offset).strftime(format)

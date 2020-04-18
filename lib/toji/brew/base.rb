@@ -31,6 +31,7 @@ module Toji
       ].freeze
 
       attr_reader :day_offset
+      attr_reader :min_time
 
       def initialize(records, date_line)
         @date_line = date_line
@@ -39,7 +40,7 @@ module Toji
 
       def records=(records)
         records = records.map{|r| StateRecord.create(r)}
-        min_time = records.select{|r| r.time}.map(&:time).sort.first
+        min_time = records.map(&:time).compact.sort.first
         @states = records.map{|r| State.new(r.elapsed_time, r, self)}
 
         # time
@@ -54,6 +55,7 @@ module Toji
             end
           }
         end
+        @min_time = @states.first&.time
 
         @states = @states.sort{|a,b| a.elapsed_time<=>b.elapsed_time}
 
