@@ -151,7 +151,7 @@ module Toji
             keys &= @brew.has_keys
           end
 
-          if group_count
+          if group_by && group_count
             brew_hash = state_group_by(group_by)
           else
             group_count = state_group_count(:itself)

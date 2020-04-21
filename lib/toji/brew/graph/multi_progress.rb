@@ -97,14 +97,21 @@ module Toji
             }
           }
 
-          result2 = {}
-          state_group_order(group_by).each{|val|
-            result2[val] = result[val]
-          }
-          result2
+          state_group_order(group_by).map {|val|
+            [val, result[val]]
+          }.to_h
         end
 
-        def table_group_by(group_by, keys=nil)
+        def table_data(group_by=nil, keys=nil)
+          case group_by
+          when :elapsed_time, :elapsed_time_with_offset, nil
+            table_data_group_by_elapsed_time(keys)
+          else
+            table_data_group_by(group_by, keys)
+          end
+        end
+
+        def table_data_group_by(group_by, keys=nil)
           header = []
           cells = []
 
@@ -130,22 +137,10 @@ module Toji
             cells += data[:cells]
           }
 
-          Plotly::Plot.new(
-            data: [{
-              type: :table,
-              header: {
-                values: header
-              },
-              cells: {
-                values: cells
-              },
-            }],
-            layout: {
-            }
-          )
+          {header: header, cells: cells}
         end
 
-        def table(keys=nil, date_format="%m/%d %H:%M")
+        def table_data_group_by_elapsed_time(keys=nil, date_format="%m/%d %H:%M")
           header = []
           cells = []
 
@@ -173,14 +168,20 @@ module Toji
             cells += data[:cells]
           }
 
+          {header: header, cells: cells}
+        end
+
+        def table(group_by=nil, keys=nil)
+          data = table_data(group_by, keys)
+
           Plotly::Plot.new(
             data: [{
               type: :table,
               header: {
-                values: header
+                values: data[:header]
               },
               cells: {
-                values: cells
+                values: data[:cells]
               },
             }],
             layout: {
