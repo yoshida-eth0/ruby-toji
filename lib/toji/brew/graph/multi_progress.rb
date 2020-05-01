@@ -39,24 +39,30 @@ module Toji
         end
         alias_method :add, :<<
 
-
-        def plot(keys=nil)
-          data = []
-          annotations = []
+        def plot_data(keys=nil)
           use_name = 2<=@progresses.length
 
-          @progresses.each {|progress|
-            data += progress.plot_data(keys, use_name)
-            annotations += progress.annotations
-          }
+          @progresses.map {|progress|
+            progress.plot_data(keys, use_name)
+          }.inject([], :+)
+        end
 
+        def annotations
+          use_name = 2<=@progresses.length
+
+          @progresses.map {|progress|
+            progress.annotations
+          }.inject([], :+)
+        end
+
+        def plot(keys=nil)
           brews = @progresses.map(&:brew)
           max_brew_days = brews.map(&:days).max
           index = brews.index{|brew| brew.days==max_brew_days}
           day_labels = brews[index].day_labels
 
           Plotly::Plot.new(
-            data: data,
+            data: plot_data(keys),
             layout: {
               xaxis: {
                 dtick: DAY,
