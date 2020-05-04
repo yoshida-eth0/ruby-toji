@@ -79,7 +79,7 @@ module Toji
       end
 
       def day_labels
-        days.times.map(&:succ)
+        days.times.map(&:succ).map(&:to_s)
       end
 
       def moromi_tome_day

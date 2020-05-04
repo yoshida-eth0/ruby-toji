@@ -55,9 +55,9 @@ module Toji
         _prefix = prefix_day_labels
 
         if _prefix
-          _prefix + moromi_days.times.map{|i| i+2}
+          _prefix + moromi_days.times.map{|i| i+2}.map(&:to_s)
         else
-          self.days.times.map{|i| i+1}
+          self.days.times.map{|i| i+1}.map(&:to_s)
         end
       end
 
