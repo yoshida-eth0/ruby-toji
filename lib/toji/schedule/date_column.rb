@@ -25,6 +25,15 @@ module Toji
           "#{name}: #{weight}"
         }.join("<br>")
       end
+
+      def to_h_a
+        event_groups.map {|es|
+          {
+            product: es.first.product.to_h,
+            weight: es.map(&:weight).sum,
+          }
+        }
+      end
     end
   end
 end

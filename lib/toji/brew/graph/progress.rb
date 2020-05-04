@@ -44,7 +44,7 @@ module Toji
           end
 
           name = ""
-          if @name
+          if use_name && @name
             name = "#{@name} "
           end
 

@@ -103,6 +103,32 @@ module Toji
           target_alc - (_baume - target_nihonshudo * -0.1) * coef
         end
       end
+
+      def to_h
+        {
+          elapsed_time: elapsed_time,
+          time: time,
+          mark: mark,
+          temps: temps,
+          preset_temp: preset_temp,
+          room_temp: room_temp,
+          room_psychrometry: room_psychrometry,
+          acid: acid,
+          amino_acid: amino_acid,
+          alcohol: alcohol,
+          warmings: warmings,
+          note: note,
+
+          day: day,
+          day_label: day_label,
+          elapsed_time_with_offset: elapsed_time_with_offset,
+          baume: baume,
+          nihonshudo: nihonshudo,
+          display_baume: display_baume,
+          moromi_day: moromi_day,
+          bmd: bmd,
+        }
+      end
     end
   end
 end

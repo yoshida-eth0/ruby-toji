@@ -106,6 +106,16 @@ module Toji
         }
       end
 
+      def to_h
+        {
+          states: map(&:to_h),
+          has_keys: has_keys,
+          day_offset: day_offset,
+          days: days,
+          day_labels: day_labels,
+        }
+      end
+
       def self.create(records, date_line: 0)
         if Base===records
           records

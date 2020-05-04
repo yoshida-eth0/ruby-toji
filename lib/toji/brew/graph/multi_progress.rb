@@ -40,16 +40,12 @@ module Toji
         alias_method :add, :<<
 
         def plot_data(keys=nil)
-          use_name = 2<=@progresses.length
-
           @progresses.map {|progress|
-            progress.plot_data(keys, use_name)
+            progress.plot_data(keys, true)
           }.inject([], :+)
         end
 
         def annotations
-          use_name = 2<=@progresses.length
-
           @progresses.map {|progress|
             progress.annotations
           }.inject([], :+)
