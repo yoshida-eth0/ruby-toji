@@ -125,6 +125,7 @@ module Toji
           baume: baume,
           nihonshudo: nihonshudo,
           display_baume: display_baume,
+          display_time: display_time,
           moromi_day: moromi_day,
           bmd: bmd,
         }
