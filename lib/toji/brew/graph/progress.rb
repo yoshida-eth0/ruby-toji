@@ -158,7 +158,7 @@ module Toji
             brew_hash = state_group_by(:itself)
           end
 
-          cells = []
+          rows = []
           group_count.each {|group_value,num|
             states = brew_hash[group_value] || []
             num ||= states.length
@@ -166,7 +166,7 @@ module Toji
             num.times {|i|
               state = states[i]
 
-              cells << keys.map {|k|
+              rows << keys.map {|k|
                 v = state&.send(k)
                 if Array===v
                   v.map(&:to_s).join(", ")
@@ -181,7 +181,7 @@ module Toji
             }
           }
 
-          {header: keys, cells: cells.transpose}
+          {header: keys, rows: rows}
         end
 
         def plot(keys=nil)
@@ -208,7 +208,7 @@ module Toji
                 values: data[:header]
               },
               cells: {
-                values: data[:cells]
+                values: data[:rows].transpose
               },
             }],
             layout: {

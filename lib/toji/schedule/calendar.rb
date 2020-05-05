@@ -52,21 +52,21 @@ module Toji
           headers << "#{i}dan"
         }
 
-        rows = date_rows
+        _date_rows = date_rows
 
-        cells = []
+        rows = []
 
         date = min_date
         while date<=max_date
           columns = [date.strftime("%m/%d")]
 
-          row = rows[date]
-          if row
+          date_row = _date_rows[date]
+          if date_row
             koji_len.times {|i|
-              columns << (row.kojis[i]&.text || "")
+              columns << (date_row.kojis[i]&.text || "")
             }
             rice_len.times {|i|
-              columns << (row.rices[i]&.text || "")
+              columns << (date_row.rices[i]&.text || "")
             }
           else
             (koji_len + rice_len).times {
@@ -74,12 +74,12 @@ module Toji
             }
           end
 
-          cells << columns
+          rows << columns
 
           date = date.tomorrow
         end
 
-        {header: headers, cells: cells.transpose}
+        {header: headers, rows: rows}
       end
 
       def table
@@ -92,7 +92,7 @@ module Toji
               values: data[:header]
             },
             cells: {
-              values: data[:cells]
+              values: data[:rows].transpose
             },
           }],
           layout: {

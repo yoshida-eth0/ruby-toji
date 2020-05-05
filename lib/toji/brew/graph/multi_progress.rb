@@ -136,10 +136,10 @@ module Toji
               name = i==0 ? progress.name : ""
               [name, h]
             }
-            cells += data[:cells]
+            cells += data[:rows].transpose
           }
 
-          {header: header, cells: cells}
+          {header: header, rows: cells.transpose}
         end
 
         def table_data_group_by_elapsed_time(keys=nil, date_format="%m/%d %H:%M")
@@ -167,10 +167,10 @@ module Toji
               name = i==0 ? progress.name : ""
               [name, h]
             }
-            cells += data[:cells]
+            cells += data[:rows].transpose
           }
 
-          {header: header, cells: cells}
+          {header: header, rows: cells.transpose}
         end
 
         def table(group_by=nil, keys=nil)
@@ -183,7 +183,7 @@ module Toji
                 values: data[:header]
               },
               cells: {
-                values: data[:cells]
+                values: data[:rows].transpose
               },
             }],
             layout: {

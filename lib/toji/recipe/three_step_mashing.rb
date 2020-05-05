@@ -116,7 +116,7 @@ module Toji
           }
         }
 
-        {header: headers, cells: cells}
+        {header: headers, rows: cells.transpose}
       end
 
       def table
@@ -129,7 +129,7 @@ module Toji
               values: data[:header]
             },
             cells: {
-              values: data[:cells]
+              values: data[:rows].transpose
             },
           }],
           layout: {
