@@ -28,9 +28,11 @@ module Toji
 
       def to_h_a
         event_groups.map {|es|
+          product = es.first.product
           {
-            product_id: es.first.product.id,
-            product_name: es.first.product.name,
+            product_id: product.id,
+            product_name: product.name,
+            product_color: product.color,
             weight: es.map(&:weight).sum,
           }
         }
