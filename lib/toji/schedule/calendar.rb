@@ -63,14 +63,14 @@ module Toji
           date_row = _date_rows[date]
           if date_row
             koji_len.times {|i|
-              columns << (date_row.kojis[i]&.text || "")
+              columns << (date_row.kojis[i]&.to_h_a || [])
             }
             rice_len.times {|i|
-              columns << (date_row.rices[i]&.text || "")
+              columns << (date_row.rices[i]&.to_h_a || [])
             }
           else
             (koji_len + rice_len).times {
-              columns << ""
+              columns << []
             }
           end
 
@@ -82,8 +82,26 @@ module Toji
         {header: headers, rows: rows}
       end
 
-      def table
+      def table_text_data
         data = table_data
+        data[:rows] = data[:rows].map {|row|
+          row.map {|column|
+            if Array===column
+              column.map{|c|
+                name = c[:product_name]
+                weight = "%.17g" % c[:weight]
+                "#{name}: #{weight}"
+              }.join("<br>")
+            else
+              column
+            end
+          }
+        }
+        data
+      end
+
+      def table
+        data = table_text_data
 
         Plotly::Plot.new(
           data: [{

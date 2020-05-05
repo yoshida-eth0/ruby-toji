@@ -1,6 +1,7 @@
 module Toji
   module Schedule
     class Product
+      attr_reader :id
       attr_reader :name
       attr_reader :description
       attr_reader :recipe
@@ -10,7 +11,8 @@ module Toji
 
       attr_reader :color
 
-      def initialize(name, description, recipe, koji_dates, rice_dates, color=nil)
+      def initialize(id, name, description, recipe, koji_dates, rice_dates, color=nil)
+        @id = id
         @name = name
         @description = description
         @recipe = recipe
@@ -64,6 +66,7 @@ module Toji
           end
 
           new(
+            args[:id],
             args[:name],
             args[:description],
             recipe,
