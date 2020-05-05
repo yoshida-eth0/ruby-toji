@@ -97,6 +97,17 @@ module Toji
           x * y
         end
       end
+
+      def to_h
+        {
+          name: name,
+          rice: rice.raw,
+          koji: koji.raw,
+          water: water,
+          lactic_acid: lactic_acid,
+          alcohol: alcohol,
+        }
+      end
     end
   end
 end

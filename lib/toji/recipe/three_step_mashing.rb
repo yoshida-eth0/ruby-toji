@@ -70,7 +70,7 @@ module Toji
       #
       # 出典: 酒造教本 P96
       def shubo_rate
-        cumulative_shubo_rates.last
+        cumulative_shubo_rates.last || 0.0
       end
 
       # 白米比率
@@ -84,6 +84,16 @@ module Toji
       def rice_rates
         @steps.map {|step|
           step.rice_total / @steps[0].rice_total
+        }
+      end
+
+      def to_h
+        {
+          steps: steps.map(&:to_h),
+          cumulative_rice_totals: cumulative_rice_totals,
+          cumulative_shubo_rates: cumulative_shubo_rates,
+          shubo_rate: shubo_rate,
+          rice_rates: rice_rates,
         }
       end
 

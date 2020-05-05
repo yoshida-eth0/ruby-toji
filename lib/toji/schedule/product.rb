@@ -44,6 +44,16 @@ module Toji
         events
       end
 
+      def to_h
+        {
+          id: @id,
+          name: @name,
+          description: @description,
+          recipe: @recipe.table_data,
+          color: @color,
+        }
+      end
+
       def self.create(args)
         if self===args
           args
