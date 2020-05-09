@@ -30,7 +30,7 @@ module Toji
 
       def group_key
         a = []
-        a << product.name
+        a << (product.id || product.name)
         a << type
         a << group_index
         a.map(&:to_s).join(":")
@@ -38,6 +38,16 @@ module Toji
 
       def weight
         @product.recipe.steps[@index].send(@type).raw
+      end
+
+      def to_h
+        {
+          date: date,
+          type: type,
+          index: index,
+          group_index: group_index,
+          weight: weight,
+        }
       end
     end
   end
