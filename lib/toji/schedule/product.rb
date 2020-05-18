@@ -44,6 +44,26 @@ module Toji
         events
       end
 
+      def events_group
+        events.group_by{|event|
+          event.group_key
+        }.map {|group_key,events|
+          breakdown = events.map {|event|
+            {index: event.index, weight: event.weight}
+          }
+          if 1<breakdown.length
+            breakdown = breakdown.select{|event| 0<event[:weight]}
+          end
+
+          {
+            date: events.first.date,
+            type: events.first.type,
+            weight: events.map(&:weight).sum,
+            breakdown: breakdown,
+          }
+        }
+      end
+
       def to_h
         {
           id: @id,
@@ -53,6 +73,7 @@ module Toji
           koji_dates: @koji_dates,
           rice_dates: @rice_dates,
           events: events.map(&:to_h),
+          events_group: events_group,
           color: @color,
         }
       end
