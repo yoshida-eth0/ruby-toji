@@ -6,7 +6,7 @@ module Toji
           include Base
           include ExpectedSteamable
 
-          def initialize(raw, rice_rate: Recipe::RiceRate::Cooked::DEFAULT)
+          def initialize(raw, rice_rate: Recipe::RiceRate::DEFAULT)
             @raw = raw.to_f
 
             @rice_rate = rice_rate

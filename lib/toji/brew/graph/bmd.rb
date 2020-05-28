@@ -5,7 +5,6 @@ module Toji
 
         def initialize
           @actuals = []
-          @expects = []
         end
 
         def actual(moromi, name=:actual)

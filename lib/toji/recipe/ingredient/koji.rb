@@ -8,7 +8,7 @@ module Toji
   module Recipe
     module Ingredient
       module Koji
-        def self.expected(raw, rice_rate: Recipe::RiceRate::Cooked::DEFAULT, koji_rate: Recipe::KojiRate::DEFAULT)
+        def self.expected(raw, rice_rate: Recipe::RiceRate::DEFAULT, koji_rate: Recipe::KojiRate::DEFAULT)
           Expected.new(raw, rice_rate: rice_rate, koji_rate: koji_rate)
         end
 
