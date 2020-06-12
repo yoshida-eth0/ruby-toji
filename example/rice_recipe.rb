@@ -1,7 +1,7 @@
 require 'toji'
 require 'terminal-table'
 
-rice = Toji::Recipe::Ingredient::Rice.expected(100, rice_rate: Toji::Recipe::RiceRate::DEFAULT)
+rice = Toji::Ingredient::Rice.expected(100, rice_rate: Toji::Ingredient::RiceRate::DEFAULT)
 
 table = Terminal::Table.new do |t|
   t << ["", "分量", "白米を基準とした歩合"]

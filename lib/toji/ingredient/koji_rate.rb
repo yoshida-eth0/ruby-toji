@@ -1,5 +1,5 @@
 module Toji
-  module Recipe
+  module Ingredient
     class KojiRate
       attr_reader :tanekoji_rate
       attr_reader :dekoji_rate

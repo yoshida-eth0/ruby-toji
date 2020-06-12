@@ -84,7 +84,7 @@ module Toji
         elsif Hash===args
           recipe = args.fetch(:recipe)
           if Symbol===recipe
-            recipe = Recipe::ThreeStepMashing::TEMPLATES.fetch(recipe)
+            recipe = Recipe::TEMPLATES.fetch(recipe)
           end
           if args[:scale]
             recipe = recipe.scale(args[:scale])

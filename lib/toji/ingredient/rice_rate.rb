@@ -1,5 +1,5 @@
 module Toji
-  module Recipe
+  module Ingredient
     class RiceRate
       # 浸漬米吸水率
       attr_reader :soaked_rate

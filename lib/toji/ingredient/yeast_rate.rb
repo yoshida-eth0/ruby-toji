@@ -1,5 +1,5 @@
 module Toji
-  module Recipe
+  module Ingredient
     class YeastRate
 
       # 1リットル醸造のために必要な酵母の量
