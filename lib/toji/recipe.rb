@@ -6,18 +6,12 @@ module Toji
     attr_reader :steps
     attr_reader :yeast
 
-    attr_accessor :moto_days
-    attr_accessor :odori_days
-
-    def initialize(steps, yeast_rate, moto_days: 1, odori_days: 1)
+    def initialize(steps, yeast_rate)
       @steps = steps
 
       @yeast_rate = yeast_rate
       weight_total = @steps.map(&:weight_total).sum
       @yeast = Ingredient::Yeast.new(weight_total, rate: yeast_rate)
-
-      @moto_days = moto_days
-      @odori_days = odori_days
     end
 
     def scale(rice_total, yeast_rate=@yeast_rate)
@@ -26,14 +20,14 @@ module Toji
         step * rate
       }
 
-      self.class.new(new_steps, yeast_rate, moto_days: @moto_days, odori_days: @odori_days)
+      self.class.new(new_steps, yeast_rate)
     end
 
     def round(ndigit=0, half: :up)
       new_steps = @steps.map {|step|
         step.round(ndigit, half: half)
       }
-      self.class.new(new_steps, @yeast_rate, moto_days: @moto_days, odori_days: @odori_days)
+      self.class.new(new_steps, @yeast_rate)
     end
 
     # 内容量の累計
@@ -163,35 +157,42 @@ module Toji
             rice: 45,
             koji: 20,
             water: 70,
-            lactic_acid: 70*6.85/1000
+            lactic_acid: 70*6.85/1000,
+            koji_interval_days: 0,
+            kake_interval_days: 5,
           ),
           Step.new(
             name: :soe,
             rice: 100,
             koji: 40,
-            water: 130
+            water: 130,
+            koji_interval_days: 14,
+            kake_interval_days: 15,
           ),
           Step.new(
             name: :naka,
             rice: 215,
             koji: 60,
-            water: 330
+            water: 330,
+            koji_interval_days: 0,
+            kake_interval_days: 2,
           ),
           Step.new(
             name: :tome,
             rice: 360,
             koji: 80,
-            water: 630
+            water: 630,
+            koji_interval_days: 0,
+            kake_interval_days: 1,
           ),
           Step.new(
             name: :yodan,
             rice: 80,
-            water: 120
+            water: 120,
+            kake_interval_days: 25,
           ),
         ],
         Ingredient::YeastRate::RED_STAR,
-        moto_days: 14,
-        odori_days: 1,
       ),
       # 灘における仕込配合の平均値
       # 出典: http://www.nada-ken.com/main/jp/index_shi/234.html
@@ -202,25 +203,33 @@ module Toji
             rice: 93,
             koji: 47,
             water: 170,
-            lactic_acid: 170*6.85/1000
+            lactic_acid: 170*6.85/1000,
+            koji_interval_days: 0,
+            kake_interval_days: 5,
           ),
           Step.new(
             name: :soe,
             rice: 217,
             koji: 99,
-            water: 270
+            water: 270,
+            koji_interval_days: 14,
+            kake_interval_days: 15,
           ),
           Step.new(
             name: :naka,
             rice: 423,
             koji: 143,
-            water: 670
+            water: 670,
+            koji_interval_days: 0,
+            kake_interval_days: 2,
           ),
           Step.new(
             name: :tome,
             rice: 813,
             koji: 165,
-            water: 1330
+            water: 1330,
+            koji_interval_days: 0,
+            kake_interval_days: 1,
           ),
           Step.new(
             name: :alcohol,
@@ -228,8 +237,6 @@ module Toji
           ),
         ],
         Ingredient::YeastRate::RED_STAR,
-        moto_days: 14,
-        odori_days: 1,
       ),
       # 簡易酒母省略仕込
       # 出典: https://www.jstage.jst.go.jp/article/jbrewsocjapan1915/60/11/60_11_999/_article/-char/ja/
@@ -240,25 +247,33 @@ module Toji
             rice: 0,
             koji: 70,
             water: 245,
-            lactic_acid: 1.6
+            lactic_acid: 1.6,
+            koji_interval_days: 0,
+            kake_interval_days: 6,
           ),
           Step.new(
             name: :soe,
             rice: 130,
             koji: 0,
-            water: 0
+            water: 0,
+            koji_interval_days: 0,
+            kake_interval_days: 1,
           ),
           Step.new(
             name: :naka,
             rice: 300,
             koji: 100,
-            water: 400
+            water: 400,
+            koji_interval_days: 0,
+            kake_interval_days: 2,
           ),
           Step.new(
             name: :tome,
             rice: 490,
             koji: 110,
-            water: 800
+            water: 800,
+            koji_interval_days: 0,
+            kake_interval_days: 1,
           ),
           Step.new(
             name: :yodan,
@@ -266,8 +281,6 @@ module Toji
           ),
         ],
         Ingredient::YeastRate::RED_STAR,
-        moto_days: 1,
-        odori_days: 2,
       ),
     }.freeze
   end

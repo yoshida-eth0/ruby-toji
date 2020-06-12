@@ -7,22 +7,30 @@ module Toji
     attr_reader :name
     attr_reader :description
     attr_reader :recipe
-
-    attr_reader :koji_dates
-    attr_reader :rice_dates
-
+    attr_reader :start_date
     attr_reader :color
 
-    def initialize(id, name, description, recipe, koji_dates, rice_dates, color=nil)
+    def initialize(id, name, description, recipe, start_date, color=nil)
       @id = id
       @name = name
       @description = description
       @recipe = recipe
-
-      @koji_dates = DateIntervalEnumerator.new([], 0).merge(koji_dates, recipe.steps.length)
-      @rice_dates = DateIntervalEnumerator.new([recipe.moto_days, recipe.odori_days+1, 1], 1).merge(rice_dates, recipe.steps.length)
-
+      @start_date = start_date
       @color = color
+    end
+
+    def koji_dates
+      date = start_date
+      @recipe.steps.map {|step|
+        date = date.next_day(step.koji_interval_days)
+      }
+    end
+
+    def rice_dates
+      date = start_date
+      @recipe.steps.map {|step|
+        date = date.next_day(step.rice_interval_days)
+      }
     end
 
     def events
@@ -72,8 +80,9 @@ module Toji
         name: @name,
         description: @description,
         recipe: @recipe.table_data,
-        koji_dates: @koji_dates,
-        rice_dates: @rice_dates,
+        start_date: @start_date
+        koji_dates: koji_dates,
+        rice_dates: rice_dates,
         events: events.map(&:to_h),
         events_group: events_group,
         color: @color,
@@ -94,20 +103,13 @@ module Toji
         if args[:round]
           recipe = recipe.round(args[:round])
         end
-        if args[:moto_days]
-          recipe.moto_days = args[:moto_days]
-        end
-        if args[:odori_days]
-          recipe.odori_days = args[:odori_days]
-        end
 
         new(
           args[:id],
           args[:name],
           args[:description],
           recipe,
-          args[:koji_dates],
-          args[:rice_dates],
+          args[:start_date],
           args[:color]
         )
       else

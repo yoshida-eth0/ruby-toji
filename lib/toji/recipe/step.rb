@@ -7,14 +7,18 @@ module Toji
       attr_reader :water
       attr_reader :lactic_acid
       attr_reader :alcohol
+      attr_reader :koji_interval_days
+      attr_reader :kake_interval_days
 
-      def initialize(name:, rice: 0, koji: 0, water: 0, lactic_acid: 0, alcohol: 0)
+      def initialize(name:, rice: 0, koji: 0, water: 0, lactic_acid: 0, alcohol: 0, koji_interval_days: 0, kake_interval_days: 0)
         @name = name
         @rice = Ingredient::Rice::Expected.create(rice)
         @koji = Ingredient::Koji::Expected.create(koji)
         @water = water.to_f
         @lactic_acid = lactic_acid.to_f
         @alcohol = alcohol.to_f
+        @koji_interval_days = koji_interval_days.to_i
+        @kake_interval_days = kake_interval_days.to_i
       end
 
       # 総米
@@ -62,7 +66,9 @@ module Toji
           koji: @koji.round(ndigit, half: half),
           water: @water.round(ndigit, half: half),
           lactic_acid: @lactic_acid.round(acid_ndigit, half: half),
-          alcohol: @alcohol.round(ndigit, half: half)
+          alcohol: @alcohol.round(ndigit, half: half),
+          koji_interval_days: koji_interval_days,
+          kake_interval_days: kake_interval_days,
         )
       end
 
@@ -74,7 +80,9 @@ module Toji
             koji: @koji + other.koji,
             water: @water + other.water,
             lactic_acid: @lactic_acid + other.lactic_acid,
-            alcohol: @alcohol + other.alcohol
+            alcohol: @alcohol + other.alcohol,
+            koji_interval_days: koji_interval_days,
+            kake_interval_days: kake_interval_days,
           )
         else
           x, y = other.coerce(self)
@@ -90,8 +98,10 @@ module Toji
             koji: @koji * other,
             water: @water * other,
             lactic_acid: @lactic_acid * other,
-            alcohol: @alcohol * other
-           )
+            alcohol: @alcohol * other,
+            koji_interval_days: koji_interval_days,
+            kake_interval_days: kake_interval_days,
+          )
         else
           x, y = other.coerce(self)
           x * y
@@ -106,6 +116,8 @@ module Toji
           water: water,
           lactic_acid: lactic_acid,
           alcohol: alcohol,
+          koji_interval_days: koji_interval_days,
+          kake_interval_days: kake_interval_days,
         }
       end
     end
