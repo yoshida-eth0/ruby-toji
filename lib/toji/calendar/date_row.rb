@@ -1,5 +1,5 @@
 module Toji
-  module Schedule
+  class Calendar
     class DateRow
       attr_reader :date
       attr_reader :kojis

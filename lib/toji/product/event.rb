@@ -1,6 +1,6 @@
 module Toji
-  module Schedule
-    class ProductEvent
+  class Product
+    class Event
       attr_reader :product
       attr_reader :type
       attr_reader :index

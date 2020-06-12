@@ -1,3 +1,5 @@
+require 'toji/recipe/step'
+
 module Toji
   class Recipe
 

@@ -1,5 +1,5 @@
 module Toji
-  module Schedule
+  class Calendar
     class DateColumn
       attr_reader :events
 

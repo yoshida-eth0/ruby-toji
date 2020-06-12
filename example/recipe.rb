@@ -1,7 +1,7 @@
 require 'toji'
 require 'terminal-table'
 
-recipe = Toji::Recipe::ThreeStepMashing::TEMPLATES[:sokujo_nada].scale(900)
+recipe = Toji::Recipe::TEMPLATES[:sokujo_nada].scale(900)
 step_names = recipe.steps.map(&:name)
 
 table = Terminal::Table.new do |t|
