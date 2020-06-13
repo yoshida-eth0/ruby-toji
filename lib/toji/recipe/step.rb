@@ -7,16 +7,18 @@ module Toji
       attr_reader :water
       attr_reader :lactic_acid
       attr_reader :alcohol
+      attr_reader :yeast
       attr_reader :koji_interval_days
       attr_reader :kake_interval_days
 
-      def initialize(name:, rice: 0, koji: 0, water: 0, lactic_acid: 0, alcohol: 0, koji_interval_days: 0, kake_interval_days: 0)
+      def initialize(name:, rice: 0, koji: 0, water: 0, lactic_acid: 0, alcohol: 0, yeast: 0, koji_interval_days: 0, kake_interval_days: 0)
         @name = name
         @rice = Ingredient::Rice::Expected.create(rice)
         @koji = Ingredient::Koji::Expected.create(koji)
         @water = water.to_f
         @lactic_acid = lactic_acid.to_f
         @alcohol = alcohol.to_f
+        @yeast = yeast.to_f
         @koji_interval_days = koji_interval_days.to_i
         @kake_interval_days = kake_interval_days.to_i
       end
@@ -28,7 +30,7 @@ module Toji
 
       # 総重量
       def weight_total
-        @rice.cooled + @koji.dekoji + @water + @lactic_acid + @alcohol
+        @rice.cooled + @koji.dekoji + @water + @lactic_acid + @alcohol + @yeast
       end
 
       # 麹歩合
@@ -67,6 +69,7 @@ module Toji
           water: @water.round(ndigit, half: half),
           lactic_acid: @lactic_acid.round(acid_ndigit, half: half),
           alcohol: @alcohol.round(ndigit, half: half),
+          yeast: @yeast.round(ndigit, half: half),
           koji_interval_days: koji_interval_days,
           kake_interval_days: kake_interval_days,
         )
@@ -81,6 +84,7 @@ module Toji
             water: @water + other.water,
             lactic_acid: @lactic_acid + other.lactic_acid,
             alcohol: @alcohol + other.alcohol,
+            yeast: @yeast + other.yeast,
             koji_interval_days: koji_interval_days,
             kake_interval_days: kake_interval_days,
           )
@@ -99,6 +103,7 @@ module Toji
             water: @water * other,
             lactic_acid: @lactic_acid * other,
             alcohol: @alcohol * other,
+            yeast: @yeast * other,
             koji_interval_days: koji_interval_days,
             kake_interval_days: kake_interval_days,
           )
@@ -116,6 +121,7 @@ module Toji
           water: water,
           lactic_acid: lactic_acid,
           alcohol: alcohol,
+          yeast: yeast,
           koji_interval_days: koji_interval_days,
           kake_interval_days: kake_interval_days,
         }

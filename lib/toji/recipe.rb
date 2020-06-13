@@ -4,30 +4,25 @@ module Toji
   class Recipe
 
     attr_reader :steps
-    attr_reader :yeast
 
-    def initialize(steps, yeast_rate)
+    def initialize(steps)
       @steps = steps
-
-      @yeast_rate = yeast_rate
-      weight_total = @steps.map(&:weight_total).sum
-      @yeast = Ingredient::Yeast.new(weight_total, rate: yeast_rate)
     end
 
-    def scale(rice_total, yeast_rate=@yeast_rate)
+    def scale(rice_total)
       rate = rice_total / @steps.map(&:rice_total).sum
       new_steps = @steps.map {|step|
         step * rate
       }
 
-      self.class.new(new_steps, yeast_rate)
+      self.class.new(new_steps)
     end
 
     def round(ndigit=0, half: :up)
       new_steps = @steps.map {|step|
         step.round(ndigit, half: half)
       }
-      self.class.new(new_steps, @yeast_rate)
+      self.class.new(new_steps)
     end
 
     # 内容量の累計
@@ -144,9 +139,11 @@ module Toji
 
 
     # 乳酸は汲水100L当たり比重1.21の乳酸(90%乳酸と称される)を650〜720ml添加する。
-    # ここでは間をとって685mlとする
+    # 添加する酵母の量は、酒母の総米100kg当たり協会酵母アンプル1〜2本である。
     #
-    # 出典: 酒造教本 P38
+    # 出典: 酒造教本 P80
+    #
+    # ここでは間をとって乳酸は685ml、酵母は1.5本とする。
     TEMPLATES = {
       # 酒造教本による標準型仕込配合
       # 出典: 酒造教本 P97
@@ -157,7 +154,8 @@ module Toji
             rice: 45,
             koji: 20,
             water: 70,
-            lactic_acid: 70*6.85/1000,
+            lactic_acid: 70/100.0*0.685,
+            yeast: (45+20)/100.0*1.5,
             koji_interval_days: 0,
             kake_interval_days: 5,
           ),
@@ -191,8 +189,7 @@ module Toji
             water: 120,
             kake_interval_days: 25,
           ),
-        ],
-        Ingredient::YeastRate::RED_STAR,
+        ]
       ),
       # 灘における仕込配合の平均値
       # 出典: http://www.nada-ken.com/main/jp/index_shi/234.html
@@ -203,7 +200,8 @@ module Toji
             rice: 93,
             koji: 47,
             water: 170,
-            lactic_acid: 170*6.85/1000,
+            lactic_acid: 170/100.0*0.685,
+            yeast: (93+47)/100.0*1.5,
             koji_interval_days: 0,
             kake_interval_days: 5,
           ),
@@ -235,8 +233,7 @@ module Toji
             name: :alcohol,
             alcohol: 900
           ),
-        ],
-        Ingredient::YeastRate::RED_STAR,
+        ]
       ),
       # 簡易酒母省略仕込
       # 出典: https://www.jstage.jst.go.jp/article/jbrewsocjapan1915/60/11/60_11_999/_article/-char/ja/
@@ -248,6 +245,7 @@ module Toji
             koji: 70,
             water: 245,
             lactic_acid: 1.6,
+            yeast: 5,
             koji_interval_days: 0,
             kake_interval_days: 6,
           ),
@@ -279,8 +277,7 @@ module Toji
             name: :yodan,
             water: 255
           ),
-        ],
-        Ingredient::YeastRate::RED_STAR,
+        ]
       ),
     }.freeze
   end

@@ -8,8 +8,7 @@ table = Terminal::Table.new do |t|
   t << [""] + step_names
   t << :separator
   t << ["[原料]"]
-  t << ["酵母(g)", recipe.yeast.yeast&.round(2)]
-  t << ["酵母吸水", recipe.yeast.water&.round(2)]
+  t << ["酵母(g or 本)"] + recipe.steps.map(&:yeast).map{|v| v&.round(2)}
   t << ["乳酸(ml)"] + recipe.steps.map(&:lactic_acid).map{|v| v&.round(6)}
   t << ["掛米(g)"] + recipe.steps.map(&:rice).map(&:raw).map{|v| v&.round(2)}
   t << ["麹米(g)"] + recipe.steps.map(&:koji).map(&:raw).map{|v| v&.round(2)}

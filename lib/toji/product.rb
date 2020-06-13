@@ -80,7 +80,7 @@ module Toji
         name: @name,
         description: @description,
         recipe: @recipe.table_data,
-        start_date: @start_date
+        start_date: @start_date,
         koji_dates: koji_dates,
         rice_dates: rice_dates,
         events: events.map(&:to_h),
