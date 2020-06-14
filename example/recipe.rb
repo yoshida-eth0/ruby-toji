@@ -10,7 +10,7 @@ table = Terminal::Table.new do |t|
   t << ["[原料]"]
   t << ["酵母(g or 本)"] + recipe.steps.map(&:yeast).map{|v| v&.round(2)}
   t << ["乳酸(ml)"] + recipe.steps.map(&:lactic_acid).map{|v| v&.round(6)}
-  t << ["掛米(g)"] + recipe.steps.map(&:rice).map(&:raw).map{|v| v&.round(2)}
+  t << ["掛米(g)"] + recipe.steps.map(&:kake).map(&:raw).map{|v| v&.round(2)}
   t << ["麹米(g)"] + recipe.steps.map(&:koji).map(&:raw).map{|v| v&.round(2)}
   t << ["汲水(ml)"] + recipe.steps.map(&:water).map{|v| v&.round(2)}
   t << ["醸造アルコール(ml)"] + recipe.steps.map(&:alcohol).map{|v| v&.round(2)}
@@ -34,13 +34,13 @@ puts "掛米"
 table = Terminal::Table.new do |t|
   t << ["工程", "原料"] + step_names
   t << :separator
-  t << ["洗米・浸漬", "白米(g)"] + recipe.steps.map(&:rice).map(&:raw).map{|v| v&.round(2)}
-  t << ["", "吸水増加量(ml)"] + recipe.steps.map(&:rice).map(&:soaking_water).map{|v| v&.round(2)}
+  t << ["洗米・浸漬", "白米(g)"] + recipe.steps.map(&:kake).map(&:raw).map{|v| v&.round(2)}
+  t << ["", "吸水増加量(ml)"] + recipe.steps.map(&:kake).map(&:soaking_water).map{|v| v&.round(2)}
   t << :separator
-  t << ["水切り", "浸漬米(g)"] + recipe.steps.map(&:rice).map(&:soaked).map{|v| v&.round(2)}
-  t << ["", "汲水(ml)"] + recipe.steps.map(&:rice).map(&:steaming_water).map{|v| v&.round(2)}
+  t << ["水切り", "浸漬米(g)"] + recipe.steps.map(&:kake).map(&:soaked).map{|v| v&.round(2)}
+  t << ["", "汲水(ml)"] + recipe.steps.map(&:kake).map(&:steaming_water).map{|v| v&.round(2)}
   t << :separator
-  t << ["蒸し", "蒸米(g)"] + recipe.steps.map(&:rice).map(&:steamed).map{|v| v&.round(2)}
+  t << ["蒸し", "蒸米(g)"] + recipe.steps.map(&:kake).map(&:steamed).map{|v| v&.round(2)}
 end
 puts table
 puts

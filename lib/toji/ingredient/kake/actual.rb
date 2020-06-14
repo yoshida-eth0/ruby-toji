@@ -1,9 +1,9 @@
 module Toji
   module Ingredient
-    module Rice
+    module Kake
       class Actual
         include Base
-        include ActualSteamable
+        include Rice::ActualSteamable
 
         def initialize(raw, soaked, steaming_water, steamed, cooled)
           @raw = raw

@@ -1,9 +1,9 @@
 module Toji
   module Ingredient
-    module Rice
+    module Kake
       class Expected
         include Base
-        include ExpectedSteamable
+        include Rice::ExpectedSteamable
 
         def initialize(raw, rice_rate: RiceRate::DEFAULT)
           @raw = raw.to_f

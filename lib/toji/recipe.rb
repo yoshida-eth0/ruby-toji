@@ -89,11 +89,11 @@ module Toji
 
     def table_data
       headers = [""] + @steps.map(&:name) + [:total]
-      keys = [:rice_total, :rice, :koji, :alcohol, :water, :lactic_acid]
+      keys = [:rice_total, :kake, :koji, :alcohol, :water, :lactic_acid]
 
       cells = [keys]
       cells += @steps.map {|step|
-        [step.rice_total, step.rice, step.koji, step.alcohol, step.water, step.lactic_acid]
+        [step.rice_total, step.kake, step.koji, step.alcohol, step.water, step.lactic_acid]
       }
       cells << keys.map {|key|
         @steps.map(&key).compact.sum
@@ -151,7 +151,7 @@ module Toji
         [
           Step.new(
             name: :moto,
-            rice: 45,
+            kake: 45,
             koji: 20,
             water: 70,
             lactic_acid: 70/100.0*0.685,
@@ -161,7 +161,7 @@ module Toji
           ),
           Step.new(
             name: :soe,
-            rice: 100,
+            kake: 100,
             koji: 40,
             water: 130,
             koji_interval_days: 14,
@@ -169,7 +169,7 @@ module Toji
           ),
           Step.new(
             name: :naka,
-            rice: 215,
+            kake: 215,
             koji: 60,
             water: 330,
             koji_interval_days: 0,
@@ -177,7 +177,7 @@ module Toji
           ),
           Step.new(
             name: :tome,
-            rice: 360,
+            kake: 360,
             koji: 80,
             water: 630,
             koji_interval_days: 0,
@@ -185,7 +185,7 @@ module Toji
           ),
           Step.new(
             name: :yodan,
-            rice: 80,
+            kake: 80,
             water: 120,
             kake_interval_days: 25,
           ),
@@ -197,7 +197,7 @@ module Toji
         [
           Step.new(
             name: :moto,
-            rice: 93,
+            kake: 93,
             koji: 47,
             water: 170,
             lactic_acid: 170/100.0*0.685,
@@ -207,7 +207,7 @@ module Toji
           ),
           Step.new(
             name: :soe,
-            rice: 217,
+            kake: 217,
             koji: 99,
             water: 270,
             koji_interval_days: 14,
@@ -215,7 +215,7 @@ module Toji
           ),
           Step.new(
             name: :naka,
-            rice: 423,
+            kake: 423,
             koji: 143,
             water: 670,
             koji_interval_days: 0,
@@ -223,7 +223,7 @@ module Toji
           ),
           Step.new(
             name: :tome,
-            rice: 813,
+            kake: 813,
             koji: 165,
             water: 1330,
             koji_interval_days: 0,
@@ -241,7 +241,7 @@ module Toji
         [
           Step.new(
             name: :moto,
-            rice: 0,
+            kake: 0,
             koji: 70,
             water: 245,
             lactic_acid: 1.6,
@@ -251,7 +251,7 @@ module Toji
           ),
           Step.new(
             name: :soe,
-            rice: 130,
+            kake: 130,
             koji: 0,
             water: 0,
             koji_interval_days: 0,
@@ -259,7 +259,7 @@ module Toji
           ),
           Step.new(
             name: :naka,
-            rice: 300,
+            kake: 300,
             koji: 100,
             water: 400,
             koji_interval_days: 0,
@@ -267,7 +267,7 @@ module Toji
           ),
           Step.new(
             name: :tome,
-            rice: 490,
+            kake: 490,
             koji: 110,
             water: 800,
             koji_interval_days: 0,

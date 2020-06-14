@@ -2,7 +2,7 @@ module Toji
   class Recipe
     class Step
       attr_reader :name
-      attr_reader :rice
+      attr_reader :kake
       attr_reader :koji
       attr_reader :water
       attr_reader :lactic_acid
@@ -11,9 +11,9 @@ module Toji
       attr_reader :koji_interval_days
       attr_reader :kake_interval_days
 
-      def initialize(name:, rice: 0, koji: 0, water: 0, lactic_acid: 0, alcohol: 0, yeast: 0, koji_interval_days: 0, kake_interval_days: 0)
+      def initialize(name:, kake: 0, koji: 0, water: 0, lactic_acid: 0, alcohol: 0, yeast: 0, koji_interval_days: 0, kake_interval_days: 0)
         @name = name
-        @rice = Ingredient::Rice::Expected.create(rice)
+        @kake = Ingredient::Kake::Expected.create(kake)
         @koji = Ingredient::Koji::Expected.create(koji)
         @water = water.to_f
         @lactic_acid = lactic_acid.to_f
@@ -25,12 +25,12 @@ module Toji
 
       # 総米
       def rice_total
-        @rice.raw + @koji.raw
+        @kake.raw + @koji.raw
       end
 
       # 総重量
       def weight_total
-        @rice.cooled + @koji.dekoji + @water + @lactic_acid + @alcohol + @yeast
+        @kake.cooled + @koji.dekoji + @water + @lactic_acid + @alcohol + @yeast
       end
 
       # 麹歩合
@@ -64,7 +64,7 @@ module Toji
 
         self.class.new(
           name: @name,
-          rice: @rice.round(ndigit, half: half),
+          kake: @kake.round(ndigit, half: half),
           koji: @koji.round(ndigit, half: half),
           water: @water.round(ndigit, half: half),
           lactic_acid: @lactic_acid.round(acid_ndigit, half: half),
@@ -79,7 +79,7 @@ module Toji
         if Step===other
           self.class.new(
             name: nil,
-            rice: @rice + other.rice,
+            kake: @kake + other.kake,
             koji: @koji + other.koji,
             water: @water + other.water,
             lactic_acid: @lactic_acid + other.lactic_acid,
@@ -98,7 +98,7 @@ module Toji
         if Integer===other || Float===other
           self.class.new(
             name: @name,
-            rice: @rice * other,
+            kake: @kake * other,
             koji: @koji * other,
             water: @water * other,
             lactic_acid: @lactic_acid * other,
@@ -116,7 +116,7 @@ module Toji
       def to_h
         {
           name: name,
-          rice: rice.raw,
+          kake: kake.raw,
           koji: koji.raw,
           water: water,
           lactic_acid: lactic_acid,

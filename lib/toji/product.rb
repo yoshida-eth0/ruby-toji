@@ -26,10 +26,10 @@ module Toji
       }
     end
 
-    def rice_dates
+    def kake_dates
       date = start_date
       @recipe.steps.map {|step|
-        date = date.next_day(step.rice_interval_days)
+        date = date.next_day(step.kake_interval_days)
       }
     end
 
@@ -40,9 +40,9 @@ module Toji
         events << Event.new(self, :koji, i)
       }
 
-      @rice_dates.length
+      @kake_dates.length
         .times.map {|i|
-          Event.new(self, :rice, i)
+          Event.new(self, :kake, i)
         }
         .delete_if {|e|
           4<=e.index && e.weight==0
@@ -82,7 +82,7 @@ module Toji
         recipe: @recipe.table_data,
         start_date: @start_date,
         koji_dates: koji_dates,
-        rice_dates: rice_dates,
+        kake_dates: kake_dates,
         events: events.map(&:to_h),
         events_group: events_group,
         color: @color,

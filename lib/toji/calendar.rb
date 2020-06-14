@@ -31,7 +31,7 @@ module Toji
       events = @products.map{|product| product.events}.flatten
 
       koji_len = events.select{|e| e.type==:koji}.map(&:group_index).max + 1
-      rice_len = events.select{|e| e.type==:rice}.map(&:group_index).max + 1
+      kake_len = events.select{|e| e.type==:kake}.map(&:group_index).max + 1
       min_date = events.map(&:date).min
       max_date = events.map(&:date).max
 
@@ -49,8 +49,8 @@ module Toji
         }
       end
 
-      headers += [:moto, :soe, :naka, :tome, :yodan][0...rice_len]
-      (5...rice_len).each {|i|
+      headers += [:moto, :soe, :naka, :tome, :yodan][0...kake_len]
+      (5...kake_len).each {|i|
         headers << "#{i}dan"
       }
 
@@ -67,11 +67,11 @@ module Toji
           koji_len.times {|i|
             columns << (date_row.kojis[i]&.to_h_a || [])
           }
-          rice_len.times {|i|
-            columns << (date_row.rices[i]&.to_h_a || [])
+          kake_len.times {|i|
+            columns << (date_row.kakes[i]&.to_h_a || [])
           }
         else
-          (koji_len + rice_len).times {
+          (koji_len + kake_len).times {
             columns << []
           }
         end
