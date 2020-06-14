@@ -189,8 +189,8 @@ module Toji
             water: 120,
             kake_interval_days: 25,
           ),
-        ]
-      ),
+        ].map(&:freeze).freeze
+      ).freeze,
       # 灘における仕込配合の平均値
       # 出典: http://www.nada-ken.com/main/jp/index_shi/234.html
       sokujo_nada: new(
@@ -233,8 +233,8 @@ module Toji
             name: :alcohol,
             alcohol: 900
           ),
-        ]
-      ),
+        ].map(&:freeze).freeze
+      ).freeze,
       # 簡易酒母省略仕込
       # 出典: https://www.jstage.jst.go.jp/article/jbrewsocjapan1915/60/11/60_11_999/_article/-char/ja/
       simple_sokujo_himeno: new(
@@ -277,8 +277,8 @@ module Toji
             name: :yodan,
             water: 255
           ),
-        ]
-      ),
+        ].map(&:freeze).freeze
+      ).freeze,
     }.freeze
   end
 end

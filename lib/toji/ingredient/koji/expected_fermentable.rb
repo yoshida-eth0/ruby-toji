@@ -3,11 +3,11 @@ module Toji
     module Koji
       module ExpectedFermentable
         def tanekoji
-          @raw * @tanekoji_rate
+          raw * tanekoji_rate
         end
 
         def dekoji
-          @raw + @raw * @dekoji_rate
+          raw + raw * dekoji_rate
         end
       end
     end

@@ -1,15 +1,15 @@
 module Toji
   class Recipe
     class Step
-      attr_reader :name
-      attr_reader :kake
-      attr_reader :koji
-      attr_reader :water
-      attr_reader :lactic_acid
-      attr_reader :alcohol
-      attr_reader :yeast
-      attr_reader :koji_interval_days
-      attr_reader :kake_interval_days
+      attr_accessor :name
+      attr_accessor :kake
+      attr_accessor :koji
+      attr_accessor :water
+      attr_accessor :lactic_acid
+      attr_accessor :alcohol
+      attr_accessor :yeast
+      attr_accessor :koji_interval_days
+      attr_accessor :kake_interval_days
 
       def initialize(name:, kake: 0, koji: 0, water: 0, lactic_acid: 0, alcohol: 0, yeast: 0, koji_interval_days: 0, kake_interval_days: 0)
         @name = name
