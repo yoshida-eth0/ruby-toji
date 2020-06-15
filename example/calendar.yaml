@@ -4,58 +4,34 @@ products:
   recipe: :simple_sokujo_himeno
   scale: 600
   round: 0
-  koji_dates: 2020-2-24
-  rice_dates: 2020-3-1
-  moto_days: 1
-  odori_days: 1
+  start_date: 2020-2-24
 - name: 仕2
   description: 姫野国夫による酒母省略仕込
   recipe: :simple_sokujo_himeno
   scale: 550
   round: 0
-  koji_dates: 2020-2-27
-  rice_dates: 2020-3-3
+  start_date: 2020-2-27
 - name: 仕3
   description: 灘における仕込配合
   recipe: :sokujo_nada
   scale: 900
   round: 0
-  koji_dates:
-  - 2020-2-20
-  - 2020-3-2
-  rice_dates:
-  - 2020-2-25
-  - 2020-3-9
+  start_date: 2020-2-20
 - name: 仕4
   description: 酒造教本による標準型仕込配合
   recipe: :sokujo_textbook
   scale: 900
   round: 0
-  koji_dates:
-  - 2020-2-20
-  - 2020-3-5
-  rice_dates:
-  - 2020-2-25
-  - 2020-3-11
+  start_date: 2020-2-20
 - name: 仕5
   description: 灘における仕込配合
   recipe: :sokujo_nada
   scale: 900
   round: 0
-  koji_dates:
-  - 2020-2-27
-  - 2020-3-9
-  rice_dates:
-  - 2020-3-3
-  - 2020-3-16
+  start_date: 2020-2-27
 - name: 仕6
   description: 酒造教本による標準型仕込配合
   recipe: :sokujo_textbook
   scale: 900
   round: 0
-  koji_dates:
-  - 2020-2-27
-  - 2020-3-12
-  rice_dates:
-  - 2020-3-3
-  - 2020-3-18
+  start_date: 2020-2-27

@@ -36,11 +36,11 @@ module Toji
     def events
       events = []
 
-      @koji_dates.length.times {|i|
+      koji_dates.length.times {|i|
         events << Event.new(self, :koji, i)
       }
 
-      @kake_dates.length
+      kake_dates.length
         .times.map {|i|
           Event.new(self, :kake, i)
         }

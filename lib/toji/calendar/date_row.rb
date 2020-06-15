@@ -3,12 +3,12 @@ module Toji
     class DateRow
       attr_reader :date
       attr_reader :kojis
-      attr_reader :rices
+      attr_reader :kakes
 
       def initialize(date)
         @date = date
         @kojis = []
-        @rices = []
+        @kakes = []
       end
 
       def <<(event)
@@ -17,10 +17,10 @@ module Toji
           index = event.group_index
           @kojis[index] ||= DateColumn.new
           @kojis[index] << event
-        when :rice
+        when :kake
           index = event.group_index
-          @rices[index] ||= DateColumn.new
-          @rices[index] << event
+          @kakes[index] ||= DateColumn.new
+          @kakes[index] << event
         end
       end
       alias_method :add, :<<

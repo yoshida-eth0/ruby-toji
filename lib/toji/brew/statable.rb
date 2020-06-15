@@ -54,7 +54,7 @@ module Toji
         elsif State==val
           val.record
         elsif Hash===val
-          r = Object.new.then {|o|
+          r = Object.new.tap {|o|
             o.extend Statable
           }
           #r = Class.new {
