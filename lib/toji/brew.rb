@@ -5,11 +5,9 @@ module Toji
   end
 end
 
-require 'toji/brew/state_accessor'
 require 'toji/brew/base'
 require 'toji/brew/state'
 require 'toji/brew/statable'
-require 'toji/brew/state_record'
 require 'toji/brew/builder'
 require 'toji/brew/graph'
 

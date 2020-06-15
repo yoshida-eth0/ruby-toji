@@ -100,7 +100,7 @@ module Toji
         end
 
         def annotations
-          return [] if @enable_annotations
+          return [] if !@enable_annotations
 
           @brew.select{|s| s.mark}.map {|s|
             {

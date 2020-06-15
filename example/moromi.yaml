@@ -1,7 +1,12 @@
 date_line: 0
+prefix_day_labels:
+- 添
+- 踊
+- 仲
+- 留
 records:
 - time: 2019-01-16
-  mark: :soe
+  mark: 添
   room_temp: 9
   temps:
   - 14.8
@@ -13,13 +18,13 @@ records:
   room_temp: 8.5
   temps: 11.3
 - time: 2019-01-19
-  mark: :naka
+  mark: 仲
   room_temp: 9
   temps:
   - 6.9
   - 10.6
 - time: 2019-01-20
-  mark: :tome
+  mark: 留
   room_temp: 6
   temps:
   - 7.5

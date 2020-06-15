@@ -2,7 +2,6 @@ module Toji
   module Brew
     class Base
       include Enumerable
-      extend StateAccessor
 
       REQUIRED_KEYS = [
         :time,
@@ -30,48 +29,14 @@ module Toji
         :note,
       ].freeze
 
-      attr_reader :day_offset
-      attr_reader :min_time
+      attr_accessor :states
+      attr_accessor :day_offset
+      attr_accessor :min_time
 
-      def initialize(records, date_line)
-        @date_line = date_line
-        self.records = records
-      end
-
-      def records=(records)
-        records = records.map{|r| StateRecord.create(r)}
-        min_time = records.map(&:time).compact.sort.first
-        @states = records.map{|r| State.new(r.elapsed_time, r, self)}
-
-        # time
-        if min_time
-          @states.each {|s|
-            if s.record.time
-              s.elapsed_time = (s.record.time - min_time).to_i
-              s.time = s.record.time
-            else
-              #s.elapsed_time = s.record.elapsed_time
-              s.time = min_time + s.record.elapsed_time
-            end
-          }
-        end
-        @min_time = @states.first&.time
-
-        @states = @states.sort{|a,b| a.elapsed_time<=>b.elapsed_time}
-
-        # day_offset
-        t = @states.first&.time
+      def initialize
+        @states = []
         @day_offset = 0
-        if t
-          @day_offset = t - Time.mktime(t.year, t.month, t.day)
-        end
-        @day_offset = (((24 - @date_line) * HOUR) + @day_offset) % DAY
-
-        # mark hash
-        @hash = {}
-        @states.select{|s| s.record.mark}.each {|s|
-          @hash[s.record.mark] = s
-        }
+        @min_time = 0
       end
 
       def days
@@ -84,14 +49,6 @@ module Toji
 
       def moromi_tome_day
         nil
-      end
-
-      def [](mark)
-        @hash[mark]
-      end
-
-      def states
-        @states.clone.freeze
       end
 
       def each(&block)
@@ -130,10 +87,12 @@ module Toji
 
       def self.load_hash(hash)
         hash = hash.deep_symbolize_keys
-        date_line = hash[:date_line] || 0
-        records = hash[:records] || []
 
-        builder.add(records).date_line(date_line).build
+        builder
+          .add(hash[:records] || [])
+          .date_line(hash[:date_line] || 0)
+          .prefix_day_labels(hash[:prefix_day_labels])
+          .build
       end
 
       def self.load_yaml_file(fname)

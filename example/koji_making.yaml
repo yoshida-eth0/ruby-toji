@@ -1,50 +1,50 @@
 date_line: 0
 records:
 - time: 2020-1-1 9:00
-  mark: :hikikomi
+  mark: 引込み
   temps: 35.0
   room_temp: 28.0
   room_psychrometry: 
 - elapsed_time: 3600
-  mark: :tokomomi
+  mark: 床揉み
   temps: 32.0
   room_temp: 28.0
   room_psychrometry: 
 - elapsed_time: 32400
-  mark: :kirikaeshi
+  mark: 切返し
   temps:
   - 32.0
   - 31.0
   room_temp: 28.0
   room_psychrometry: 
 - elapsed_time: 75600
-  mark: :mori
+  mark: 盛り
   temps:
   - 35.0
   - 33.0
   room_temp: 28.0
   room_psychrometry: 4
 - elapsed_time: 104400
-  mark: :naka_shigoto
+  mark: 仲仕事
   temps:
   - 37.0
   - 35.0
   room_temp: 28.0
   room_psychrometry: 4
 - elapsed_time: 126000
-  mark: :shimai_shigoto
+  mark: 仕舞仕事
   temps:
   - 38.0
   - 37.0
   room_temp: 28.0
   room_psychrometry: 5
 - elapsed_time: 140400
-  mark: :tsumikae
+  mark: 最高積替
   temps: 40.0
   room_temp: 28.0
   room_psychrometry: 5
 - elapsed_time: 158400
-  mark: :dekoji
+  mark: 出麹
   temps: 40.0
   room_temp: 28.0
   room_psychrometry: 5

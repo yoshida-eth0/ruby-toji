@@ -1,15 +1,15 @@
 date_line: 0
 records:
 - elapsed_time: 0
-  mark: :mizukoji
+  mark: 水麹
   temps: 12.0
   acid: 13.0
 - elapsed_time: 3600
-  mark: :shikomi
+  mark: 仕込み
   temps: 20.0
   acid: 13.0
 - elapsed_time: 86400
-  mark: :utase
+  mark: 打瀬
   temps: 14.0
   baume: 15.0
   acid: 13.0
@@ -19,31 +19,31 @@ records:
   - 11.0
   baume: 16.0
   acid: 13.0
-  warmings: :daki
+  warmings: 暖気
 - elapsed_time: 259200
   temps:
   - 10.0
   - 13.0
   baume: 16.5
   acid: 13.5
-  warmings: :daki
+  warmings: 暖気
 - elapsed_time: 345600
   temps:
   - 12.0
   - 15.0
   baume: 17.0
   acid: 13.5
-  warmings: :daki
+  warmings: 暖気
 - elapsed_time: 432000
   temps: 14.0
   baume: 17.0
   acid: 14.0
-  warmings: :anka
+  warmings: 行火
 - elapsed_time: 518400
   temps: 20.0
   baume: 17.0
   acid: 14.5
-  warmings: :anka
+  warmings: 行火
 - elapsed_time: 604800
   temps: 20.0
   baume: 14.0
@@ -53,7 +53,7 @@ records:
   baume: 12.0
   acid: 16.0
 - elapsed_time: 777600
-  mark: :wake
+  mark: 分け
   temps: 20.0
   baume: 9.0
   acid: 16.0

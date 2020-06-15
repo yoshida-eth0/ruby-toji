@@ -6,10 +6,13 @@ module Toji
         @cls = cls
         @records = []
         @date_line = 0
+        @prefix_day_labels = nil
       end
 
       def <<(record)
-        @records += [record].flatten
+        @records += [record].flatten.map {|record|
+          Statable.create(record)
+        }
         self
       end
       alias_method :add, :<<
@@ -19,8 +22,48 @@ module Toji
         self
       end
 
+      def prefix_day_labels(val)
+        @prefix_day_labels = val
+        self
+      end
+
       def build
-        @cls.new(@records, @date_line)
+        brew = @cls.new
+
+        min_time = @records.map(&:time).compact.sort.first
+        states = @records.map{|r| State.new(r.elapsed_time, r, brew)}
+
+        # time
+        if min_time
+          states.each {|s|
+            if s.record.time
+              s.elapsed_time = (s.record.time - min_time).to_i
+              s.time = s.record.time
+            else
+              #s.elapsed_time = s.record.elapsed_time
+              s.time = min_time + s.record.elapsed_time
+            end
+          }
+        end
+        min_time = states.first&.time
+
+        states = states.sort{|a,b| a.elapsed_time<=>b.elapsed_time}
+
+        # day_offset
+        t = states.first&.time
+        day_offset = 0
+        if t
+          day_offset = t - Time.mktime(t.year, t.month, t.day)
+        end
+        day_offset = (((24 - @date_line) * HOUR) + day_offset) % DAY
+
+        brew.states = states
+        brew.day_offset = day_offset
+        brew.min_time = min_time
+        if Moromi===brew
+          brew.prefix_day_labels = @prefix_day_labels
+        end
+        brew
       end
     end
   end
