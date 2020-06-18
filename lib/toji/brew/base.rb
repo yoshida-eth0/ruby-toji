@@ -73,31 +73,8 @@ module Toji
         }
       end
 
-      def self.create(states, date_line: 0)
-        if Base===states
-          states
-        else
-          builder.add(states).date_line(date_line).build
-        end
-      end
-
       def self.builder
         Builder.new(self)
-      end
-
-      def self.load_hash(hash)
-        hash = hash.deep_symbolize_keys
-
-        builder
-          .add(hash[:states] || [])
-          .date_line(hash[:date_line] || 0)
-          .prefix_day_labels(hash[:prefix_day_labels])
-          .build
-      end
-
-      def self.load_yaml_file(fname)
-        hash = YAML.load_file(fname)
-        load_hash(hash)
       end
     end
   end

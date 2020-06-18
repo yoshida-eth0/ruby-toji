@@ -1,4 +1,5 @@
 require 'toji'
+require_relative 'example_core'
 require 'terminal-table'
 
 

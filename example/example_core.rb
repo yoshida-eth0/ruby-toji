@@ -2,15 +2,48 @@ require 'securerandom'
 
 module Example
 
-  class State
-    include Toji::Brew::State
+  module Brew
+    class State
+      include Toji::Brew::State
 
-    def self.create(val)
-      s = new
-      KEYS.each {|k|
-        s.send("#{k}=", val[k])
-      }
-      s
+      def self.create(val)
+        s = new
+        KEYS.each {|k|
+          s.send("#{k}=", val[k])
+        }
+        s
+      end
+    end
+
+
+    module BrewGenerator
+      def load_hash(hash)
+        hash = hash.deep_symbolize_keys
+
+        builder
+          .add((hash[:states] || []).map{|s| State.create(s)})
+          .date_line(hash[:date_line] || 0)
+          .prefix_day_labels(hash[:prefix_day_labels])
+          .build
+      end
+
+      def load_yaml_file(fname)
+        hash = YAML.load_file(fname)
+        load_hash(hash)
+      end
+    end
+
+
+    class Koji < Toji::Brew::Koji
+      extend BrewGenerator
+    end
+
+    class Shubo < Toji::Brew::Shubo
+      extend BrewGenerator
+    end
+
+    class Moromi < Toji::Brew::Moromi
+      extend BrewGenerator
     end
   end
 

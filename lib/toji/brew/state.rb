@@ -60,19 +60,19 @@ module Toji
           val
         elsif StateWrapper==val
           val.state
-        elsif Hash===val
-          #s = Class.new {
-          #  include State
-          #}.new
-          s = Object.new.tap {|o|
-            o.extend State
-            o.extend State::PrependMethods
-          }
+        #elsif Hash===val
+        #  #s = Class.new {
+        #  #  include State
+        #  #}.new
+        #  s = Object.new.tap {|o|
+        #    o.extend State
+        #    o.extend State::PrependMethods
+        #  }
 
-          KEYS.each {|k|
-            s.send("#{k}=", val[k])
-          }
-          s
+        #  KEYS.each {|k|
+        #    s.send("#{k}=", val[k])
+        #  }
+        #  s
         else
           raise Error, "ArgumentError: cant cast to Toji::Brew::State"
         end
