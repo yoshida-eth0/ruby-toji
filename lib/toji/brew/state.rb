@@ -1,134 +1,81 @@
-require 'forwardable'
-
 module Toji
   module Brew
-    class State
-      extend Forwardable
+    module State
+      KEYS = [
+        :time,
+        :elapsed_time,
+        :mark,
+        :temps,
+        :preset_temp,
+        :room_temp,
+        :room_psychrometry,
+        :baume,
+        :nihonshudo,
+        :acid,
+        :amino_acid,
+        :alcohol,
+        :warmings,
+        :note,
+      ].freeze
 
-      attr_accessor :elapsed_time
       attr_accessor :time
-      attr_reader :record
-      attr_reader :brew
+      attr_accessor :elapsed_time
+      attr_accessor :mark
+      attr_accessor :temps
 
-      def_delegators :@record, :mark
-      def_delegators :@record, :temps
-      def_delegators :@record, :preset_temp
-      def_delegators :@record, :room_temp
-      def_delegators :@record, :room_psychrometry
-      def_delegators :@record, :acid
-      def_delegators :@record, :amino_acid
-      def_delegators :@record, :alcohol
-      def_delegators :@record, :warmings
-      def_delegators :@record, :note
+      attr_accessor :preset_temp
+      attr_accessor :room_temp
+      attr_accessor :room_psychrometry
 
-      def initialize(elapsed_time, record, brew)
-        @elapsed_time = elapsed_time
-        @record = record
-        @brew = brew
+      attr_accessor :baume
+      attr_accessor :nihonshudo
+      attr_accessor :acid
+      attr_accessor :amino_acid
+      attr_accessor :alcohol
+
+      attr_accessor :warmings
+      attr_accessor :note
+
+
+      def self.included(cls)
+        cls.prepend PrependMethods
       end
 
-      def day
-        ((elapsed_time_with_offset.to_f + 1) / DAY).ceil
-      end
+      module PrependMethods
+        def temps=(val)
+          super([val].flatten.compact.map(&:to_f))
+        end
 
-      def day_label
-        @brew.day_labels[day - 1]
-      end
+        def time=(val)
+          super(val&.to_time)
+        end
 
-      def elapsed_time_with_offset
-        @elapsed_time + @brew.day_offset
-      end
-
-      def baume
-        if @record.baume
-          @record.baume
-        elsif @record.nihonshudo
-          @record.nihonshudo * -0.1
+        def warmings=(val)
+          super([val].flatten.compact)
         end
       end
 
-      def nihonshudo
-        if @record.nihonshudo
-          @record.nihonshudo
-        elsif @record.baume
-          @record.baume * -10
-        end
-      end
+      def self.create(val)
+        if State===val
+          val
+        elsif StateWrapper==val
+          val.state
+        elsif Hash===val
+          #s = Class.new {
+          #  include State
+          #}.new
+          s = Object.new.tap {|o|
+            o.extend State
+            o.extend State::PrependMethods
+          }
 
-      def display_baume
-        if @record.baume || @record.nihonshudo
-          b = baume
-          if b<3.0
-            nihonshudo
-          else
-            b
-          end
-        end
-      end
-
-      def display_time(format="%m/%d %H:%M")
-        if @time
-          @time.strftime(format)
-        elsif @brew.min_time
-          time = @brew.min_time + @elapsed_time
-          time.strftime(format)
+          KEYS.each {|k|
+            s.send("#{k}=", val[k])
+          }
+          s
         else
-          utc_offset = Time.at(0).utc_offset
-          Time.at(@elapsed_time - utc_offset).strftime(format)
+          raise Error, "ArgumentError: cant cast to Toji::Brew::State"
         end
-      end
-
-      def moromi_day
-        _tome_day = @brew.moromi_tome_day
-        _now_day = day
-
-        if _tome_day && _tome_day < _now_day
-          _now_day - _tome_day + 1
-        end
-      end
-
-      def bmd
-        _moromi_day = moromi_day
-        _baume = baume
-
-        if _moromi_day && _baume
-          _moromi_day * _baume
-        end
-      end
-
-      def expected_alcohol(target_alc, target_nihonshudo, coef)
-        _baume = baume
-
-        if _baume
-          target_alc - (_baume - target_nihonshudo * -0.1) * coef
-        end
-      end
-
-      def to_h
-        {
-          elapsed_time: elapsed_time,
-          time: time,
-          mark: mark,
-          temps: temps,
-          preset_temp: preset_temp,
-          room_temp: room_temp,
-          room_psychrometry: room_psychrometry,
-          acid: acid,
-          amino_acid: amino_acid,
-          alcohol: alcohol,
-          warmings: warmings,
-          note: note,
-
-          day: day,
-          day_label: day_label,
-          elapsed_time_with_offset: elapsed_time_with_offset,
-          baume: baume,
-          nihonshudo: nihonshudo,
-          display_baume: display_baume,
-          display_time: display_time,
-          moromi_day: moromi_day,
-          bmd: bmd,
-        }
       end
     end
   end

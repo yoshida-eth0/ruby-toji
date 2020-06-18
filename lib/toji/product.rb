@@ -1,34 +1,22 @@
 require 'toji/product/event'
-require 'toji/product/date_interval_enumerator'
 
 module Toji
-  class Product
-    attr_reader :id
-    attr_reader :name
-    attr_reader :description
-    attr_reader :recipe
-    attr_reader :start_date
-    attr_reader :color
-
-    def initialize(id, name, description, recipe, start_date, color=nil)
-      @id = id
-      @name = name
-      @description = description
-      @recipe = recipe
-      @start_date = start_date
-      @color = color
-    end
+  module Product
+    attr_reader :reduce_key
+    attr_accessor :name
+    attr_accessor :recipe
+    attr_accessor :start_date
 
     def koji_dates
       date = start_date
-      @recipe.steps.map {|step|
+      recipe.steps.map {|step|
         date = date.next_day(step.koji_interval_days)
       }
     end
 
     def kake_dates
       date = start_date
-      @recipe.steps.map {|step|
+      recipe.steps.map {|step|
         date = date.next_day(step.kake_interval_days)
       }
     end
@@ -72,49 +60,6 @@ module Toji
           breakdown: breakdown,
         }
       }
-    end
-
-    def to_h
-      {
-        id: @id,
-        name: @name,
-        description: @description,
-        recipe: @recipe.table_data,
-        start_date: @start_date,
-        koji_dates: koji_dates,
-        kake_dates: kake_dates,
-        events: events.map(&:to_h),
-        events_group: events_group,
-        color: @color,
-      }
-    end
-
-    def self.create(args)
-      if self===args
-        args
-      elsif Hash===args
-        recipe = args.fetch(:recipe)
-        if Symbol===recipe
-          recipe = Recipe::TEMPLATES.fetch(recipe)
-        end
-        if args[:scale]
-          recipe = recipe.scale(args[:scale])
-        end
-        if args[:round]
-          recipe = recipe.round(args[:round])
-        end
-
-        new(
-          args[:id],
-          args[:name],
-          args[:description],
-          recipe,
-          args[:start_date],
-          args[:color]
-        )
-      else
-        raise "not supported class: #{args.class}"
-      end
     end
   end
 end

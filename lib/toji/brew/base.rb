@@ -56,7 +56,7 @@ module Toji
       end
 
       def has_keys
-        result = REQUIRED_KEYS.clone
+        result = REQUIRED_KEYS.dup
 
         result += OPTIONAL_KEYS.select {|k|
           @states.find {|s| s.send(k).present?}
@@ -73,11 +73,11 @@ module Toji
         }
       end
 
-      def self.create(records, date_line: 0)
-        if Base===records
-          records
+      def self.create(states, date_line: 0)
+        if Base===states
+          states
         else
-          builder.add(records).date_line(date_line).build
+          builder.add(states).date_line(date_line).build
         end
       end
 
@@ -89,7 +89,7 @@ module Toji
         hash = hash.deep_symbolize_keys
 
         builder
-          .add(hash[:records] || [])
+          .add(hash[:states] || [])
           .date_line(hash[:date_line] || 0)
           .prefix_day_labels(hash[:prefix_day_labels])
           .build

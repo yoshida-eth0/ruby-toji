@@ -2,9 +2,10 @@ date_line: 0
 prefix_day_labels:
 - 添
 - 踊
+- 踊
 - 仲
 - 留
-records:
+states:
 - time: 2019-01-16
   mark: 添
   room_temp: 9

@@ -6,8 +6,8 @@ module Toji
 end
 
 require 'toji/brew/base'
+require 'toji/brew/state_wrapper'
 require 'toji/brew/state'
-require 'toji/brew/statable'
 require 'toji/brew/builder'
 require 'toji/brew/graph'
 

@@ -1,5 +1,5 @@
 date_line: 0
-records:
+states:
 - time: 2020-1-1 9:00
   mark: 引込み
   temps: 35.0

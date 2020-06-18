@@ -4,14 +4,14 @@ module Toji
 
       def initialize(cls)
         @cls = cls
-        @records = []
+        @states = []
         @date_line = 0
         @prefix_day_labels = nil
       end
 
-      def <<(record)
-        @records += [record].flatten.map {|record|
-          Statable.create(record)
+      def <<(state)
+        @states += [state].flatten.map {|state|
+          State.create(state)
         }
         self
       end
@@ -30,34 +30,34 @@ module Toji
       def build
         brew = @cls.new
 
-        min_time = @records.map(&:time).compact.sort.first
-        states = @records.map{|r| State.new(r.elapsed_time, r, brew)}
+        min_time = @states.map(&:time).compact.sort.first
+        wrappers = @states.map{|r| StateWrapper.new(r.elapsed_time, r, brew)}
 
         # time
         if min_time
-          states.each {|s|
-            if s.record.time
-              s.elapsed_time = (s.record.time - min_time).to_i
-              s.time = s.record.time
+          wrappers.each {|w|
+            if w.state.time
+              w.elapsed_time = (w.state.time - min_time).to_i
+              w.time = w.state.time
             else
-              #s.elapsed_time = s.record.elapsed_time
-              s.time = min_time + s.record.elapsed_time
+              #w.elapsed_time = w.state.elapsed_time
+              w.time = min_time + w.state.elapsed_time
             end
           }
         end
-        min_time = states.first&.time
+        min_time = wrappers.first&.time
 
-        states = states.sort{|a,b| a.elapsed_time<=>b.elapsed_time}
+        wrappers = wrappers.sort{|a,b| a.elapsed_time<=>b.elapsed_time}
 
         # day_offset
-        t = states.first&.time
+        t = wrappers.first&.time
         day_offset = 0
         if t
           day_offset = t - Time.mktime(t.year, t.month, t.day)
         end
         day_offset = (((24 - @date_line) * HOUR) + day_offset) % DAY
 
-        brew.states = states
+        brew.states = wrappers
         brew.day_offset = day_offset
         brew.min_time = min_time
         if Moromi===brew

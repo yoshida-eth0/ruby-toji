@@ -65,10 +65,10 @@ module Toji
         date_row = _date_rows[date]
         if date_row
           koji_len.times {|i|
-            columns << (date_row.kojis[i]&.to_h_a || [])
+            columns << (date_row.kojis[i]&.column_events || [])
           }
           kake_len.times {|i|
-            columns << (date_row.kakes[i]&.to_h_a || [])
+            columns << (date_row.kakes[i]&.column_events || [])
           }
         else
           (koji_len + kake_len).times {
@@ -90,7 +90,7 @@ module Toji
         row.map {|column|
           if Array===column
             column.map{|c|
-              name = c[:product_name]
+              name = c[:product].name
               weight = "%.17g" % c[:weight]
               "#{name}: #{weight}"
             }.join("<br>")
@@ -118,23 +118,6 @@ module Toji
         layout: {
         }
       )
-    end
-
-    def self.load_hash(hash)
-      hash = hash.deep_symbolize_keys
-      products = hash[:products] || []
-
-      cal = new
-      products.each {|product|
-        cal.add(Product.create(product))
-      }
-
-      cal
-    end
-
-    def self.load_yaml_file(fname)
-      hash = YAML.load_file(fname)
-      load_hash(hash)
     end
   end
 end

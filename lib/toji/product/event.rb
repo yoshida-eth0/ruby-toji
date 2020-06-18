@@ -1,5 +1,5 @@
 module Toji
-  class Product
+  module Product
     class Event
       attr_reader :product
       attr_reader :type
@@ -30,14 +30,14 @@ module Toji
 
       def group_key
         a = []
-        a << (product.id || product.name)
+        a << product.reduce_key
         a << type
         a << group_index
         a.map(&:to_s).join(":")
       end
 
       def weight
-        @product.recipe.steps[@index].send(@type).raw
+        @product.recipe.steps[@index].send(@type)
       end
 
       def to_h
