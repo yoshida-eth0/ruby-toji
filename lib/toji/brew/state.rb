@@ -42,6 +42,10 @@ module Toji
       end
 
       module PrependMethods
+        def temps
+          (super || []).map(&:to_f)
+        end
+
         def temps=(val)
           super([val].flatten.compact.map(&:to_f))
         end
@@ -52,6 +56,38 @@ module Toji
 
         def warmings=(val)
           super([val].flatten.compact)
+        end
+      end
+
+      module BaumeToNihonshudo
+        def nihonshudo
+          if self.baume
+            self.baume * -10
+          end
+        end
+
+        def nohonshudo=(val)
+          if val
+            self.baume = val.to_f / -10.0
+          else
+            self.baume = nil
+          end
+        end
+      end
+
+      module NihonshudoToBaume
+        def baume
+          if self.nihonshudo
+            self.nihonshudo / -10.0
+          end
+        end
+
+        def baume=(val)
+          if val
+            self.nihonshudo = val.to_f * -10
+          else
+            self.nihonshudo = nil
+          end
         end
       end
 
