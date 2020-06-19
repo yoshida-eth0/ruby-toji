@@ -66,7 +66,7 @@ module Toji
           end
         end
 
-        def nohonshudo=(val)
+        def nihonshudo=(val)
           if val
             self.baume = val.to_f / -10.0
           else
