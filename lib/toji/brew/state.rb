@@ -54,6 +54,10 @@ module Toji
           super(val&.to_time)
         end
 
+        def warmings
+          super || []
+        end
+
         def warmings=(val)
           super([val].flatten.compact)
         end
