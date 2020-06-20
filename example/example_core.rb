@@ -22,7 +22,7 @@ module Example
 
         builder
           .add((hash[:states] || []).map{|s| State.create(s)})
-          .date_line(hash[:date_line] || 0)
+          .date_line(hash[:date_line] || 0, Toji::Brew::HOUR)
           .prefix_day_labels(hash[:prefix_day_labels])
           .build
       end

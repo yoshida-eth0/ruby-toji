@@ -17,8 +17,8 @@ module Toji
       end
       alias_method :add, :<<
 
-      def date_line(val)
-        @date_line = val
+      def date_line(val, unit=SECOND)
+        @date_line = (val * unit).to_i
         self
       end
 
@@ -55,7 +55,7 @@ module Toji
         if t
           day_offset = t - Time.mktime(t.year, t.month, t.day)
         end
-        day_offset = (((24 - @date_line) * HOUR) + day_offset) % DAY
+        day_offset = (DAY - @date_line + day_offset) % DAY
 
         brew.states = wrappers
         brew.day_offset = day_offset
