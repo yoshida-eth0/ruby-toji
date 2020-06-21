@@ -45,7 +45,7 @@ module Example
       def initialize
         @states = []
         @day_offset = 0
-        @min_time = 0
+        @base_time = 0
       end
     end
 
