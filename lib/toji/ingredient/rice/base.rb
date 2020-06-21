@@ -21,7 +21,6 @@ module Toji
         # 蒸米吸水率は麹米及び酒母米で41〜43%、掛米は39〜40%で、吟醸造りの場合は数%低い
         #
         # 出典: 酒造教本 P48
-        attr_reader :before_steaming_rate
         attr_reader :steamed_rate
         attr_reader :steaming_water
         attr_reader :steamed

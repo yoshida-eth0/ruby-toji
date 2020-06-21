@@ -9,8 +9,8 @@ module Toji
         Expected.new(raw, rice_rate: rice_rate)
       end
 
-      def self.actual(raw, soaked, steaming_water, steamed, cooled)
-        Actual.new(raw, soaked, steaming_water, steamed, cooled)
+      def self.actual(raw, soaked, steamed, cooled)
+        Actual.new(raw, soaked, steamed, cooled)
       end
     end
   end

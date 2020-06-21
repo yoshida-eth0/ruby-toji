@@ -15,22 +15,13 @@ module Toji
       }
     end
 
-    def round(ndigit=0, half: :up)
+    def round(ndigit=0, mini_ndigit=nil, half: :up)
       new_steps = steps.map {|step|
-        step.round(ndigit, half: half)
+        step.round(ndigit, mini_ndigit, half: half)
       }
 
       self.class.new.tap {|o|
         o.steps = new_steps
-      }
-    end
-
-    # 内容量の累計
-    def cumulative_weight_totals
-      weight_total = steps.map(&:weight_total)
-
-      weight_total.map.with_index {|x,i|
-        weight_total[0..i].inject(:+)
       }
     end
 

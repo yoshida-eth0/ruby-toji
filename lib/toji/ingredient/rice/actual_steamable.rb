@@ -10,12 +10,12 @@ module Toji
           soaked - raw
         end
 
-        def before_steaming_rate
-          # TODO
-        end
-
         def steamed_rate
           (steamed - raw) / raw 
+        end
+
+        def steaming_water
+          steamed - raw
         end
 
         def cooled_rate

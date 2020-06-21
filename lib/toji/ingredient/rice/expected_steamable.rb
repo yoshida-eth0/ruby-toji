@@ -11,9 +11,7 @@ module Toji
         end
 
         def steaming_water
-          if before_steaming_rate
-            raw * (before_steaming_rate - soaked_rate)
-          end
+          raw * steamed_rate
         end
 
         def steamed

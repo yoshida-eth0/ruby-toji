@@ -13,7 +13,7 @@ module Toji
 
       # 総米
       def rice_total
-        kake + koji
+        [kake, koji].compact.map(&:to_f).sum
       end
 
       # 麹歩合
@@ -22,8 +22,7 @@ module Toji
       # なお、留め仕込みまでの麹歩合が20%を下回ると蒸米の溶解糖化に影響が出るので注意がいる
       # 出典: 酒造教本 P95
       def koji_rate
-        ret = koji / rice_total
-        ret.nan? ? 0.0 : ret
+        (koji || 0.0) / rice_total
       end
 
       # 汲水歩合
@@ -36,13 +35,12 @@ module Toji
       #
       # 出典: 酒造教本 P96
       def water_rate
-        ret = water / rice_total
-        ret.nan? ? 0.0 : ret
+        (water || 0.0) / rice_total
       end
 
-      def round(ndigit=0, acid_ndigit=nil, half: :up)
-        if !acid_ndigit
-          acid_ndigit = ndigit + 3
+      def round(ndigit=0, mini_ndigit=nil, half: :up)
+        if !mini_ndigit
+          mini_ndigit = ndigit + 3
         end
 
         self.class.new.tap {|o|
@@ -50,9 +48,9 @@ module Toji
           o.kake = kake.round(ndigit, half: half)
           o.koji = koji.round(ndigit, half: half)
           o.water = water.round(ndigit, half: half)
-          o.lactic_acid = lactic_acid.round(acid_ndigit, half: half)
+          o.lactic_acid = lactic_acid.round(mini_ndigit, half: half)
           o.alcohol = alcohol.round(ndigit, half: half)
-          o.yeast = yeast.round(ndigit, half: half)
+          o.yeast = yeast.round(mini_ndigit, half: half)
           o.koji_interval_days = koji_interval_days
           o.kake_interval_days = kake_interval_days
         }
@@ -61,7 +59,7 @@ module Toji
       def +(other)
         if Step===other
           self.class.new.tap {|o|
-            o.name = nil
+            o.name = name
             o.kake = kake + other.kake
             o.koji = koji + other.koji
             o.water = water + other.water

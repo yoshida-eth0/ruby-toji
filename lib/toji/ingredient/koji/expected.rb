@@ -11,7 +11,6 @@ module Toji
 
           @rice_rate = rice_rate
           @soaked_rate = rice_rate.soaked_rate
-          @before_steaming_rate = rice_rate.before_steaming_rate
           @steamed_rate = rice_rate.steamed_rate
           @cooled_rate = rice_rate.cooled_rate
 

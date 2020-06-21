@@ -1,7 +1,7 @@
 require 'toji'
 require 'terminal-table'
 
-koji = Toji::Ingredient::Koji.expected(150, rice_rate: Toji::Ingredient::RiceRate::DEFAULT, koji_rate: Toji::Ingredient::KojiRate::DEFAULT)
+koji = Toji::Ingredient::Koji.expected(100, rice_rate: Toji::Ingredient::RiceRate::DEFAULT, koji_rate: Toji::Ingredient::KojiRate::DEFAULT)
 
 table = Terminal::Table.new do |t|
   t << ["", "分量", "白米を基準とした歩合"]
@@ -22,7 +22,6 @@ table = Terminal::Table.new do |t|
   t << ["", "吸水増加量", koji.soaking_water&.round(2)]
   t << :separator
   t << ["水切り", "浸漬米", koji.soaked&.round(2)]
-  t << ["", "蒸発・炊飯前の汲水", koji.steaming_water&.round(2)]
   t << :separator
   t << ["蒸し", "蒸米", koji.steamed&.round(2)]
   t << :separator

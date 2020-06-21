@@ -23,7 +23,7 @@ module Toji
 
         def +(other)
           if Base===other
-            Actual.new(raw + other.raw, soaked + other.soaked, steaming_water + other.steaming_water, steamed + other.steamed, cooled + other.cooled, tanekoji + other.tanekoji, dekoji + other.dekoji)
+            Actual.new(raw + other.raw, soaked + other.soaked, steamed + other.steamed, cooled + other.cooled, tanekoji + other.tanekoji, dekoji + other.dekoji)
           else
             x, y = other.coerce(self)
             x + y

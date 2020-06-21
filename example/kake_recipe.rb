@@ -20,7 +20,6 @@ table = Terminal::Table.new do |t|
   t << ["", "吸水増加量", kake.soaking_water&.round(2)]
   t << :separator
   t << ["水切り", "浸漬米", kake.soaked&.round(2)]
-  t << ["", "蒸発・炊飯前の汲水", kake.steaming_water&.round(2)]
   t << :separator
   t << ["蒸し", "蒸米", kake.steamed&.round(2)]
 end
