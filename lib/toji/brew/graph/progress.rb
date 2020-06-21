@@ -117,28 +117,7 @@ module Toji
           }
         end
 
-        def state_group_by(group_by)
-          group = {}
-          prev = nil
-
-          @brew.each {|state|
-            val = state.send(group_by) || prev
-            prev = val
-
-            group[val] ||= []
-            group[val] << state
-          }
-
-          group
-        end
-
-        def state_group_count(group_by)
-          state_group_by(group_by).map{|val,states|
-            [val, states.length]
-          }.to_h
-        end
-
-        def table_data(keys=nil, group_by=nil, group_count=nil)
+        def table_data(keys=nil)
           if !keys
             keys = @brew.has_keys
             keys.delete(:elapsed_time)
@@ -151,33 +130,19 @@ module Toji
             keys &= @brew.has_keys
           end
 
-          if group_by && group_count
-            brew_hash = state_group_by(group_by)
-          else
-            group_count = state_group_count(:itself)
-            brew_hash = state_group_by(:itself)
-          end
-
           rows = []
-          group_count.each {|group_value,num|
-            states = brew_hash[group_value] || []
-            num ||= states.length
-
-            num.times {|i|
-              state = states[i]
-
-              rows << keys.map {|k|
-                v = state&.send(k)
-                if Array===v
-                  v.map(&:to_s).join(", ")
-                elsif Float===v
-                  v.round(3)
-                elsif v
-                  v
-                else
-                  ""
-                end
-              }
+          @brew.each {|state|
+            rows << keys.map {|k|
+              v = state&.send(k)
+              if Array===v
+                v.map(&:to_s).join(", ")
+              elsif Float===v
+                v.round(3).to_s
+              elsif v
+                v.to_s
+              else
+                ""
+              end
             }
           }
 

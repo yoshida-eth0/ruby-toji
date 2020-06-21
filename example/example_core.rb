@@ -5,11 +5,14 @@ module Example
   module Brew
     class State
       include Toji::Brew::State
+      include Toji::Brew::State::BaumeToNihonshudo
 
       def self.create(val)
         s = new
         KEYS.each {|k|
-          s.send("#{k}=", val[k])
+          if val.has_key?(k)
+            s.send("#{k}=", val[k])
+          end
         }
         s
       end

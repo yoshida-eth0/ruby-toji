@@ -98,7 +98,7 @@ module Toji
       def self.create(val)
         if State===val
           val
-        elsif StateWrapper==val
+        elsif WrappedState==val
           val.state
         #elsif Hash===val
         #  #s = Class.new {
