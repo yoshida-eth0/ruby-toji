@@ -1,6 +1,6 @@
 module Toji
   module Brew
-    class Base
+    module Base
       include Enumerable
 
       REQUIRED_KEYS = [
@@ -29,18 +29,12 @@ module Toji
         :note,
       ].freeze
 
-      attr_accessor :states
+      attr_accessor :wrapped_states
       attr_accessor :day_offset
-      attr_accessor :min_time
-
-      def initialize
-        @states = []
-        @day_offset = 0
-        @min_time = 0
-      end
+      attr_accessor :base_time
 
       def days
-        ((@states.last.elapsed_time_with_offset.to_f + 1) / DAY).ceil
+        ((wrapped_states.last.elapsed_time_with_offset.to_f + 1) / DAY).ceil
       end
 
       def day_labels
@@ -52,29 +46,15 @@ module Toji
       end
 
       def each(&block)
-        @states.each(&block)
+        wrapped_states.each(&block)
       end
 
       def has_keys
         result = REQUIRED_KEYS.dup
 
         result += OPTIONAL_KEYS.select {|k|
-          @states.find {|s| s.send(k).present?}
+          wrapped_states.find {|s| s.send(k).present?}
         }
-      end
-
-      def to_h
-        {
-          states: map(&:to_h),
-          has_keys: has_keys,
-          day_offset: day_offset,
-          days: days,
-          day_labels: day_labels,
-        }
-      end
-
-      def self.builder
-        Builder.new(self)
       end
     end
   end

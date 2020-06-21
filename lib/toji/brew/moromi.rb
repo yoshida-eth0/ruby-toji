@@ -1,6 +1,7 @@
 module Toji
   module Brew
-    class Moromi < Base
+    module Moromi
+      include Base
 
       attr_accessor :prefix_day_labels
 

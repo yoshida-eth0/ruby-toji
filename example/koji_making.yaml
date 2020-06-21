@@ -1,6 +1,7 @@
 date_line: 0
 states:
 - time: 2020-1-1 9:00
+  elapsed_time: 0
   mark: 引込み
   temps: 35.0
   room_temp: 28.0

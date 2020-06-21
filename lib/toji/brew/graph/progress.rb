@@ -75,7 +75,7 @@ module Toji
             result << {x: xs, y: ys, text: text, name: "#{name}#{key}", line: {dash: @dash, shape: line_shape}, marker: {color: PLOT_COLORS[key]}}
           }
 
-          if 0<@brew.states.length && 0<@brew.day_offset
+          if 0<@brew.wrapped_states.length && 0<@brew.day_offset
             result = result.map{|h|
               h[:x].unshift(0)
               h[:y].unshift(nil)
@@ -84,8 +84,8 @@ module Toji
             }
           end
 
-          #if 0<@brew.states.length && @brew.states.last.time.strftime("%T")!="00:00:00"
-          #  t = @brew.states.last.elapsed_time_with_offset
+          #if 0<@brew.wrapped_states.length && @brew.wrapped_states.last.time.strftime("%T")!="00:00:00"
+          #  t = @brew.wrapped_states.last.elapsed_time_with_offset
           #  t -= (t % DAY) - DAY
           #
           #  result = result.map{|h|

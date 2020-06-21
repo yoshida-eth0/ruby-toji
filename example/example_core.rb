@@ -15,8 +15,11 @@ module Example
       end
     end
 
-
     module BrewGenerator
+      def builder
+        Toji::Brew::Builder.new(self)
+      end
+
       def load_hash(hash)
         hash = hash.deep_symbolize_keys
 
@@ -24,6 +27,8 @@ module Example
           .add((hash[:states] || []).map{|s| State.create(s)})
           .date_line(hash[:date_line] || 0, Toji::Brew::HOUR)
           .prefix_day_labels(hash[:prefix_day_labels])
+          .time_interpolation(nil)
+          .elapsed_time_interpolation
           .build
       end
 
@@ -33,17 +38,27 @@ module Example
       end
     end
 
-
-    class Koji < Toji::Brew::Koji
+    class Base
+      include Toji::Brew::Base
       extend BrewGenerator
+
+      def initialize
+        @states = []
+        @day_offset = 0
+        @min_time = 0
+      end
     end
 
-    class Shubo < Toji::Brew::Shubo
-      extend BrewGenerator
+    class Koji < Base
+      include Toji::Brew::Koji
     end
 
-    class Moromi < Toji::Brew::Moromi
-      extend BrewGenerator
+    class Shubo < Base
+      include Toji::Brew::Shubo
+    end
+
+    class Moromi < Base
+      include Toji::Brew::Moromi
     end
   end
 

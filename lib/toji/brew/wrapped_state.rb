@@ -2,7 +2,7 @@ require 'forwardable'
 
 module Toji
   module Brew
-    class StateWrapper
+    class WrappedState
       extend Forwardable
 
       attr_accessor :elapsed_time
@@ -21,8 +21,9 @@ module Toji
       def_delegators :@state, :warmings
       def_delegators :@state, :note
 
-      def initialize(elapsed_time, state, brew)
-        @elapsed_time = elapsed_time
+      def initialize(state, brew)
+        @elapsed_time = state.elapsed_time
+        @time = state.time
         @state = state
         @brew = brew
       end
@@ -69,8 +70,8 @@ module Toji
       def display_time(format="%m/%d %H:%M")
         if @time
           @time.strftime(format)
-        elsif @brew.min_time
-          time = @brew.min_time + @elapsed_time
+        elsif @brew.base_time
+          time = @brew.base_time + @elapsed_time
           time.strftime(format)
         else
           utc_offset = Time.at(0).utc_offset

@@ -7,6 +7,9 @@ module Toji
         @states = []
         @date_line = 0
         @prefix_day_labels = nil
+        @base_time = nil
+        @time_interpolation = false
+        @elapsed_time_interpolation = false
       end
 
       def <<(state)
@@ -27,39 +30,64 @@ module Toji
         self
       end
 
+      def time_interpolation(base_time)
+        @base_time = base_time&.to_time
+        @time_interpolation = true
+        #@elapsed_time_interpolation = false
+        self
+      end
+
+      def elapsed_time_interpolation
+        #@base_time = nil
+        #@time_interpolation = false
+        @elapsed_time_interpolation = true
+        self
+      end
+
       def build
         brew = @cls.new
 
-        min_time = @states.map(&:time).compact.sort.first
-        wrappers = @states.map{|r| StateWrapper.new(r.elapsed_time, r, brew)}
+        wrapped_states = @states.map{|s| WrappedState.new(s, brew)}
 
-        # time
-        if min_time
-          wrappers.each {|w|
-            if w.state.time
-              w.elapsed_time = (w.state.time - min_time).to_i
-              w.time = w.state.time
-            else
-              #w.elapsed_time = w.state.elapsed_time
-              w.time = min_time + w.state.elapsed_time
+        # time interpolation
+        if @time_interpolation
+          base_time = @base_time
+
+          base_state = wrapped_states.select{|w| w.time && w.elapsed_time}.first
+          if base_state
+            base_time = base_state.time - base_state.elapsed_time
+          end
+
+          wrapped_states.each {|w|
+            if w.elapsed_time
+              w.time = base_time + w.elapsed_time
             end
           }
         end
-        min_time = wrappers.first&.time
 
-        wrappers = wrappers.sort{|a,b| a.elapsed_time<=>b.elapsed_time}
+        # elapsed_time interpolation
+        if @elapsed_time_interpolation
+          base_time = wrapped_states.map(&:time).sort.first
+          wrapped_states.each {|w|
+            if w.time
+              w.elapsed_time = (w.time - base_time).to_i
+            end
+          }
+        end
+
+        wrapped_states = wrapped_states.sort_by(&:elapsed_time)
+        base_time = wrapped_states.first&.time
 
         # day_offset
-        t = wrappers.first&.time
         day_offset = 0
-        if t
-          day_offset = t - Time.mktime(t.year, t.month, t.day)
+        if base_time
+          day_offset = base_time - Time.mktime(base_time.year, base_time.month, base_time.day)
         end
         day_offset = (DAY - @date_line + day_offset) % DAY
 
-        brew.states = wrappers
+        brew.wrapped_states = wrapped_states
         brew.day_offset = day_offset
-        brew.min_time = min_time
+        brew.base_time = base_time
         if Moromi===brew
           brew.prefix_day_labels = @prefix_day_labels
         end

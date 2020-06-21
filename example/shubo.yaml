@@ -1,6 +1,7 @@
 date_line: 0
 states:
-- elapsed_time: 0
+- time: 2019-01-16
+  elapsed_time: 0
   mark: 水麹
   temps: 12.0
   acid: 13.0

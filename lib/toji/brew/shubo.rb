@@ -1,6 +1,7 @@
 module Toji
   module Brew
-    class Shubo < Base
+    module Shubo
+      include Base
 
       def progress(name: nil, dash: :solid, enable_annotations: true)
         Graph::Progress.new(self, name: name, dash: dash, enable_annotations: enable_annotations)
