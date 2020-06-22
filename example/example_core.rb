@@ -69,11 +69,6 @@ module Example
   class Step
     include Toji::Recipe::Step
 
-    # 総重量
-    def weight_total
-      kake + koji + water + lactic_acid + alcohol + yeast
-    end
-
     def to_h
       {
         name: name,

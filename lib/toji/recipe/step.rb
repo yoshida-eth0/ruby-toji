@@ -13,7 +13,7 @@ module Toji
 
       # 総米
       def rice_total
-        [kake, koji].compact.map(&:to_f).sum
+        kake.to_f + koji.to_f
       end
 
       # 麹歩合
@@ -22,7 +22,7 @@ module Toji
       # なお、留め仕込みまでの麹歩合が20%を下回ると蒸米の溶解糖化に影響が出るので注意がいる
       # 出典: 酒造教本 P95
       def koji_rate
-        (koji || 0.0) / rice_total
+        koji.to_f / rice_total
       end
 
       # 汲水歩合
@@ -35,7 +35,7 @@ module Toji
       #
       # 出典: 酒造教本 P96
       def water_rate
-        (water || 0.0) / rice_total
+        water.to_f / rice_total
       end
 
       def round(ndigit=0, mini_ndigit=nil, half: :up)
@@ -45,14 +45,14 @@ module Toji
 
         self.class.new.tap {|o|
           o.name = name
-          o.kake = kake.round(ndigit, half: half)
-          o.koji = koji.round(ndigit, half: half)
-          o.water = water.round(ndigit, half: half)
-          o.lactic_acid = lactic_acid.round(mini_ndigit, half: half)
-          o.alcohol = alcohol.round(ndigit, half: half)
-          o.yeast = yeast.round(mini_ndigit, half: half)
-          o.koji_interval_days = koji_interval_days
-          o.kake_interval_days = kake_interval_days
+          o.kake = kake.to_f.round(ndigit, half: half)
+          o.koji = koji.to_f.round(ndigit, half: half)
+          o.water = water.to_f.round(ndigit, half: half)
+          o.lactic_acid = lactic_acid.to_f.round(mini_ndigit, half: half)
+          o.alcohol = alcohol.to_f.round(ndigit, half: half)
+          o.yeast = yeast.to_f.round(mini_ndigit, half: half)
+          o.koji_interval_days = koji_interval_days.to_i
+          o.kake_interval_days = kake_interval_days.to_i
         }
       end
 
@@ -60,14 +60,14 @@ module Toji
         if Step===other
           self.class.new.tap {|o|
             o.name = name
-            o.kake = kake + other.kake
-            o.koji = koji + other.koji
-            o.water = water + other.water
-            o.lactic_acid = lactic_acid + other.lactic_acid
-            o.alcohol = alcohol + other.alcohol
-            o.yeast = yeast + other.yeast
-            o.koji_interval_days = koji_interval_days
-            o.kake_interval_days = kake_interval_days
+            o.kake = kake.to_f + other.kake.to_f
+            o.koji = koji.to_f + other.koji.to_f
+            o.water = water.to_f + other.water.to_f
+            o.lactic_acid = lactic_acid.to_f + other.lactic_acid.to_f
+            o.alcohol = alcohol.to_f + other.alcohol.to_f
+            o.yeast = yeast.to_f + other.yeast.to_f
+            o.koji_interval_days = koji_interval_days.to_i
+            o.kake_interval_days = kake_interval_days.to_i
           }
         else
           x, y = other.coerce(self)
@@ -79,14 +79,14 @@ module Toji
         if Integer===other || Float===other
           self.class.new.tap {|o|
             o.name = name
-            o.kake = kake * other
-            o.koji = koji * other
-            o.water = water * other
-            o.lactic_acid = lactic_acid * other
-            o.alcohol = alcohol * other
-            o.yeast = yeast * other
-            o.koji_interval_days = koji_interval_days
-            o.kake_interval_days = kake_interval_days
+            o.kake = kake.to_f * other
+            o.koji = koji.to_f * other
+            o.water = water.to_f * other
+            o.lactic_acid = lactic_acid.to_f * other
+            o.alcohol = alcohol.to_f * other
+            o.yeast = yeast.to_f * other
+            o.koji_interval_days = koji_interval_days.to_i
+            o.kake_interval_days = kake_interval_days.to_i
           }
         else
           x, y = other.coerce(self)
