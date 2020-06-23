@@ -2,30 +2,37 @@ require 'toji'
 require_relative 'example_core'
 require 'terminal-table'
 
-recipe = Example::Recipe::TEMPLATES[:sokujo_nada].scale(900)
+recipe = Example::Recipe::TEMPLATES[:sokujo_nada].scale(900).round(2)
 step_names = recipe.steps.map(&:name)
 
 table = Terminal::Table.new do |t|
   t << [""] + step_names
   t << :separator
   t << ["[原料]"]
-  t << ["酵母(g or 本)"] + recipe.steps.map(&:yeast).map{|v| v&.round(2)}
-  t << ["乳酸(ml)"] + recipe.steps.map(&:lactic_acid).map{|v| v&.round(6)}
-  t << ["掛米(g)"] + recipe.steps.map(&:kake).map{|v| v&.round(2)}
-  t << ["麹米(g)"] + recipe.steps.map(&:koji).map{|v| v&.round(2)}
-  t << ["汲水(ml)"] + recipe.steps.map(&:water).map{|v| v&.round(2)}
-  t << ["醸造アルコール(ml)"] + recipe.steps.map(&:alcohol).map{|v| v&.round(2)}
+  t << ["酵母(g or 本)"] + recipe.steps.map(&:yeast)
+  t << ["乳酸(ml)"] + recipe.steps.map(&:lactic_acid)
+  t << ["掛米(g)"] + recipe.steps.map(&:kake)
+  t << ["麹米(g)"] + recipe.steps.map(&:koji)
+  t << ["汲水(ml)"] + recipe.steps.map(&:water)
+  t << ["醸造アルコール(ml)"] + recipe.steps.map(&:alcohol)
   t << :separator
   t << ["[合計]"]
-  t << ["総米(g)"] + recipe.steps.map(&:rice_total).map{|v| v&.round(2)}
+  t << ["総米(g)"] + recipe.steps.map(&:rice_total)
   t << ["麹歩合(%)"] + recipe.steps.map{|s| s.koji_rate * 100}.map{|v| v&.round(2)}
   t << ["汲水歩合(%)"] + recipe.steps.map{|s| s.water_rate * 100}.map{|v| v&.round(2)}
   t << :separator
   t << ["[累計]"]
-  t << ["総米(g)"] + recipe.cumulative_rice_totals.map{|v| v&.round(2)}
+  t << ["総米(g)"] + recipe.cumulative_rice_totals
   t << ["白米比率"] + recipe.rice_rates.map{|v| v&.round(2)}
   t << ["酒母歩合(%)"] + recipe.cumulative_shubo_rates.map{|s| s * 100}.map{|v| v&.round(2)}
-  t << ["タンク内容量(ml)"] + recipe.cumulative_weight_totals.map{|v| v&.round(2)}
+  t << ["タンク内容量(ml)"] + recipe.steps.map {|s|
+    kake = Toji::Ingredient::Kake::Expected.create(s.kake)
+    koji = Toji::Ingredient::Koji::Expected.create(s.koji)
+    s.yeast.to_f + s.lactic_acid.to_f + kake.steamed.to_f + koji.dekoji.to_f + s.water.to_f + s.alcohol.to_f
+  }.then {|a|
+    sum = 0.0
+    a.map {|x| sum += x}
+  }.map{|v| v&.round(2)}
 end
 puts table
 puts

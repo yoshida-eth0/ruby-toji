@@ -3,7 +3,7 @@ require_relative 'example_core'
 require 'terminal-table'
 
 
-moromi = Toji::Brew::Moromi.load_yaml_file(File.dirname(__FILE__)+"/moromi.yaml")
+moromi = Example::Brew::Moromi.load_yaml_file(File.dirname(__FILE__)+"/moromi.yaml")
 
 table = Terminal::Table.new do |t|
   t << ["作業", "日数", "品温(度)", "操作室温", "ボーメ及び日本酒度", "アルコール度数", "BMD", "アルコール期待値(16.5 +3)", "経過時間", "日時"]

@@ -39,16 +39,6 @@ module Toji
       def weight
         @product.recipe.steps[@index].send(@type)
       end
-
-      def to_h
-        {
-          date: date,
-          type: type,
-          index: index,
-          group_index: group_index,
-          weight: weight,
-        }
-      end
     end
   end
 end

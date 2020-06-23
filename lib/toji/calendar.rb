@@ -10,7 +10,7 @@ module Toji
     end
 
     def <<(product)
-      @products << product
+      @products += [product].flatten
       self
     end
     alias_method :add, :<<

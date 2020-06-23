@@ -69,20 +69,6 @@ module Example
   class Step
     include Toji::Recipe::Step
 
-    def to_h
-      {
-        name: name,
-        kake: kake,
-        koji: koji,
-        water: water,
-        lactic_acid: lactic_acid,
-        alcohol: alcohol,
-        yeast: yeast,
-        koji_interval_days: koji_interval_days,
-        kake_interval_days: kake_interval_days,
-      }
-    end
-
     def self.create(name:, kake: 0, koji: 0, water: 0, lactic_acid: 0, alcohol: 0, yeast: 0, koji_interval_days: 0, kake_interval_days: 0)
       new.tap {|o|
         o.name = name
@@ -105,16 +91,6 @@ module Example
     def initialize
       @steps = []
     end
-
-    #def to_h
-    #  {
-    #    steps: steps.map(&:to_h),
-    #    cumulative_rice_totals: cumulative_rice_totals,
-    #    cumulative_shubo_rates: cumulative_shubo_rates,
-    #    shubo_rate: shubo_rate,
-    #    rice_rates: rice_rates,
-    #  }
-    #end
 
     def self.create(steps)
       new.tap {|o|
@@ -280,21 +256,6 @@ module Example
       @recipe = recipe
       @start_date = start_date
       @color = color
-    end
-
-    def to_h
-      {
-        id: id,
-        name: name,
-        description: @description,
-        recipe: @recipe.table_data,
-        start_date: @start_date,
-        koji_dates: koji_dates,
-        kake_dates: kake_dates,
-        events: events.map(&:to_h),
-        events_group: events_group,
-        color: @color,
-      }
     end
 
     def self.create(args)

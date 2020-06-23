@@ -22,7 +22,8 @@ module Toji
       # なお、留め仕込みまでの麹歩合が20%を下回ると蒸米の溶解糖化に影響が出るので注意がいる
       # 出典: 酒造教本 P95
       def koji_rate
-        koji.to_f / rice_total
+        val = koji.to_f / rice_total
+        val.nan? ? 0.0 : val
       end
 
       # 汲水歩合
@@ -35,7 +36,8 @@ module Toji
       #
       # 出典: 酒造教本 P96
       def water_rate
-        water.to_f / rice_total
+        val = water.to_f / rice_total
+        val.nan? ? 0.0 : val
       end
 
       def round(ndigit=0, mini_ndigit=nil, half: :up)
