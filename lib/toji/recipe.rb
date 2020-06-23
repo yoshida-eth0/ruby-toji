@@ -69,15 +69,15 @@ module Toji
     end
 
     def table_data
-      headers = [""] + @steps.map(&:name) + [:total]
+      headers = [""] + steps.map(&:name) + [:total]
       keys = [:rice_total, :kake, :koji, :alcohol, :water, :lactic_acid]
 
       cells = [keys]
-      cells += @steps.map {|step|
+      cells += steps.map {|step|
         [step.rice_total, step.kake, step.koji, step.alcohol, step.water, step.lactic_acid]
       }
       cells << keys.map {|key|
-        @steps.map(&key).compact.sum
+        steps.map(&key).compact.sum
       }
 
       cells = cells.map {|cell|
