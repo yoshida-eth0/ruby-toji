@@ -1,8 +1,6 @@
 module Toji
   module Brew
     module Base
-      include Enumerable
-
       REQUIRED_KEYS = [
         :time,
         :elapsed_time,
@@ -43,10 +41,6 @@ module Toji
 
       def moromi_tome_day
         nil
-      end
-
-      def each(&block)
-        wrapped_states.each(&block)
       end
 
       def has_keys

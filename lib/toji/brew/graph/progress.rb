@@ -56,13 +56,13 @@ module Toji
             xs = []
             ys = []
             text = []
-            @brew.each {|r|
-              val = r.send(key)
+            @brew.wrapped_states.each {|s|
+              val = s.send(key)
               if val
                 [val].flatten.each_with_index {|v,i|
-                  xs << r.elapsed_time_with_offset + i
+                  xs << s.elapsed_time_with_offset + i
                   ys << v
-                  text << r.display_time
+                  text << s.display_time
                 }
               end
             }
@@ -102,7 +102,7 @@ module Toji
         def annotations
           return [] if !@enable_annotations
 
-          @brew.select{|s| s.mark}.map {|s|
+          @brew.wrapped_states.select{|s| s.mark}.map {|s|
             {
               x: s.elapsed_time_with_offset,
               y: s.temps.first || 0,
@@ -131,7 +131,7 @@ module Toji
           end
 
           rows = []
-          @brew.each {|state|
+          @brew.wrapped_states.each {|state|
             rows << keys.map {|k|
               v = state&.send(k)
               if Array===v
