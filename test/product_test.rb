@@ -7,11 +7,11 @@ class ProductTest < Minitest::Test
     attr_accessor :description
     attr_accessor :color
 
-    def initialize(reduce_key, name, recipe, start_date)
+    def initialize(reduce_key, name, recipe, base_date)
       @reduce_key = reduce_key || SecureRandom.uuid
       @name = name
       @recipe = recipe
-      @start_date = start_date
+      @base_date = base_date
     end
   end
 
@@ -102,7 +102,7 @@ class ProductTest < Minitest::Test
     assert_equal "asdfghjkl", @product.reduce_key
     assert_equal "仕1", @product.name
     assert_equal @recipe, @product.recipe
-    assert_equal Time.mktime(2020, 2, 10), @product.start_date
+    assert_equal Time.mktime(2020, 2, 10), @product.base_date
 
     assert_equal [Time.mktime(2020, 2, 10), Time.mktime(2020, 2, 24), Time.mktime(2020, 2, 24), Time.mktime(2020, 2, 24), Time.mktime(2020, 2, 24)], @product.koji_dates
     assert_equal [Time.mktime(2020, 2, 15), Time.mktime(2020, 3, 1), Time.mktime(2020, 3, 3), Time.mktime(2020, 3, 4), Time.mktime(2020, 3, 29)], @product.kake_dates

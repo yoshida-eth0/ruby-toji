@@ -249,12 +249,12 @@ module Example
     attr_accessor :description
     attr_accessor :color
 
-    def initialize(reduce_key, name, description, recipe, start_date, color=nil)
+    def initialize(reduce_key, name, description, recipe, base_date, color=nil)
       @reduce_key = reduce_key || SecureRandom.uuid
       @name = name
       @description = description
       @recipe = recipe
-      @start_date = start_date
+      @base_date = base_date
       @color = color
     end
 
@@ -278,7 +278,7 @@ module Example
           args[:name],
           args[:description],
           recipe,
-          args[:start_date],
+          args[:base_date],
           args[:color]
         )
       else

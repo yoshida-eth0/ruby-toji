@@ -5,17 +5,17 @@ module Toji
     attr_reader :reduce_key
     attr_accessor :name
     attr_accessor :recipe
-    attr_accessor :start_date
+    attr_accessor :base_date
 
     def koji_dates
-      date = start_date
+      date = base_date
       recipe.steps.map {|step|
         date = date.next_day(step.koji_interval_days)
       }
     end
 
     def kake_dates
-      date = start_date
+      date = base_date
       recipe.steps.map {|step|
         date = date.next_day(step.kake_interval_days)
       }
