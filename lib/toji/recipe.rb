@@ -1,8 +1,11 @@
 require 'toji/recipe/step'
+require 'toji/recipe/ab_expect'
 
 module Toji
   module Recipe
     attr_accessor :steps
+    attr_accessor :ab_coef
+    attr_accessor :ab_expects
 
     def scale(rice_total)
       rate = rice_total / steps.map(&:rice_total).sum

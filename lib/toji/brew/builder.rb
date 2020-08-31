@@ -7,7 +7,6 @@ module Toji
         @states = []
         @date_line = 0
         @prefix_day_labels = nil
-        @ab_coef = 0.0
         @base_time = nil
         @time_interpolation = false
         @elapsed_time_interpolation = false
@@ -28,11 +27,6 @@ module Toji
 
       def prefix_day_labels(val)
         @prefix_day_labels = val
-        self
-      end
-
-      def ab_coef(val)
-        @ab_coef = val
         self
       end
 
@@ -96,7 +90,6 @@ module Toji
         brew.base_time = base_time
         if Moromi===brew
           brew.prefix_day_labels = @prefix_day_labels
-          brew.ab_coef = @ab_coef
         end
         brew
       end

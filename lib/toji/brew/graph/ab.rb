@@ -2,12 +2,15 @@ module Toji
   module Brew
     module Graph
       class Ab
-        attr_reader :coef
-
-        def initialize(coef=1.5)
-          @coef = coef
+        def initialize
+          @coef = 1.0
           @actuals = []
           @expects = []
+        end
+
+        def coef(coef)
+          @coef = coef
+          self
         end
 
         def actual(moromi, name=:actual)
@@ -17,6 +20,13 @@ module Toji
 
         def expect(alcohol, nihonshudo)
           @expects << [alcohol.to_f, nihonshudo.to_f]
+          self
+        end
+
+        def expects(expects)
+          expects.each {|o|
+            expect(o.alcohol, o.nihonshudo)
+          }
           self
         end
 
