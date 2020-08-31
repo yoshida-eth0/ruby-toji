@@ -4,6 +4,7 @@ module Toji
       include Base
 
       attr_accessor :prefix_day_labels
+      attr_accessor :ab_coef
 
       def moromi_tome_day
         prefix_day_labels&.length
@@ -36,8 +37,8 @@ module Toji
         Graph::Bmd.new.actual(self)
       end
 
-      def ab(coef=1.5)
-        Graph::Ab.new(coef).actual(self)
+      def ab
+        Graph::Ab.new(ab_coef).actual(self)
       end
     end
   end

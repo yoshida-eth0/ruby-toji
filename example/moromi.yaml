@@ -5,6 +5,7 @@ prefix_day_labels:
 - 踊
 - 仲
 - 留
+ab_coef: 1.5
 states:
 - time: 2019-01-16
   mark: 添

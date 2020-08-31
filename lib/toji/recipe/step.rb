@@ -3,7 +3,12 @@ module Toji
     module Step
       attr_accessor :name
       attr_accessor :kake
+      attr_accessor :kake_soaked_rate
+      attr_accessor :kake_steamed_rate
       attr_accessor :koji
+      attr_accessor :koji_soaked_rate
+      attr_accessor :koji_steamed_rate
+      attr_accessor :koji_dekoji_rate
       attr_accessor :water
       attr_accessor :lactic_acid
       attr_accessor :alcohol
