@@ -1,20 +1,21 @@
 module Toji
   module Recipe
     module Step
-      attr_accessor :name
-      attr_accessor :kake
-      attr_accessor :kake_soaked_rate
-      attr_accessor :kake_steamed_rate
       attr_accessor :koji
       attr_accessor :koji_soaked_rate
       attr_accessor :koji_steamed_rate
       attr_accessor :koji_dekoji_rate
+      attr_accessor :koji_interval_days
+
+      attr_accessor :kake
+      attr_accessor :kake_soaked_rate
+      attr_accessor :kake_steamed_rate
+      attr_accessor :kake_interval_days
+
       attr_accessor :water
       attr_accessor :lactic_acid
       attr_accessor :alcohol
       attr_accessor :yeast
-      attr_accessor :koji_interval_days
-      attr_accessor :kake_interval_days
 
       # 総米
       def rice_total
@@ -51,30 +52,42 @@ module Toji
         end
 
         self.class.new.tap {|o|
-          o.name = name
-          o.kake = kake.to_f.round(ndigit, half: half)
           o.koji = koji.to_f.round(ndigit, half: half)
+          o.koji_soaked_rate = koji_soaked_rate.to_f
+          o.koji_steamed_rate = koji_steamed_rate.to_f
+          o.koji_dekoji_rate = koji_dekoji_rate.to_f
+          o.koji_interval_days = koji_interval_days.to_i
+
+          o.kake = kake.to_f.round(ndigit, half: half)
+          o.kake_soaked_rate = kake_soaked_rate.to_f
+          o.kake_steamed_rate = kake_steamed_rate.to_f
+          o.kake_interval_days = kake_interval_days.to_i
+
           o.water = water.to_f.round(ndigit, half: half)
           o.lactic_acid = lactic_acid.to_f.round(mini_ndigit, half: half)
           o.alcohol = alcohol.to_f.round(ndigit, half: half)
           o.yeast = yeast.to_f.round(mini_ndigit, half: half)
-          o.koji_interval_days = koji_interval_days.to_i
-          o.kake_interval_days = kake_interval_days.to_i
         }
       end
 
       def +(other)
         if Step===other
           self.class.new.tap {|o|
-            o.name = name
-            o.kake = kake.to_f + other.kake.to_f
             o.koji = koji.to_f + other.koji.to_f
+            o.koji_soaked_rate = koji_soaked_rate.to_f
+            o.koji_steamed_rate = koji_steamed_rate.to_f
+            o.koji_dekoji_rate = koji_dekoji_rate.to_f
+            o.koji_interval_days = koji_interval_days.to_i
+
+            o.kake = kake.to_f + other.kake.to_f
+            o.kake_soaked_rate = kake_soaked_rate.to_f
+            o.kake_steamed_rate = kake_steamed_rate.to_f
+            o.kake_interval_days = kake_interval_days.to_i
+
             o.water = water.to_f + other.water.to_f
             o.lactic_acid = lactic_acid.to_f + other.lactic_acid.to_f
             o.alcohol = alcohol.to_f + other.alcohol.to_f
             o.yeast = yeast.to_f + other.yeast.to_f
-            o.koji_interval_days = koji_interval_days.to_i
-            o.kake_interval_days = kake_interval_days.to_i
           }
         else
           x, y = other.coerce(self)
@@ -85,15 +98,21 @@ module Toji
       def *(other)
         if Integer===other || Float===other
           self.class.new.tap {|o|
-            o.name = name
-            o.kake = kake.to_f * other
             o.koji = koji.to_f * other
+            o.koji_soaked_rate = koji_soaked_rate.to_f
+            o.koji_steamed_rate = koji_steamed_rate.to_f
+            o.koji_dekoji_rate = koji_dekoji_rate.to_f
+            o.koji_interval_days = koji_interval_days.to_i
+
+            o.kake = kake.to_f * other
+            o.kake_soaked_rate = kake_soaked_rate.to_f
+            o.kake_steamed_rate = kake_steamed_rate.to_f
+            o.kake_interval_days = kake_interval_days.to_i
+
             o.water = water.to_f * other
             o.lactic_acid = lactic_acid.to_f * other
             o.alcohol = alcohol.to_f * other
             o.yeast = yeast.to_f * other
-            o.koji_interval_days = koji_interval_days.to_i
-            o.kake_interval_days = kake_interval_days.to_i
           }
         else
           x, y = other.coerce(self)

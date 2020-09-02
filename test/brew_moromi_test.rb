@@ -119,7 +119,7 @@ class BrewMoromiTest < Minitest::Test
   end
 
   def test_ab
-    ab = @moromi.ab
+    ab = @moromi.ab(1.4)
     y = ab.plot_data[0][:y]
 
     assert_equal 4, y.length
