@@ -14,5 +14,5 @@ require 'toji/brew/builder'
 require 'toji/brew/graph'
 
 require 'toji/brew/koji'
-require 'toji/brew/shubo'
+require 'toji/brew/moto'
 require 'toji/brew/moromi'

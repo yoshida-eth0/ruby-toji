@@ -4,7 +4,7 @@ require 'toji/recipe/ab_expect'
 module Toji
   module Recipe
     attr_accessor :steps
-    attr_accessor :has_shubo
+    attr_accessor :has_moto
     attr_accessor :has_moromi
     attr_accessor :ab_coef
     attr_accessor :ab_expects
@@ -18,7 +18,7 @@ module Toji
 
       self.class.new.tap {|o|
         o.steps = new_steps
-        o.has_shubo = has_shubo
+        o.has_moto = has_moto
         o.has_moromi = has_moromi
         o.ab_coef = ab_coef
         o.ab_expects = ab_expects.deep_dup
@@ -33,7 +33,7 @@ module Toji
 
       self.class.new.tap {|o|
         o.steps = new_steps
-        o.has_shubo = has_shubo
+        o.has_moto = has_moto
         o.has_moromi = has_moromi
         o.ab_coef = ab_coef
         o.ab_expects = ab_expects.deep_dup
@@ -51,12 +51,12 @@ module Toji
     end
 
     # 酒母歩合の累計
-    def cumulative_shubo_rates
+    def cumulative_moto_rates
       rice_total = steps.map(&:rice_total)
-      shubo = rice_total.first
+      moto = rice_total.first
 
       rice_total.map.with_index {|x,i|
-        shubo / rice_total[0..i].inject(&:+)
+        moto / rice_total[0..i].inject(&:+)
       }
     end
 
@@ -66,8 +66,8 @@ module Toji
     # 汲水歩合が大きい高温糖化酒母では6%程度である
     #
     # 出典: 酒造教本 P96
-    def shubo_rate
-      cumulative_shubo_rates.last || 0.0
+    def moto_rate
+      cumulative_moto_rates.last || 0.0
     end
 
     # 白米比率

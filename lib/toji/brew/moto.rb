@@ -1,6 +1,6 @@
 module Toji
   module Brew
-    module Shubo
+    module Moto
       include Base
 
       def progress(name: nil, dash: :solid, enable_annotations: true)

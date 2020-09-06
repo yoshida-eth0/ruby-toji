@@ -56,8 +56,8 @@ module Example
       include Toji::Brew::Koji
     end
 
-    class Shubo < Base
-      include Toji::Brew::Shubo
+    class Moto < Base
+      include Toji::Brew::Moto
     end
 
     class Moromi < Base
@@ -68,6 +68,7 @@ module Example
 
   class Step
     include Toji::Recipe::Step
+    attr_accessor :name
 
     def self.create(name:, kake: 0, koji: 0, water: 0, lactic_acid: 0, alcohol: 0, yeast: 0, koji_interval_days: 0, kake_interval_days: 0)
       new.tap {|o|

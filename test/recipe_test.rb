@@ -32,10 +32,10 @@ class RecipeTest < Minitest::Test
       @steps = []
     end
 
-    def self.create(steps, has_shubo, has_moromi, ab_coef, ab_expects, squeeze_interval_days)
+    def self.create(steps, has_moto, has_moromi, ab_coef, ab_expects, squeeze_interval_days)
       new.tap {|o|
         o.steps = steps
-        o.has_shubo = has_shubo
+        o.has_moto = has_moto
         o.has_moromi = has_moromi
         o.ab_coef = ab_coef
         o.ab_expects = ab_expects
@@ -186,9 +186,9 @@ class RecipeTest < Minitest::Test
     assert_equal 5, @recipe.steps.length
 
     assert_equal [65.0, 205.0, 480.0, 920.0, 1000.0], @recipe.cumulative_rice_totals
-    assert_equal [1.0, 0.3170731707317073, 0.13541666666666666, 0.07065217391304347, 0.065], @recipe.cumulative_shubo_rates
+    assert_equal [1.0, 0.3170731707317073, 0.13541666666666666, 0.07065217391304347, 0.065], @recipe.cumulative_moto_rates
 
-    assert_equal 0.065, @recipe.shubo_rate
+    assert_equal 0.065, @recipe.moto_rate
     assert_equal [1.0, 2.1538461538461537, 4.230769230769231, 6.769230769230769, 1.2307692307692308], @recipe.rice_rates
   end
 
@@ -196,9 +196,9 @@ class RecipeTest < Minitest::Test
     recipe = @recipe.scale(350)
   
     assert_equal [22.75, 71.75, 168.0, 322.0, 350.0], recipe.cumulative_rice_totals
-    assert_equal [1.0, 0.3170731707317073, 0.13541666666666666, 0.07065217391304347, 0.065], recipe.cumulative_shubo_rates
+    assert_equal [1.0, 0.3170731707317073, 0.13541666666666666, 0.07065217391304347, 0.065], recipe.cumulative_moto_rates
 
-    assert_equal 0.065, recipe.shubo_rate
+    assert_equal 0.065, recipe.moto_rate
     assert_equal [1.0, 2.1538461538461537, 4.230769230769231, 6.769230769230769, 1.2307692307692308], recipe.rice_rates
   end
 
@@ -206,9 +206,9 @@ class RecipeTest < Minitest::Test
     recipe = @recipe.scale(350).round
   
     assert_equal [23.0, 72.0, 168.0, 322.0, 350.0], recipe.cumulative_rice_totals
-    assert_equal [1.0, 0.3194444444444444, 0.13690476190476192, 0.07142857142857142, 0.06571428571428571], recipe.cumulative_shubo_rates
+    assert_equal [1.0, 0.3194444444444444, 0.13690476190476192, 0.07142857142857142, 0.06571428571428571], recipe.cumulative_moto_rates
 
-    assert_equal 0.06571428571428571, recipe.shubo_rate
+    assert_equal 0.06571428571428571, recipe.moto_rate
     assert_equal [1.0, 2.130434782608696, 4.173913043478261, 6.695652173913044, 1.2173913043478262], recipe.rice_rates
   end
 end

@@ -46,10 +46,10 @@ class ProductTest < Minitest::Test
       @steps = []
     end
 
-    def self.create(steps, has_shubo, has_moromi, ab_coef, ab_expects, squeeze_interval_days)
+    def self.create(steps, has_moto, has_moromi, ab_coef, ab_expects, squeeze_interval_days)
       new.tap {|o|
         o.steps = steps
-        o.has_shubo = has_shubo
+        o.has_moto = has_moto
         o.has_moromi = has_moromi
         o.ab_coef = ab_coef
         o.ab_expects = ab_expects
