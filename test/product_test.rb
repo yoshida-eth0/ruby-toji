@@ -137,13 +137,13 @@ class ProductTest < Minitest::Test
     assert_equal 10, events.length
 
     assert_equal Time.mktime(2020, 2, 10), event0.date
-    assert_equal :koji, event0.type
+    assert_equal :koji, event0.rice_type
     assert_equal 0, event0.index
     assert_equal 0, event0.group_index
     assert_equal 20, event0.weight
 
     assert_equal Time.mktime(2020, 3, 3), event7.date
-    assert_equal :kake, event7.type
+    assert_equal :kake, event7.rice_type
     assert_equal 2, event7.index
     assert_equal 2, event7.group_index
     assert_equal 215, event7.weight
@@ -157,12 +157,12 @@ class ProductTest < Minitest::Test
     assert_equal 7, rice_event_groups.length
 
     assert_equal Time.mktime(2020, 2, 24), eg1.date
-    assert_equal :koji, eg1.type
+    assert_equal :koji, eg1.rice_type
     assert_equal 180, eg1.weight
     assert_equal 3, eg1.breakdown.length
 
     assert_equal Time.mktime(2020, 3, 3), eg4.date
-    assert_equal :kake, eg4.type
+    assert_equal :kake, eg4.rice_type
     assert_equal 215, eg4.weight
     assert_equal 1, eg4.breakdown.length
   end

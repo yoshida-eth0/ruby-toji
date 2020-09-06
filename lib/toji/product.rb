@@ -31,7 +31,7 @@ module Toji
       koji_dates.map.with_index {|date,i|
         RiceEvent.new(
           product: self,
-          type: :koji,
+          rice_type: :koji,
           index: i,
           group_index: koji_dates.find_index(date),
           date: date,
@@ -44,7 +44,7 @@ module Toji
       kake_dates.map.with_index {|date,i|
         RiceEvent.new(
           product: self,
-          type: :kake,
+          rice_type: :kake,
           index: i,
           group_index: kake_dates.find_index(date),
           date: date,
