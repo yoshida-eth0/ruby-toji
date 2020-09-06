@@ -1,19 +1,19 @@
 module Toji
   class Calendar
     class DateColumn
-      attr_reader :events
+      attr_reader :rice_events
 
       def initialize
-        @events = []
+        @rice_events = []
       end
 
       def <<(event)
-        @events << event
+        @rice_events << event
       end
       alias_method :add, :<<
 
       def event_groups
-        @events.group_by {|e|
+        @rice_events.group_by {|e|
           e.group_key
         }.values
       end

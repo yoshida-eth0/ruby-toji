@@ -1,43 +1,12 @@
 module Toji
   module Product
     class Event
-      attr_reader :product
+      attr_reader :date
       attr_reader :type
-      attr_reader :index
-      
-      def initialize(product, type, index)
-        @product = product
+
+      def initialize(date, type)
+        @date = date
         @type = type
-        @index = index
-      end
-
-      def date
-        method = "#{@type}_dates".to_sym
-        @product.send(method)[@index]
-      end
-
-      def group_index
-        method = "#{@type}_dates".to_sym
-        dates = @product.send(method)
-        date = dates[@index]
-
-        if @type==:koji && dates.all? {|d| d==date}
-          1
-        else
-          dates.index(date)
-        end
-      end
-
-      def group_key
-        a = []
-        a << product.reduce_key
-        a << type
-        a << group_index
-        a.map(&:to_s).join(":")
-      end
-
-      def weight
-        @product.recipe.steps[@index].send(@type)
       end
     end
   end

@@ -32,9 +32,12 @@ class RecipeTest < Minitest::Test
       @steps = []
     end
 
-    def self.create(steps)
+    def self.create(steps, ab_coef, ab_expects, squeeze_interval_days)
       new.tap {|o|
         o.steps = steps
+        o.ab_coef = ab_coef
+        o.ab_expects = ab_expects
+        o.squeeze_interval_days = squeeze_interval_days
       }
     end
   end
@@ -88,7 +91,10 @@ class RecipeTest < Minitest::Test
 
           water: 120,
         ),
-      ].map(&:freeze).freeze
+      ].map(&:freeze).freeze,
+      1.4,
+      [],
+      30,
     ).freeze
   end
 

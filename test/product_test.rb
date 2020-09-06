@@ -46,9 +46,12 @@ class ProductTest < Minitest::Test
       @steps = []
     end
 
-    def self.create(steps)
+    def self.create(steps, ab_coef, ab_expects, squeeze_interval_days)
       new.tap {|o|
         o.steps = steps
+        o.ab_coef = ab_coef
+        o.ab_expects = ab_expects
+        o.squeeze_interval_days = squeeze_interval_days
       }
     end
   end
@@ -102,7 +105,10 @@ class ProductTest < Minitest::Test
 
           water: 120,
         ),
-      ].map(&:freeze).freeze
+      ].map(&:freeze).freeze,
+      1.4,
+      [],
+      30,
     ).freeze
 
     @product = Product.new("asdfghjkl", "仕1", @recipe, Time.mktime(2020, 2, 10))
@@ -116,10 +122,11 @@ class ProductTest < Minitest::Test
 
     assert_equal [Time.mktime(2020, 2, 10), Time.mktime(2020, 2, 24), Time.mktime(2020, 2, 24), Time.mktime(2020, 2, 24), Time.mktime(2020, 2, 24)], @product.koji_dates
     assert_equal [Time.mktime(2020, 2, 15), Time.mktime(2020, 3, 1), Time.mktime(2020, 3, 3), Time.mktime(2020, 3, 4), Time.mktime(2020, 3, 29)], @product.kake_dates
+    assert_equal Time.mktime(2020, 3, 11), @product.squeeze_date
   end
 
   def test_events
-    events = @product.events
+    events = @product.rice_events
     event0 = events[0]
     event7 = events[7]
 
@@ -138,21 +145,21 @@ class ProductTest < Minitest::Test
     assert_equal 215, event7.weight
   end
 
-  def test_events_group
-    events_group = @product.events_group
-    eg1 = events_group[1]
-    eg4 = events_group[4]
+  def test_rice_event_groups
+    rice_event_groups = @product.rice_event_groups
+    eg1 = rice_event_groups[1]
+    eg4 = rice_event_groups[4]
 
-    assert_equal 7, events_group.length
+    assert_equal 7, rice_event_groups.length
 
-    assert_equal Time.mktime(2020, 2, 24), eg1[:date]
-    assert_equal :koji, eg1[:type]
-    assert_equal 180, eg1[:weight]
-    assert_equal 3, eg1[:breakdown].length
+    assert_equal Time.mktime(2020, 2, 24), eg1.date
+    assert_equal :koji, eg1.type
+    assert_equal 180, eg1.weight
+    assert_equal 3, eg1.breakdown.length
 
-    assert_equal Time.mktime(2020, 3, 3), eg4[:date]
-    assert_equal :kake, eg4[:type]
-    assert_equal 215, eg4[:weight]
-    assert_equal 1, eg4[:breakdown].length
+    assert_equal Time.mktime(2020, 3, 3), eg4.date
+    assert_equal :kake, eg4.type
+    assert_equal 215, eg4.weight
+    assert_equal 1, eg4.breakdown.length
   end
 end

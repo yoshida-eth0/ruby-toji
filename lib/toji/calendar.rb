@@ -16,7 +16,7 @@ module Toji
     alias_method :add, :<<
 
     def date_rows
-      events = @products.map{|product| product.events}.flatten
+      events = @products.map{|product| product.rice_events}.flatten
 
       result = {}
       events.each {|event|
@@ -28,7 +28,7 @@ module Toji
     end
 
     def table_data
-      events = @products.map{|product| product.events}.flatten
+      events = @products.map{|product| product.rice_events}.flatten
 
       koji_len = events.select{|e| e.type==:koji}.map(&:group_index).max + 1
       kake_len = events.select{|e| e.type==:kake}.map(&:group_index).max + 1

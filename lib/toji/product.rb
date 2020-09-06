@@ -1,4 +1,6 @@
 require 'toji/product/event'
+require 'toji/product/rice_event'
+require 'toji/product/rice_event_group'
 
 module Toji
   module Product
@@ -21,45 +23,75 @@ module Toji
       }
     end
 
+    def squeeze_date
+      base_date.next_day(recipe.squeeze_interval_days)
+    end
+
+    def koji_events
+      koji_dates.map.with_index {|date,i|
+        RiceEvent.new(
+          product: self,
+          type: :koji,
+          index: i,
+          group_index: koji_dates.find_index(date),
+          date: date,
+          weight: recipe.steps[i].koji,
+        )
+      }
+    end
+
+    def kake_events
+      kake_dates.map.with_index {|date,i|
+        RiceEvent.new(
+          product: self,
+          type: :kake,
+          index: i,
+          group_index: kake_dates.find_index(date),
+          date: date,
+          weight: recipe.steps[i].kake,
+        )
+      }
+    end
+
+    def rice_events
+      koji_events + kake_events
+    end
+
+    def koji_event_groups
+      koji_events.group_by{|event|
+        event.group_key
+      }.map {|group_key,events|
+        events.select{|event| 0<event.weight}
+      }.select {|events|
+        0<events.length
+      }.map {|events|
+        RiceEventGroup.new(events)
+      }
+    end
+
+    def kake_event_groups
+      kake_events.group_by{|event|
+        event.group_key
+      }.map {|group_key,events|
+        events.select{|event| 0<event.weight}
+      }.select {|events|
+        0<events.length
+      }.map {|events|
+        RiceEventGroup.new(events)
+      }
+    end
+
+    def rice_event_groups
+      koji_event_groups + kake_event_groups
+    end
+
     def events
       events = []
 
-      koji_dates.length.times {|i|
-        events << Event.new(self, :koji, i)
-      }
-
-      kake_dates.length
-        .times.map {|i|
-          Event.new(self, :kake, i)
-        }
-        .delete_if {|e|
-          4<=e.index && e.weight==0
-        }
-        .each {|e|
-          events << e
-        }
+      events += rice_event_groups
+      events << Event.new(squeeze_date, :squeeze)
 
       events
-    end
-
-    def events_group
-      events.group_by{|event|
-        event.group_key
-      }.map {|group_key,events|
-        breakdown = events.map {|event|
-          {index: event.index, weight: event.weight}
-        }
-        if 1<breakdown.length
-          breakdown = breakdown.select{|event| 0<event[:weight]}
-        end
-
-        {
-          date: events.first.date,
-          type: events.first.type,
-          weight: events.map(&:weight).sum,
-          breakdown: breakdown,
-        }
-      }
     end
   end
 end

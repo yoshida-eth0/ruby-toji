@@ -6,6 +6,7 @@ module Toji
     attr_accessor :steps
     attr_accessor :ab_coef
     attr_accessor :ab_expects
+    attr_accessor :squeeze_interval_days
 
     def scale(rice_total)
       rate = rice_total / steps.map(&:rice_total).sum
@@ -15,6 +16,9 @@ module Toji
 
       self.class.new.tap {|o|
         o.steps = new_steps
+        o.ab_coef = ab_coef
+        o.ab_expects = ab_expects.deep_dup
+        o.squeeze_interval_days = squeeze_interval_days
       }
     end
 
@@ -25,6 +29,9 @@ module Toji
 
       self.class.new.tap {|o|
         o.steps = new_steps
+        o.ab_coef = ab_coef
+        o.ab_expects = ab_expects.deep_dup
+        o.squeeze_interval_days = squeeze_interval_days
       }
     end
 
