@@ -58,25 +58,21 @@ module Toji
     end
 
     def koji_event_groups
-      koji_events.group_by{|event|
+      koji_events.select{|event|
+        0<event.weight
+      }.group_by{|event|
         event.group_key
       }.map {|group_key,events|
-        events.select{|event| 0<event.weight}
-      }.select {|events|
-        0<events.length
-      }.map {|events|
         RiceEventGroup.new(events)
       }
     end
 
     def kake_event_groups
-      kake_events.group_by{|event|
+      kake_events.select{|event|
+        0<event.weight
+      }.group_by{|event|
         event.group_key
       }.map {|group_key,events|
-        events.select{|event| 0<event.weight}
-      }.select {|events|
-        0<events.length
-      }.map {|events|
         RiceEventGroup.new(events)
       }
     end

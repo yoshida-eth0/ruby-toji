@@ -4,6 +4,8 @@ require 'toji/recipe/ab_expect'
 module Toji
   module Recipe
     attr_accessor :steps
+    attr_accessor :has_shubo
+    attr_accessor :has_moromi
     attr_accessor :ab_coef
     attr_accessor :ab_expects
     attr_accessor :squeeze_interval_days
@@ -16,6 +18,8 @@ module Toji
 
       self.class.new.tap {|o|
         o.steps = new_steps
+        o.has_shubo = has_shubo
+        o.has_moromi = has_moromi
         o.ab_coef = ab_coef
         o.ab_expects = ab_expects.deep_dup
         o.squeeze_interval_days = squeeze_interval_days
@@ -29,6 +33,8 @@ module Toji
 
       self.class.new.tap {|o|
         o.steps = new_steps
+        o.has_shubo = has_shubo
+        o.has_moromi = has_moromi
         o.ab_coef = ab_coef
         o.ab_expects = ab_expects.deep_dup
         o.squeeze_interval_days = squeeze_interval_days
