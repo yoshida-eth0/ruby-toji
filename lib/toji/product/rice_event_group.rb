@@ -2,19 +2,18 @@ require 'toji/product/event'
 
 module Toji
   module Product
-    class RiceEventGroup < Event
+    module RiceEventGroup
+      include Event
+
       attr_reader :rice_type
       attr_reader :breakdown
 
-      def initialize(events)
-        o = events.first
-        super(o&.date, :rice)
-        @rice_type = o&.rice_type
-        @breakdown = events
+      def type
+        :rice
       end
 
       def weight
-        @breakdown.map(&:weight).sum
+        breakdown.map(&:weight).sum
       end
     end
   end

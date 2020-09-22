@@ -25,6 +25,17 @@ class RecipeTest < Minitest::Test
     end
   end
 
+  class Action
+    include Toji::Recipe::Action
+
+    def self.create(type:, interval_days:)
+      new.tap {|o|
+        o.type = type
+        o.interval_days = interval_days
+      }
+    end
+  end
+
   class Recipe
     include Toji::Recipe
 
@@ -32,14 +43,14 @@ class RecipeTest < Minitest::Test
       @steps = []
     end
 
-    def self.create(steps, has_moto, has_moromi, ab_coef, ab_expects, squeeze_interval_days)
+    def self.create(steps, actions, has_moto, has_moromi, ab_coef, ab_expects)
       new.tap {|o|
         o.steps = steps
+        o.actions = actions
         o.has_moto = has_moto
         o.has_moromi = has_moromi
         o.ab_coef = ab_coef
         o.ab_expects = ab_expects
-        o.squeeze_interval_days = squeeze_interval_days
       }
     end
   end
@@ -94,11 +105,16 @@ class RecipeTest < Minitest::Test
           water: 120,
         ),
       ].map(&:freeze).freeze,
+      [
+        Action.create(
+          type: :squeeze,
+          interval_days: 50,
+        ),
+      ].map(&:freeze).freeze,
       true,
       true,
       1.4,
       [],
-      30,
     ).freeze
   end
 

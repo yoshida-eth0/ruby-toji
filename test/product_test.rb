@@ -3,6 +3,7 @@ require "test_helper"
 class ProductTest < Minitest::Test
   class Product
     include Toji::Product
+    include Toji::Product::EventFactory
 
     attr_accessor :description
     attr_accessor :color
@@ -12,6 +13,52 @@ class ProductTest < Minitest::Test
       @name = name
       @recipe = recipe
       @base_date = base_date
+    end
+
+    def create_rice_event(product:, date:, rice_type:, index:, group_index:, weight:)
+      RiceEvent.new(product: product, date: date, rice_type: rice_type, index: index, group_index: group_index, weight: weight)
+    end
+
+    def create_rice_event_group(date:, rice_type:, breakdown:)
+      RiceEventGroup.new(date: date, rice_type: rice_type, breakdown: breakdown)
+    end
+
+    def create_action_event(product:, date:, type:, index:)
+      ActionEvent.new(product: product, date: date, type: type, index: index)
+    end
+  end
+
+  class RiceEvent
+    include Toji::Product::RiceEvent
+
+    def initialize(product:, date:, rice_type:, index:, group_index:, weight:)
+      @product = product
+      @date = date
+      @rice_type = rice_type
+      @index = index
+      @group_index = group_index
+      @weight = weight
+    end
+  end
+
+  class RiceEventGroup
+    include Toji::Product::RiceEventGroup
+
+    def initialize(date:, rice_type:, breakdown:)
+      @date = date
+      @rice_type = rice_type
+      @breakdown = breakdown
+    end
+  end
+
+  class ActionEvent
+    include Toji::Product::ActionEvent
+
+    def initialize(product:, date:, type:, index:)
+      @product = product
+      @date = date
+      @type = type
+      @index = index
     end
   end
 
@@ -39,6 +86,17 @@ class ProductTest < Minitest::Test
     end
   end
 
+  class Action
+    include Toji::Recipe::Action
+
+    def self.create(type:, interval_days:)
+      new.tap {|o|
+        o.type = type
+        o.interval_days = interval_days
+      }
+    end
+  end
+
   class Recipe
     include Toji::Recipe
 
@@ -46,14 +104,14 @@ class ProductTest < Minitest::Test
       @steps = []
     end
 
-    def self.create(steps, has_moto, has_moromi, ab_coef, ab_expects, squeeze_interval_days)
+    def self.create(steps, actions, has_moto, has_moromi, ab_coef, ab_expects)
       new.tap {|o|
         o.steps = steps
+        o.actions = actions
         o.has_moto = has_moto
         o.has_moromi = has_moromi
         o.ab_coef = ab_coef
         o.ab_expects = ab_expects
-        o.squeeze_interval_days = squeeze_interval_days
       }
     end
   end
@@ -108,11 +166,16 @@ class ProductTest < Minitest::Test
           water: 120,
         ),
       ].map(&:freeze).freeze,
+      [
+        Action.create(
+          type: :squeeze,
+          interval_days: 50,
+        ),
+      ].map(&:freeze).freeze,
       true,
       true,
       1.4,
       [],
-      30,
     ).freeze
 
     @product = Product.new("asdfghjkl", "仕1", @recipe, Time.mktime(2020, 2, 10))
@@ -126,7 +189,7 @@ class ProductTest < Minitest::Test
 
     assert_equal [Time.mktime(2020, 2, 10), Time.mktime(2020, 2, 24), Time.mktime(2020, 2, 24), Time.mktime(2020, 2, 24), Time.mktime(2020, 2, 24)], @product.koji_dates
     assert_equal [Time.mktime(2020, 2, 15), Time.mktime(2020, 3, 1), Time.mktime(2020, 3, 3), Time.mktime(2020, 3, 4), Time.mktime(2020, 3, 29)], @product.kake_dates
-    assert_equal Time.mktime(2020, 3, 11), @product.squeeze_date
+    assert_equal [Time.mktime(2020, 3, 31)], @product.action_dates
   end
 
   def test_events

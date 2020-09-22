@@ -1,6 +1,8 @@
 require 'toji/product/event'
 require 'toji/product/rice_event'
 require 'toji/product/rice_event_group'
+require 'toji/product/action_event'
+require 'toji/product/event_factory'
 
 module Toji
   module Product
@@ -8,6 +10,12 @@ module Toji
     attr_accessor :name
     attr_accessor :recipe
     attr_accessor :base_date
+
+    attr_accessor :koji_events
+    attr_accessor :kake_events
+    attr_accessor :koji_event_groups
+    attr_accessor :kake_event_groups
+    attr_accessor :action_events
 
     def koji_dates
       date = base_date
@@ -23,33 +31,10 @@ module Toji
       }
     end
 
-    def squeeze_date
-      base_date.next_day(recipe.squeeze_interval_days)
-    end
-
-    def koji_events
-      koji_dates.map.with_index {|date,i|
-        RiceEvent.new(
-          product: self,
-          rice_type: :koji,
-          index: i,
-          group_index: koji_dates.find_index(date),
-          date: date,
-          weight: recipe.steps[i].koji,
-        )
-      }
-    end
-
-    def kake_events
-      kake_dates.map.with_index {|date,i|
-        RiceEvent.new(
-          product: self,
-          rice_type: :kake,
-          index: i,
-          group_index: kake_dates.find_index(date),
-          date: date,
-          weight: recipe.steps[i].kake,
-        )
+    def action_dates
+      date = base_date
+      recipe.actions.map {|action|
+        date = date.next_day(action.interval_days)
       }
     end
 
@@ -57,37 +42,12 @@ module Toji
       koji_events + kake_events
     end
 
-    def koji_event_groups
-      koji_events.select{|event|
-        0<event.weight
-      }.group_by{|event|
-        event.group_key
-      }.map {|group_key,events|
-        RiceEventGroup.new(events)
-      }
-    end
-
-    def kake_event_groups
-      kake_events.select{|event|
-        0<event.weight
-      }.group_by{|event|
-        event.group_key
-      }.map {|group_key,events|
-        RiceEventGroup.new(events)
-      }
-    end
-
     def rice_event_groups
       koji_event_groups + kake_event_groups
     end
 
     def events
-      events = []
-
-      events += rice_event_groups
-      events << Event.new(squeeze_date, :squeeze)
-
-      events
+      rice_event_groups + action_events
     end
   end
 end

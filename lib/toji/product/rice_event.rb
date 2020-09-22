@@ -2,20 +2,17 @@ require 'toji/product/event'
 
 module Toji
   module Product
-    class RiceEvent < Event
+    module RiceEvent
+      include Event
+
       attr_reader :product
       attr_reader :rice_type
       attr_reader :index
       attr_reader :group_index
       attr_reader :weight
       
-      def initialize(product:, rice_type:, index:, group_index:, date:, weight:)
-        super(date, :rice)
-        @product = product
-        @rice_type = rice_type
-        @index = index
-        @group_index = group_index
-        @weight = weight
+      def type
+        :rice
       end
 
       def group_key
