@@ -28,10 +28,12 @@ module Toji
     end
 
     def table_data
-      events = @products.map{|product| product.rice_events}.flatten
+      koji_events = @products.map{|product| product.koji_events}.flatten
+      kake_events = @products.map{|product| product.kake_events}.flatten
+      events = koji_events + kake_events
 
-      koji_len = events.select{|e| e.rice_type==:koji}.map{|e| e.indexes.first}.max + 1
-      kake_len = events.select{|e| e.rice_type==:kake}.map{|e| e.indexes.first}.max + 1
+      koji_len = koji_events.map(&:group_index).max + 1
+      kake_len = kake_events.map(&:group_index).max + 1
       min_date = events.map(&:date).min
       max_date = events.map(&:date).max
 

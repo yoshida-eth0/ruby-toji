@@ -59,7 +59,6 @@ module Toji
       def action_events
         action_dates.map.with_index {|date,i|
           create_action_event(
-            product: self,
             date: date,
             type: recipe.actions[i].type,
             index: i,
