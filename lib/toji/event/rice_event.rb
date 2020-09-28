@@ -6,8 +6,8 @@ module Toji
       include Base
 
       attr_reader :rice_type
-      attr_reader :group_index
-      attr_reader :indexes
+      attr_reader :index
+      attr_reader :step_indexes
 
       attr_reader :raw
       attr_reader :soaked

@@ -14,12 +14,12 @@ class ProductTest < Minitest::Test
       @base_date = base_date
     end
 
-    def create_koji_event(date:, group_index:, indexes:, raw:)
-      KojiEvent.new(product: self, date: date, group_index: group_index, indexes: indexes, raw: raw)
+    def create_koji_event(date:, index:, step_indexes:, raw:)
+      KojiEvent.new(product: self, date: date, index: index, step_indexes: step_indexes, raw: raw)
     end
 
-    def create_kake_event(date:, group_index:, indexes:, raw:)
-      KakeEvent.new(product: self, date: date, group_index: group_index, indexes: indexes, raw: raw)
+    def create_kake_event(date:, index:, step_indexes:, raw:)
+      KakeEvent.new(product: self, date: date, index: index, step_indexes: step_indexes, raw: raw)
     end
 
     def create_action_event(date:, type:, index:)
@@ -30,11 +30,11 @@ class ProductTest < Minitest::Test
   class KojiEvent
     include Toji::Event::KojiEvent
 
-    def initialize(product:, date:, group_index:, indexes:, raw:)
+    def initialize(product:, date:, index:, step_indexes:, raw:)
       @product = product
       @date = date
-      @group_index = group_index
-      @indexes = indexes
+      @index = index
+      @step_indexes = step_indexes
       @raw = raw
     end
   end
@@ -42,11 +42,11 @@ class ProductTest < Minitest::Test
   class KakeEvent
     include Toji::Event::KakeEvent
 
-    def initialize(product:, date:, group_index:, indexes:, raw:)
+    def initialize(product:, date:, index:, step_indexes:, raw:)
       @product = product
       @date = date
-      @group_index = group_index
-      @indexes = indexes
+      @index = index
+      @step_indexes = step_indexes
       @raw = raw
     end
   end
@@ -201,11 +201,11 @@ class ProductTest < Minitest::Test
     assert_equal Time.mktime(2020, 2, 24), event1.date
     assert_equal :koji, event1.rice_type
     #assert_equal 180, event1.weight
-    assert_equal 3, event1.indexes.length
+    assert_equal 3, event1.step_indexes.length
 
     assert_equal Time.mktime(2020, 3, 3), event4.date
     assert_equal :kake, event4.rice_type
     #assert_equal 215, event4.weight
-    assert_equal 1, event4.indexes.length
+    assert_equal 1, event4.step_indexes.length
   end
 end
