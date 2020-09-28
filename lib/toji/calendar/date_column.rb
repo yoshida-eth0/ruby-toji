@@ -12,27 +12,12 @@ module Toji
       end
       alias_method :add, :<<
 
-      def event_groups
-        @rice_events.group_by {|e|
-          e.group_key
-        }.values
-      end
-
       def text
-        event_groups.map {|es|
-          name = es.first.product.name
-          weight = "%.17g" % es.map(&:weight).sum
-          "#{name}: #{weight}"
+        @rice_events.map {|ev|
+          name = ev.product.name
+          raw = "%.17g" % ev.raw
+          "#{name}: #{raw}"
         }.join("<br>")
-      end
-
-      def column_events
-        event_groups.map {|es|
-          {
-            product: es.first.product,
-            weight: es.map(&:weight).sum,
-          }
-        }
       end
     end
   end

@@ -1,20 +1,13 @@
-require 'toji/product/event'
-require 'toji/product/rice_event'
-require 'toji/product/rice_event_group'
-require 'toji/product/action_event'
 require 'toji/product/event_factory'
 
 module Toji
   module Product
-    attr_reader :reduce_key
     attr_accessor :name
     attr_accessor :recipe
     attr_accessor :base_date
 
     attr_accessor :koji_events
     attr_accessor :kake_events
-    attr_accessor :koji_event_groups
-    attr_accessor :kake_event_groups
     attr_accessor :action_events
 
     def koji_dates
@@ -42,12 +35,8 @@ module Toji
       koji_events + kake_events
     end
 
-    def rice_event_groups
-      koji_event_groups + kake_event_groups
-    end
-
     def events
-      rice_event_groups + action_events
+      rice_events + action_events
     end
   end
 end

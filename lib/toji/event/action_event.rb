@@ -1,11 +1,10 @@
-require 'toji/product/event'
+require 'toji/event/base'
 
 module Toji
-  module Product
+  module Event
     module ActionEvent
       include Event
 
-      attr_reader :product
       attr_reader :index
 
     end

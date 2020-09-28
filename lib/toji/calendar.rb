@@ -30,8 +30,8 @@ module Toji
     def table_data
       events = @products.map{|product| product.rice_events}.flatten
 
-      koji_len = events.select{|e| e.type==:koji}.map(&:group_index).max + 1
-      kake_len = events.select{|e| e.type==:kake}.map(&:group_index).max + 1
+      koji_len = events.select{|e| e.rice_type==:koji}.map{|e| e.indexes.first}.max + 1
+      kake_len = events.select{|e| e.rice_type==:kake}.map{|e| e.indexes.first}.max + 1
       min_date = events.map(&:date).min
       max_date = events.map(&:date).max
 
@@ -65,10 +65,10 @@ module Toji
         date_row = _date_rows[date]
         if date_row
           koji_len.times {|i|
-            columns << (date_row.kojis[i]&.column_events || [])
+            columns << date_row.kojis[i]
           }
           kake_len.times {|i|
-            columns << (date_row.kakes[i]&.column_events || [])
+            columns << date_row.kakes[i]
           }
         else
           (koji_len + kake_len).times {
@@ -88,14 +88,12 @@ module Toji
       data = table_data
       data[:rows] = data[:rows].map {|row|
         row.map {|column|
-          if Array===column
-            column.map{|c|
-              name = c[:product].name
-              weight = "%.17g" % c[:weight]
-              "#{name}: #{weight}"
-            }.join("<br>")
-          else
+          if DateColumn===column
+            column.text
+          elsif column
             column
+          else
+            ""
           end
         }
       }

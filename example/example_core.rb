@@ -1,3 +1,4 @@
+require 'toji'
 require 'securerandom'
 
 module Example
@@ -244,19 +245,70 @@ module Example
   end
 
 
+  class KojiEvent
+    include Toji::Event::KojiEvent
+
+    def initialize(product:, date:, group_index:, indexes:, raw:)
+      @product = product
+      @date = date
+      @group_index = group_index
+      @indexes = indexes
+      @raw = raw
+    end
+  end
+
+
+  class KakeEvent
+    include Toji::Event::KakeEvent
+
+    def initialize(product:, date:, group_index:, indexes:, raw:)
+      @product = product
+      @date = date
+      @group_index = group_index
+      @indexes = indexes
+      @raw = raw
+    end
+  end
+
+
+  class ActionEvent
+    include Toji::Event::ActionEvent
+
+    def initialize(product:, date:, type:, index:)
+      @product = product
+      @date = date
+      @type = type
+      @index = index
+    end
+  end
+
+
   class Product
     include Toji::Product
+    include Toji::Product::EventFactory
 
     attr_accessor :description
     attr_accessor :color
 
-    def initialize(reduce_key, name, description, recipe, base_date, color=nil)
-      @reduce_key = reduce_key || SecureRandom.uuid
+    def initialize(id, name, description, recipe, base_date, color=nil)
+      @id = id
       @name = name
       @description = description
       @recipe = recipe
       @base_date = base_date
       @color = color
+    end
+
+    def create_koji_event(date:, group_index:, indexes:, raw:)
+      KojiEvent.new(product: self, date: date, group_index: group_index, indexes: indexes, raw: raw)
+    end
+
+    def create_kake_event(date:, group_index:, indexes:, raw:)
+      KakeEvent.new(product: self, date: date, group_index: group_index, indexes: indexes, raw: raw)
+    end
+
+    def create_action_event(date:, type:, index:)
+      ActionEvent.new(product: self, date: date, type: type, index: index)
     end
 
     def self.create(args)

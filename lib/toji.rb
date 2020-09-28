@@ -6,6 +6,7 @@ require 'toji/ingredient'
 require 'toji/recipe'
 require 'toji/brew'
 require 'toji/calendar'
+require 'toji/event'
 require 'toji/product'
 
 module Toji

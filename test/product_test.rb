@@ -8,51 +8,51 @@ class ProductTest < Minitest::Test
     attr_accessor :description
     attr_accessor :color
 
-    def initialize(reduce_key, name, recipe, base_date)
-      @reduce_key = reduce_key || SecureRandom.uuid
+    def initialize(name, recipe, base_date)
       @name = name
       @recipe = recipe
       @base_date = base_date
     end
 
-    def create_rice_event(product:, date:, rice_type:, index:, group_index:, weight:)
-      RiceEvent.new(product: product, date: date, rice_type: rice_type, index: index, group_index: group_index, weight: weight)
+    def create_koji_event(date:, group_index:, indexes:, raw:)
+      KojiEvent.new(product: self, date: date, group_index: group_index, indexes: indexes, raw: raw)
     end
 
-    def create_rice_event_group(date:, rice_type:, breakdown:)
-      RiceEventGroup.new(date: date, rice_type: rice_type, breakdown: breakdown)
+    def create_kake_event(date:, group_index:, indexes:, raw:)
+      KakeEvent.new(product: self, date: date, group_index: group_index, indexes: indexes, raw: raw)
     end
 
-    def create_action_event(product:, date:, type:, index:)
-      ActionEvent.new(product: product, date: date, type: type, index: index)
+    def create_action_event(date:, type:, index:)
+      ActionEvent.new(product: self, date: date, type: type, index: index)
     end
   end
 
-  class RiceEvent
-    include Toji::Product::RiceEvent
+  class KojiEvent
+    include Toji::Event::KojiEvent
 
-    def initialize(product:, date:, rice_type:, index:, group_index:, weight:)
+    def initialize(product:, date:, group_index:, indexes:, raw:)
       @product = product
       @date = date
-      @rice_type = rice_type
-      @index = index
       @group_index = group_index
-      @weight = weight
+      @indexes = indexes
+      @raw = raw
     end
   end
 
-  class RiceEventGroup
-    include Toji::Product::RiceEventGroup
+  class KakeEvent
+    include Toji::Event::KakeEvent
 
-    def initialize(date:, rice_type:, breakdown:)
+    def initialize(product:, date:, group_index:, indexes:, raw:)
+      @product = product
       @date = date
-      @rice_type = rice_type
-      @breakdown = breakdown
+      @group_index = group_index
+      @indexes = indexes
+      @raw = raw
     end
   end
 
   class ActionEvent
-    include Toji::Product::ActionEvent
+    include Toji::Event::ActionEvent
 
     def initialize(product:, date:, type:, index:)
       @product = product
@@ -178,11 +178,10 @@ class ProductTest < Minitest::Test
       [],
     ).freeze
 
-    @product = Product.new("asdfghjkl", "仕1", @recipe, Time.mktime(2020, 2, 10))
+    @product = Product.new("仕1", @recipe, Time.mktime(2020, 2, 10))
   end
 
   def test_basic
-    assert_equal "asdfghjkl", @product.reduce_key
     assert_equal "仕1", @product.name
     assert_equal @recipe, @product.recipe
     assert_equal Time.mktime(2020, 2, 10), @product.base_date
@@ -192,41 +191,21 @@ class ProductTest < Minitest::Test
     assert_equal [Time.mktime(2020, 3, 31)], @product.action_dates
   end
 
-  def test_events
-    events = @product.rice_events
-    event0 = events[0]
-    event7 = events[7]
+  def test_rice_events
+    rice_events = @product.rice_events
+    event1 = rice_events[1]
+    event4 = rice_events[4]
 
-    assert_equal 10, events.length
+    assert_equal 7, rice_events.length
 
-    assert_equal Time.mktime(2020, 2, 10), event0.date
-    assert_equal :koji, event0.rice_type
-    assert_equal 0, event0.index
-    assert_equal 0, event0.group_index
-    assert_equal 20, event0.weight
+    assert_equal Time.mktime(2020, 2, 24), event1.date
+    assert_equal :koji, event1.rice_type
+    #assert_equal 180, event1.weight
+    assert_equal 3, event1.indexes.length
 
-    assert_equal Time.mktime(2020, 3, 3), event7.date
-    assert_equal :kake, event7.rice_type
-    assert_equal 2, event7.index
-    assert_equal 2, event7.group_index
-    assert_equal 215, event7.weight
-  end
-
-  def test_rice_event_groups
-    rice_event_groups = @product.rice_event_groups
-    eg1 = rice_event_groups[1]
-    eg4 = rice_event_groups[4]
-
-    assert_equal 7, rice_event_groups.length
-
-    assert_equal Time.mktime(2020, 2, 24), eg1.date
-    assert_equal :koji, eg1.rice_type
-    assert_equal 180, eg1.weight
-    assert_equal 3, eg1.breakdown.length
-
-    assert_equal Time.mktime(2020, 3, 3), eg4.date
-    assert_equal :kake, eg4.rice_type
-    assert_equal 215, eg4.weight
-    assert_equal 1, eg4.breakdown.length
+    assert_equal Time.mktime(2020, 3, 3), event4.date
+    assert_equal :kake, event4.rice_type
+    #assert_equal 215, event4.weight
+    assert_equal 1, event4.indexes.length
   end
 end

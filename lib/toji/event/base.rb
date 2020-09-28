@@ -1,6 +1,7 @@
 module Toji
-  module Product
-    module Event
+  module Event
+    module Base
+      attr_reader :product
       attr_reader :date
       attr_reader :type
     end

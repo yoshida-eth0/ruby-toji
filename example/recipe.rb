@@ -24,7 +24,7 @@ table = Terminal::Table.new do |t|
   t << ["[累計]"]
   t << ["総米(g)"] + recipe.cumulative_rice_totals
   t << ["白米比率"] + recipe.rice_rates.map{|v| v&.round(2)}
-  t << ["酒母歩合(%)"] + recipe.cumulative_shubo_rates.map{|s| s * 100}.map{|v| v&.round(2)}
+  t << ["酒母歩合(%)"] + recipe.cumulative_moto_rates.map{|s| s * 100}.map{|v| v&.round(2)}
   t << ["タンク内容量(ml)"] + recipe.steps.map {|s|
     kake = Toji::Ingredient::Kake::Expected.create(s.kake)
     koji = Toji::Ingredient::Koji::Expected.create(s.koji)

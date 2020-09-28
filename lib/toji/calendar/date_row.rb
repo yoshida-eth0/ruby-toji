@@ -12,7 +12,7 @@ module Toji
       end
 
       def <<(event)
-        case event.type
+        case event.rice_type
         when :koji
           index = event.group_index
           @kojis[index] ||= DateColumn.new

@@ -86,7 +86,7 @@ module Toji
     end
 
     def table_data
-      headers = [""] + steps.map(&:name) + [:total]
+      headers = [""] + steps.map.with_index{|s,i| :"step#{i}"} + [:total]
       keys = [:rice_total, :kake, :koji, :alcohol, :water, :lactic_acid]
 
       cells = [keys]
