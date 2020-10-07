@@ -94,29 +94,6 @@ module Toji
           end
         end
       end
-
-      def self.create(val)
-        if State===val
-          val
-        elsif WrappedState==val
-          val.state
-        #elsif Hash===val
-        #  #s = Class.new {
-        #  #  include State
-        #  #}.new
-        #  s = Object.new.tap {|o|
-        #    o.extend State
-        #    o.extend State::PrependMethods
-        #  }
-
-        #  KEYS.each {|k|
-        #    s.send("#{k}=", val[k])
-        #  }
-        #  s
-        else
-          raise Error, "ArgumentError: cant cast to Toji::Brew::State"
-        end
-      end
     end
   end
 end

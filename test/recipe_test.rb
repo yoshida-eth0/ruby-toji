@@ -1,60 +1,6 @@
 require "test_helper"
 
 class RecipeTest < Minitest::Test
-  class Step
-    include Toji::Recipe::Step
-
-    def self.create(koji: 0, koji_interval_days: 0, kake: 0, kake_interval_days: 0, water: 0, lactic_acid: 0, alcohol: 0, yeast: 0)
-      new.tap {|o|
-        o.koji = koji.to_f
-        o.koji_soaked_rate = 0.0
-        o.koji_steamed_rate = 0.0
-        o.koji_dekoji_rate = 0.0
-        o.koji_interval_days = koji_interval_days.to_i
-
-        o.kake = kake.to_f
-        o.kake_soaked_rate = 0.0
-        o.kake_steamed_rate = 0.0
-        o.kake_interval_days = kake_interval_days.to_i
-
-        o.water = water.to_f
-        o.lactic_acid = lactic_acid.to_f
-        o.alcohol = alcohol.to_f
-        o.yeast = yeast.to_f
-      }
-    end
-  end
-
-  class Action
-    include Toji::Recipe::Action
-
-    def self.create(type:, interval_days:)
-      new.tap {|o|
-        o.type = type
-        o.interval_days = interval_days
-      }
-    end
-  end
-
-  class Recipe
-    include Toji::Recipe
-
-    def initialize
-      @steps = []
-    end
-
-    def self.create(steps, actions, has_moto, has_moromi, ab_coef, ab_expects)
-      new.tap {|o|
-        o.steps = steps
-        o.actions = actions
-        o.has_moto = has_moto
-        o.has_moromi = has_moromi
-        o.ab_coef = ab_coef
-        o.ab_expects = ab_expects
-      }
-    end
-  end
-
   def setup
     # 酒造教本による標準型仕込配合
     # 出典: 酒造教本 P97
