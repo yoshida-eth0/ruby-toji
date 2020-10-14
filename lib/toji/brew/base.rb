@@ -1,53 +1,40 @@
 module Toji
   module Brew
-    module Base
-      REQUIRED_KEYS = [
-        :time,
-        :elapsed_time,
-        :day,
-        :day_label,
-        :display_time,
-      ].freeze
+    module Progress
+      attr_reader :states
+      attr_reader :day_offset
 
-      OPTIONAL_KEYS = [
-        :moromi_day,
-        :mark,
-        :temps,
-        :preset_temp,
-        :room_temp,
-        :room_psychrometry,
-        :baume,
-        :nihonshudo,
-        :display_baume,
-        :acid,
-        :amino_acid,
-        :alcohol,
-        :bmd,
-        :warmings,
-        :note,
-      ].freeze
+      attr_reader :base_time
+      attr_reader :days
+      attr_reader :day_labels
 
-      attr_accessor :wrapped_states
+      attr_reader :all_keys
+    end
+
+    module BaseProgress
+      attr_accessor :states
       attr_accessor :day_offset
       attr_accessor :base_time
 
+      def base_time
+        states&.first&.time
+      end
+
       def days
-        ((wrapped_states.last.elapsed_time_with_offset.to_f + 1) / DAY).ceil
+        ((states&.last&.elapsed_time_with_offset&.to_f + 1) / DAY).ceil
       end
 
       def day_labels
         days.times.map(&:succ).map(&:to_s)
       end
 
-      def moromi_tome_day
-        nil
+      def all_keys
+        BaseState::REQUIRED_KEYS
       end
 
       def has_keys
-        result = REQUIRED_KEYS.dup
-
-        result += OPTIONAL_KEYS.select {|k|
-          wrapped_states.find {|s| s.send(k).present?}
+        all_keys.select {|k|
+          states.find {|s| s.send(k).present?}
         }
       end
     end

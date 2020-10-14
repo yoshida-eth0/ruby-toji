@@ -1,7 +1,7 @@
 module Toji
   module Brew
     module Graph
-      class Progress
+      class ProgressNote
 
         PLOT_KEYS = [:temps, :preset_temp, :room_temp, :room_psychrometry, :baume, :acid, :amino_acid, :alcohol, :bmd].freeze
 
@@ -26,13 +26,13 @@ module Toji
           :dashdot,
         ].freeze
 
-        attr_reader :brew
+        attr_reader :progress
         attr_accessor :name
         attr_accessor :dash
         attr_accessor :enable_annotations
 
-        def initialize(brew, name: nil, dash: :solid, enable_annotations: true)
-          @brew = brew
+        def initialize(progress, name: nil, dash: :solid, enable_annotations: true)
+          @progress = progress
           @name = name
           @dash = dash
           @enable_annotations = enable_annotations
@@ -40,7 +40,7 @@ module Toji
 
         def plot_data(keys=nil, use_name=false)
           if !keys
-            keys = @brew.has_keys
+            keys = @progress.has_keys
           end
 
           name = ""
@@ -56,7 +56,7 @@ module Toji
             xs = []
             ys = []
             text = []
-            @brew.wrapped_states.each {|s|
+            @progress.states.each {|s|
               val = s.send(key)
               if val
                 [val].flatten.each_with_index {|v,i|
@@ -75,7 +75,7 @@ module Toji
             result << {x: xs, y: ys, text: text, name: "#{name}#{key}", line: {dash: @dash, shape: line_shape}, marker: {color: PLOT_COLORS[key]}}
           }
 
-          if 0<@brew.wrapped_states.length && 0<@brew.day_offset
+          if 0<@progress.states.length && 0<@progress.day_offset
             result = result.map{|h|
               h[:x].unshift(0)
               h[:y].unshift(nil)
@@ -84,8 +84,8 @@ module Toji
             }
           end
 
-          #if 0<@brew.wrapped_states.length && @brew.wrapped_states.last.time.strftime("%T")!="00:00:00"
-          #  t = @brew.wrapped_states.last.elapsed_time_with_offset
+          #if 0<@progress.states.length && @progress.states.last.time.strftime("%T")!="00:00:00"
+          #  t = @progress.states.last.elapsed_time_with_offset
           #  t -= (t % DAY) - DAY
           #
           #  result = result.map{|h|
@@ -102,7 +102,7 @@ module Toji
         def annotations
           return [] if !@enable_annotations
 
-          @brew.wrapped_states.select{|s| s.mark}.map {|s|
+          @progress.states.select{|s| s.mark}.map {|s|
             {
               x: s.elapsed_time_with_offset,
               y: s.temps.first || 0,
@@ -119,19 +119,21 @@ module Toji
 
         def table_data(keys=nil)
           if !keys
-            keys = @brew.has_keys
+            keys = @progress.has_keys
             keys.delete(:elapsed_time)
             keys.delete(:time)
             keys.delete(:day)
             keys.delete(:moromi_day)
-            keys.delete(:baume)
-            keys.delete(:nihonshudo)
+            if keys.include?(:display_baume)
+              keys.delete(:baume)
+              keys.delete(:nihonshudo)
+            end
           else
-            keys &= @brew.has_keys
+            keys &= @progress.has_keys
           end
 
           rows = []
-          @brew.wrapped_states.each {|state|
+          @progress.states.each {|state|
             rows << keys.map {|k|
               v = state&.send(k)
               if Array===v
@@ -155,8 +157,8 @@ module Toji
             layout: {
               xaxis: {
                 dtick: DAY,
-                tickvals: @brew.days.times.map{|d| d*DAY},
-                ticktext: @brew.day_labels
+                tickvals: @progress.days.times.map{|d| d*DAY},
+                ticktext: @progress.day_labels
               },
               annotations: annotations,
             }

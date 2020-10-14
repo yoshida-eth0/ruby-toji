@@ -1,10 +1,14 @@
 module Toji
   module Brew
-    module Koji
-      include Base
+    module KojiProgress
+      include BaseProgress
 
-      def progress(name: nil, dash: :solid, enable_annotations: true)
-        Graph::Progress.new(self, name: name, dash: dash, enable_annotations: enable_annotations)
+      def all_keys
+        KojiState::REQUIRED_KEYS + KojiState::OPTIONAL_KEYS
+      end
+
+      def progress_note(name: nil, dash: :solid, enable_annotations: true)
+        Graph::ProgressNote.new(self, name: name, dash: dash, enable_annotations: enable_annotations)
       end
     end
   end

@@ -2,21 +2,21 @@ require "test_helper"
 
 class BrewMoromiTest < Minitest::Test
   def setup
-    @moromi = Moromi.new
+    @moromi = MoromiProgress.new
   end
 
   def test_basic
     assert_equal Time.mktime(2020, 1, 16), @moromi.base_time
     assert_equal 0, @moromi.day_offset
 
-    states = @moromi.wrapped_states
+    states = @moromi.states
 
     assert_equal 6, states.length
     assert_equal 691200, states[1].elapsed_time
   end
 
   def test_progress
-    table_data = @moromi.progress.table_data
+    table_data = @moromi.progress_note.table_data
 
     assert_equal [:day_label, :display_time, :mark, :temps, :room_temp, :display_baume, :alcohol, :bmd], table_data[:header]
     assert_equal ["添", "01/16 00:00", "添", "14.8, 11.0", "9", "", "", ""], table_data[:rows][0]

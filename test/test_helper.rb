@@ -5,9 +5,6 @@ class Product
   include Toji::Product
   include Toji::Product::EventFactory
 
-  attr_accessor :description
-  attr_accessor :color
-
   def initialize(name, recipe, base_date)
     @name = name
     @recipe = recipe
@@ -118,63 +115,26 @@ end
 
 
 class KojiProgress
-  # TODO
-end
-
-class KojiProgressState
-  # TODO
-end
-
-class MotoProgress
-  # TODO
-end
-
-class MotoProgressState
-  # TODO
-end
-
-class MoromiProgress
-  # TODO
-end
-
-class MoromiProgressState
-  # TODO
-end
-
-class State
-  include Toji::Brew::State
-  include Toji::Brew::State::BaumeToNihonshudo
-
-  def self.create(val)
-    s = new
-    KEYS.each {|k|
-      if val.has_key?(k)
-        s.send("#{k}=", val[k])
-      end
-    }
-    s
-  end
-end
-
-
-class Koji
-  include Toji::Brew::Koji
+  include Toji::Brew::KojiProgress
 
   def states
     [
-      State.create({
+      KojiState.create({
+        progress: self,
         time: Time.mktime(2020, 1, 1, 9, 0),
         mark: "引込み",
         temps: 35.0,
         room_temp: 28.0,
       }),
-      State.create({
+      KojiState.create({
+        progress: self,
         time: Time.mktime(2020, 1, 1, 10, 0),
         mark: "床揉み",
         temps: 32.0,
         room_temp: 28.0,
       }),
-      State.create({
+      KojiState.create({
+        progress: self,
         time: Time.mktime(2020, 1, 1, 19, 0),
         mark: "切返し",
         temps: [32.0, 31.0],
@@ -190,34 +150,55 @@ class Koji
   def day_offset
     (base_time - Time.mktime(base_time.year, base_time.month, base_time.day)).to_i
   end
+end
 
-  def wrapped_states
-    states.map {|s|
-      w = Toji::Brew::WrappedState.new(s, self)
-      w.elapsed_time = (s.time - base_time).to_i
-      w
+class KojiState
+  include Toji::Brew::KojiState
+
+  KEYS = [
+    :progress,
+    :time,
+    :mark,
+    :temps,
+    :preset_temp,
+    :room_temp,
+    :room_psychrometry,
+    :note,
+  ]
+
+  def self.create(val)
+    s = new
+    KEYS.each {|k|
+      if val.has_key?(k)
+        s.send("#{k}=", val[k])
+      end
     }
+    s
   end
 end
 
-class Moto
-  include Toji::Brew::Moto
+
+class MotoProgress
+  include Toji::Brew::MotoProgress
 
   def states
     [
-      State.create({
+      MotoState.create({
+        progress: self,
         time: Time.mktime(2020, 1, 1),
         mark: "水麹",
         temps: 12.0,
         acid: 13.0,
       }),
-      State.create({
+      MotoState.create({
+        progress: self,
         time: Time.mktime(2020, 1, 1, 1, 0),
         mark: "仕込み",
         temps: 20.0,
         acid: 13.0,
       }),
-      State.create({
+      MotoState.create({
+        progress: self,
         time: Time.mktime(2020, 1, 2),
         mark: "打瀬",
         temps: 14.0,
@@ -234,18 +215,39 @@ class Moto
   def day_offset
     (base_time - Time.mktime(base_time.year, base_time.month, base_time.day)).to_i
   end
+end
 
-  def wrapped_states
-    states.map {|s|
-      w = Toji::Brew::WrappedState.new(s, self)
-      w.elapsed_time = (s.time - base_time).to_i
-      w
+class MotoState
+  include Toji::Brew::MotoState
+
+  KEYS = [
+    :progress,
+    :time,
+    :mark,
+    :temps,
+    :preset_temp,
+    :room_temp,
+    :room_psychrometry,
+    :baume,
+    :acid,
+    :warmings,
+    :note,
+  ]
+
+  def self.create(val)
+    s = new
+    KEYS.each {|k|
+      if val.has_key?(k)
+        s.send("#{k}=", val[k])
+      end
     }
+    s
   end
 end
 
-class Moromi
-  include Toji::Brew::Moromi
+
+class MoromiProgress
+  include Toji::Brew::MoromiProgress
 
   def prefix_day_labels
     ["添", "踊", "踊", "仲", "留"]
@@ -253,41 +255,47 @@ class Moromi
 
   def states
     [
-      State.create({
+      MoromiState.create({
+        progress: self,
         time: Time.mktime(2020, 1, 16),
         mark: "添",
         temps: [14.8, 11.0],
         room_temp: 9,
       }),
-      State.create({
+      MoromiState.create({
+        progress: self,
         time: Time.mktime(2020, 1, 24),
         temps: 12.3,
         room_temp: 8,
         baume: 8.0,
         alcohol: 4.8,
       }),
-      State.create({
+      MoromiState.create({
+        progress: self,
         time: Time.mktime(2020, 1, 25),
         temps: 13.1,
         room_temp: 8,
         baume: 7.2,
         alcohol: 6.75,
       }),
-      State.create({
+      MoromiState.create({
+        progress: self,
         time: Time.mktime(2020, 1, 31),
         temps: 12.0,
         room_temp: 7,
         nihonshudo: -21,
         alcohol: 13.7,
       }),
-      State.create({
+      MoromiState.create({
+        progress: self,
         time: Time.mktime(2020, 2, 6),
         temps: 8.4,
         room_temp: 5,
         nihonshudo: -3,
         alcohol: 16.3,
       }),
-      State.create({
+      MoromiState.create({
+        progress: self,
         time: Time.mktime(2020, 2, 9),
         temps: 8.1,
         room_temp: 6,
@@ -302,13 +310,37 @@ class Moromi
   def day_offset
     (base_time - Time.mktime(base_time.year, base_time.month, base_time.day)).to_i
   end
+end
 
-  def wrapped_states
-    states.map {|s|
-      w = Toji::Brew::WrappedState.new(s, self)
-      w.elapsed_time = (s.time - base_time).to_i
-      w
+class MoromiState
+  include Toji::Brew::MoromiState
+  include Toji::Brew::MoromiState::BaumeToNihonshudo
+
+  KEYS = [
+    :progress,
+    :time,
+    :mark,
+    :temps,
+    :preset_temp,
+    :room_temp,
+    :room_psychrometry,
+    :baume,
+    :nihonshudo,
+    :acid,
+    :amino_acid,
+    :alcohol,
+    :warmings,
+    :note,
+  ]
+
+  def self.create(val)
+    s = new
+    KEYS.each {|k|
+      if val.has_key?(k)
+        s.send("#{k}=", val[k])
+      end
     }
+    s
   end
 end
 

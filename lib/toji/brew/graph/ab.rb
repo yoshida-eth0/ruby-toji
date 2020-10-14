@@ -34,7 +34,7 @@ module Toji
           result = []
 
           @actuals.each {|moromi, name|
-            states = moromi.wrapped_states.select{|s| s.alcohol && s.baume}
+            states = moromi.states.select{|s| s.alcohol && s.baume}
 
             xs = states.map(&:alcohol)
             ys = states.map(&:baume)
@@ -57,13 +57,13 @@ module Toji
 
         def min_baume
           @actuals.map {|moromi, name|
-            moromi.wrapped_states.map(&:baume).compact.min
+            moromi.states.map(&:baume).compact.min
           }.compact.min || 0
         end
 
         def max_baume
           @actuals.map {|moromi, name|
-            moromi.wrapped_states.map(&:baume).compact.max
+            moromi.states.map(&:baume).compact.max
           }.compact.max || 0
         end
 

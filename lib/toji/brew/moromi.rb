@@ -1,7 +1,7 @@
 module Toji
   module Brew
-    module Moromi
-      include Base
+    module MoromiProgress
+      include BaseProgress
 
       attr_accessor :prefix_day_labels
 
@@ -28,8 +28,12 @@ module Toji
         end
       end
 
-      def progress(name: nil, dash: :solid, enable_annotations: true)
-        Graph::Progress.new(self, name: name, dash: dash, enable_annotations: enable_annotations)
+      def all_keys
+        MoromiState::REQUIRED_KEYS + MoromiState::OPTIONAL_KEYS
+      end
+
+      def progress_note(name: nil, dash: :solid, enable_annotations: true)
+        Graph::ProgressNote.new(self, name: name, dash: dash, enable_annotations: enable_annotations)
       end
 
       def bmd

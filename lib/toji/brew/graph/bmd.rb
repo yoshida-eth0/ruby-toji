@@ -16,7 +16,7 @@ module Toji
           result = []
 
           @actuals.each {|moromi, name|
-            states = moromi.wrapped_states.select{|s| s.moromi_day && s.bmd}
+            states = moromi.states.select{|s| s.moromi_day && s.bmd}
 
             xs = states.map(&:moromi_day).map{|d| d*DAY}
             ys = states.map(&:bmd)
