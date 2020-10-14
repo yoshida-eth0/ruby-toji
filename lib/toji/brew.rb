@@ -7,11 +7,17 @@ module Toji
   end
 end
 
-require 'toji/brew/base'
 require 'toji/brew/state'
+require 'toji/brew/base_state'
+require 'toji/brew/koji_state'
+require 'toji/brew/moto_state'
+require 'toji/brew/moromi_state'
+
+require 'toji/brew/progress'
+require 'toji/brew/base_progress'
+require 'toji/brew/koji_progress'
+require 'toji/brew/moto_progress'
+require 'toji/brew/moromi_progress'
+
 require 'toji/brew/builder'
 require 'toji/brew/graph'
-
-require 'toji/brew/koji'
-require 'toji/brew/moto'
-require 'toji/brew/moromi'

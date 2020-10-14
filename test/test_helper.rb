@@ -314,7 +314,7 @@ end
 
 class MoromiState
   include Toji::Brew::MoromiState
-  include Toji::Brew::MoromiState::BaumeToNihonshudo
+  include Toji::Brew::State::BaumeToNihonshudo
 
   KEYS = [
     :progress,
