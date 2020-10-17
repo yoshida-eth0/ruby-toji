@@ -1,7 +1,7 @@
 module Toji
   module Brew
     module Graph
-      class MultiProgress
+      class MultiProgressNote
 
         LINE_DASHES = [
           :solid,
@@ -23,15 +23,15 @@ module Toji
           end
 
           case source
-          when Progress
+          when ProgressNote
             progress = source.dup
             progress.name = name
             progress.dash = dash
             progress.enable_annotations = enable_annotations
-          when Base
-            progress = source.progress(name: name, dash: dash, enable_annotations: enable_annotations)
+          when Progress
+            progress = source.progress_note(name: name, dash: dash, enable_annotations: enable_annotations)
           else
-            raise Error, "ArgumentError: Progress or Base required"
+            raise Error, "ArgumentError: Toji::Brew::Graph::ProgressNote or Toji::Brew::Progress required"
           end
 
           @progresses << progress
@@ -52,17 +52,17 @@ module Toji
         end
 
         def plot(keys=nil)
-          brews = @progresses.map(&:brew)
-          max_brew_days = brews.map(&:days).max
-          index = brews.index{|brew| brew.days==max_brew_days}
-          day_labels = brews[index].day_labels
+          progresses = @progresses.map(&:progress)
+          max_days = progresses.map(&:days).max
+          index = progresses.index{|progress| progress.days==max_days}
+          day_labels = progresses[index].day_labels
 
           Plotly::Plot.new(
             data: plot_data(keys),
             layout: {
               xaxis: {
                 dtick: DAY,
-                tickvals: max_brew_days.times.map{|d| d*DAY},
+                tickvals: max_days.times.map{|d| d*DAY},
                 ticktext: day_labels
               },
               annotations: annotations,

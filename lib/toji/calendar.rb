@@ -32,8 +32,8 @@ module Toji
       kake_events = @products.map{|product| product.kake_events}.flatten
       events = koji_events + kake_events
 
-      koji_len = koji_events.map(&:group_index).max + 1
-      kake_len = kake_events.map(&:group_index).max + 1
+      koji_len = koji_events.map(&:index).max + 1
+      kake_len = kake_events.map(&:index).max + 1
       min_date = events.map(&:date).min
       max_date = events.map(&:date).max
 

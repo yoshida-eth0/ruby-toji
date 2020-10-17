@@ -14,11 +14,11 @@ module Toji
       def <<(event)
         case event.rice_type
         when :koji
-          index = event.group_index
+          index = event.index
           @kojis[index] ||= DateColumn.new
           @kojis[index] << event
         when :kake
-          index = event.group_index
+          index = event.index
           @kakes[index] ||= DateColumn.new
           @kakes[index] << event
         end

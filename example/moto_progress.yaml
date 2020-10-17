@@ -1,76 +1,75 @@
 date_line: 0
 states:
 - time: 2019-01-16
-  elapsed_time: 0
   mark: 水麹
   temps: 12.0
   acid: 13.0
-- elapsed_time: 3600
+- time: 2019-01-16 01:00
   mark: 仕込み
   temps: 20.0
   acid: 13.0
-- elapsed_time: 86400
+- time: 2019-01-17
   mark: 打瀬
   temps: 14.0
   baume: 15.0
   acid: 13.0
-- elapsed_time: 172800
+- time: 2019-01-18
   temps:
   - 8.0
   - 11.0
   baume: 16.0
   acid: 13.0
   warmings: 暖気
-- elapsed_time: 259200
+- time: 2019-01-19
   temps:
   - 10.0
   - 13.0
   baume: 16.5
   acid: 13.5
   warmings: 暖気
-- elapsed_time: 345600
+- time: 2019-01-20
   temps:
   - 12.0
   - 15.0
   baume: 17.0
   acid: 13.5
   warmings: 暖気
-- elapsed_time: 432000
+- time: 2019-01-21
   temps: 14.0
   baume: 17.0
   acid: 14.0
   warmings: 行火
-- elapsed_time: 518400
+- time: 2019-01-22
   temps: 20.0
   baume: 17.0
   acid: 14.5
   warmings: 行火
-- elapsed_time: 604800
+- time: 2019-01-23
   temps: 20.0
   baume: 14.0
   acid: 15.5
-- elapsed_time: 691200
+- time: 2019-01-24
   temps: 20.0
   baume: 12.0
   acid: 16.0
-- elapsed_time: 777600
+- time: 2019-01-25
   mark: 分け
   temps: 20.0
   baume: 9.0
   acid: 16.0
-- elapsed_time: 864000
+- time: 2019-01-26
   temps: 15.0
   baume: 8.0
   acid: 16.5
-- elapsed_time: 950400
+- time: 2019-01-27
   temps: 12.0
   baume: 7.0
   acid: 17.0
-- elapsed_time: 1036800
+- time: 2019-01-28
   temps: 10.0
   baume: 6.0
   acid: 17.5
-- elapsed_time: 1123200
+- time: 2019-01-29
   temps: 9.0
   baume: 5.0
   acid: 17.5

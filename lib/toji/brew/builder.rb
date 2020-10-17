@@ -2,8 +2,9 @@ module Toji
   module Brew
     class Builder
 
-      def initialize(cls)
-        @cls = cls
+      def initialize(progress_cls, state_cls)
+        @progress_cls = progress_cls
+        @state_cls = state_cls
         @states = []
         @date_line = 0
         @prefix_day_labels = nil
@@ -14,7 +15,11 @@ module Toji
 
       def <<(state)
         @states += [state].flatten.map {|state|
-          State.create(state)
+          if State===state
+            state
+          else
+            @state_cls.create(state)
+          end
         }
         self
       end
@@ -45,53 +50,56 @@ module Toji
       end
 
       def build
-        brew = @cls.new
+        progress = @progress_cls.new
 
-        wrapped_states = @states.map{|s| WrappedState.new(s, brew)}
+        states = @states.map{|s|
+          s.progress = progress
+          s
+        }
 
-        # time interpolation
-        if @time_interpolation
-          base_time = @base_time
+        ## time interpolation
+        #if @time_interpolation
+        #  base_time = @base_time
 
-          base_state = wrapped_states.select{|w| w.time && w.elapsed_time}.first
-          if base_state
-            base_time = base_state.time - base_state.elapsed_time
-          end
+        #  base_state = @states.select{|w| w.time && w.elapsed_time}.first
+        #  if base_state
+        #    base_time = base_state.time - base_state.elapsed_time
+        #  end
 
-          wrapped_states.each {|w|
-            if w.elapsed_time
-              w.time = base_time + w.elapsed_time
-            end
-          }
+        #  @states.each {|w|
+        #    if w.elapsed_time
+        #      w.time = base_time + w.elapsed_time
+        #    end
+        #  }
+        #end
+
+        ## elapsed_time interpolation
+        #if @elapsed_time_interpolation
+        #  base_time = @states.map(&:time).sort.first
+        #  @states.each {|w|
+        #    if w.time
+        #      w.elapsed_time = (w.time - base_time).to_i
+        #    end
+        #  }
+        #end
+
+        ##@states = @states.sort_by(&:elapsed_time)
+        #base_time = @states.first&.time
+
+        ## day_offset
+        #day_offset = 0
+        #if base_time
+        #  day_offset = base_time - Time.mktime(base_time.year, base_time.month, base_time.day)
+        #end
+        #day_offset = (DAY - @date_line + day_offset) % DAY
+
+        progress.states = states
+        #progress.day_offset = day_offset
+        #progress.base_time = base_time
+        if MoromiProgress===progress
+          progress.prefix_day_labels = @prefix_day_labels
         end
-
-        # elapsed_time interpolation
-        if @elapsed_time_interpolation
-          base_time = wrapped_states.map(&:time).sort.first
-          wrapped_states.each {|w|
-            if w.time
-              w.elapsed_time = (w.time - base_time).to_i
-            end
-          }
-        end
-
-        wrapped_states = wrapped_states.sort_by(&:elapsed_time)
-        base_time = wrapped_states.first&.time
-
-        # day_offset
-        day_offset = 0
-        if base_time
-          day_offset = base_time - Time.mktime(base_time.year, base_time.month, base_time.day)
-        end
-        day_offset = (DAY - @date_line + day_offset) % DAY
-
-        brew.wrapped_states = wrapped_states
-        brew.day_offset = day_offset
-        brew.base_time = base_time
-        if Moromi===brew
-          brew.prefix_day_labels = @prefix_day_labels
-        end
-        brew
+        progress
       end
     end
   end

@@ -1,9 +1,10 @@
+$LOAD_PATH << File.dirname(__FILE__) + "/../lib"
 require 'toji'
 require_relative 'example_core'
 require 'terminal-table'
 
 recipe = Example::Recipe::TEMPLATES[:sokujo_nada].scale(900).round(2)
-step_names = recipe.steps.map(&:name)
+step_names = ["酛", "添", "仲", "留", "四段"].slice(0, recipe.steps.length)
 
 table = Terminal::Table.new do |t|
   t << [""] + step_names

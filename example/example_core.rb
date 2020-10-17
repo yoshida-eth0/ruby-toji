@@ -1,68 +1,63 @@
+$LOAD_PATH << File.dirname(__FILE__) + "/../lib"
 require 'toji'
 require 'securerandom'
 
 module Example
 
-  module Brew
-    class State
-      include Toji::Brew::State
-      include Toji::Brew::State::BaumeToNihonshudo
+  class Product
+    include Toji::Product
+    include Toji::Product::EventFactory
 
-      def self.create(val)
-        s = new
-        KEYS.each {|k|
-          if val.has_key?(k)
-            s.send("#{k}=", val[k])
-          end
-        }
-        s
-      end
+    attr_accessor :description
+    attr_accessor :color
+
+    def initialize(id, name, description, recipe, base_date, color=nil)
+      @id = id
+      @name = name
+      @description = description
+      @recipe = recipe
+      @base_date = base_date
+      @color = color
     end
 
-    module BrewGenerator
-      def builder
-        Toji::Brew::Builder.new(self)
-      end
-
-      def load_hash(hash)
-        hash = hash.deep_symbolize_keys
-
-        builder
-          .add((hash[:states] || []).map{|s| State.create(s)})
-          .date_line(hash[:date_line] || 0, Toji::Brew::HOUR)
-          .prefix_day_labels(hash[:prefix_day_labels])
-          .time_interpolation(nil)
-          .elapsed_time_interpolation
-          .build
-      end
-
-      def load_yaml_file(fname)
-        hash = YAML.load_file(fname)
-        load_hash(hash)
-      end
+    def create_koji_event(date:, index:, step_indexes:, raw:)
+      KojiEvent.new(product: self, date: date, index: index, step_indexes: step_indexes, raw: raw)
     end
 
-    class Base
-      include Toji::Brew::Base
-      extend BrewGenerator
+    def create_kake_event(date:, index:, step_indexes:, raw:)
+      KakeEvent.new(product: self, date: date, index: index, step_indexes: step_indexes, raw: raw)
+    end
 
-      def initialize
-        @states = []
-        @day_offset = 0
-        @base_time = 0
+    def create_action_event(date:, type:, index:)
+      ActionEvent.new(product: self, date: date, type: type, index: index)
+    end
+
+    def self.create(args)
+      if self===args
+        args
+      elsif Hash===args
+        recipe = args.fetch(:recipe)
+        if Symbol===recipe
+          recipe = Recipe::TEMPLATES.fetch(recipe)
+        end
+        if args[:scale]
+          recipe = recipe.scale(args[:scale])
+        end
+        if args[:round]
+          recipe = recipe.round(args[:round])
+        end
+
+        new(
+          args[:id],
+          args[:name],
+          args[:description],
+          recipe,
+          args[:base_date],
+          args[:color]
+        )
+      else
+        raise "not supported class: #{args.class}"
       end
-    end
-
-    class Koji < Base
-      include Toji::Brew::Koji
-    end
-
-    class Moto < Base
-      include Toji::Brew::Moto
-    end
-
-    class Moromi < Base
-      include Toji::Brew::Moromi
     end
   end
 
@@ -82,6 +77,18 @@ module Example
         o.yeast = yeast.to_f
         o.koji_interval_days = koji_interval_days.to_i
         o.kake_interval_days = kake_interval_days.to_i
+      }
+    end
+  end
+
+
+  class Action
+    include Toji::Recipe::Action
+  
+    def self.create(type:, interval_days:)
+      new.tap {|o|
+        o.type = type
+        o.interval_days = interval_days
       }
     end
   end
@@ -248,28 +255,26 @@ module Example
   class KojiEvent
     include Toji::Event::KojiEvent
 
-    def initialize(product:, date:, group_index:, indexes:, raw:)
+    def initialize(product:, date:, index:, step_indexes:, raw:)
       @product = product
       @date = date
-      @group_index = group_index
-      @indexes = indexes
+      @index = index
+      @step_indexes = step_indexes
       @raw = raw
     end
   end
-
 
   class KakeEvent
     include Toji::Event::KakeEvent
 
-    def initialize(product:, date:, group_index:, indexes:, raw:)
+    def initialize(product:, date:, index:, step_indexes:, raw:)
       @product = product
       @date = date
-      @group_index = group_index
-      @indexes = indexes
+      @index = index
+      @step_indexes = step_indexes
       @raw = raw
     end
   end
-
 
   class ActionEvent
     include Toji::Event::ActionEvent
@@ -283,59 +288,122 @@ module Example
   end
 
 
-  class Product
-    include Toji::Product
-    include Toji::Product::EventFactory
+  module Brew
+    module BrewGenerator
+      def load_hash(hash)
+        hash = hash.deep_symbolize_keys
 
-    attr_accessor :description
-    attr_accessor :color
+        builder
+          .add(hash[:states] || [])
+          .date_line(hash[:date_line] || 0, Toji::Brew::HOUR)
+          .prefix_day_labels(hash[:prefix_day_labels])
+          .time_interpolation(nil)
+          .elapsed_time_interpolation
+          .build
+      end
 
-    def initialize(id, name, description, recipe, base_date, color=nil)
-      @id = id
-      @name = name
-      @description = description
-      @recipe = recipe
-      @base_date = base_date
-      @color = color
+      def load_yaml_file(fname)
+        hash = YAML.load_file(fname)
+        load_hash(hash)
+      end
     end
 
-    def create_koji_event(date:, group_index:, indexes:, raw:)
-      KojiEvent.new(product: self, date: date, group_index: group_index, indexes: indexes, raw: raw)
+    class KojiProgress
+      include Toji::Brew::KojiProgress
+      extend BrewGenerator
+    
+      attr_accessor :states
+
+      def self.builder
+        Toji::Brew::Builder.new(KojiProgress, KojiState)
+      end
+    end
+    
+    class KojiState
+      include Toji::Brew::KojiState
+    
+      def self.create(args)
+        new.tap {|s|
+          s.progress = args[:progress]
+          s.time = args[:time].to_time
+          s.mark = args[:mark]
+          s.temps = [args[:temps]].flatten.compact
+          s.preset_temp = args[:preset_temp]
+          s.room_temp = args[:room_temp]
+          s.room_psychrometry = args[:room_psychrometry]
+          s.note = args[:note]
+        }
+      end
     end
 
-    def create_kake_event(date:, group_index:, indexes:, raw:)
-      KakeEvent.new(product: self, date: date, group_index: group_index, indexes: indexes, raw: raw)
+    class MotoProgress
+      include Toji::Brew::MotoProgress
+      extend BrewGenerator
+
+      attr_accessor :states
+    
+      def self.builder
+        Toji::Brew::Builder.new(MotoProgress, MotoState)
+      end
     end
-
-    def create_action_event(date:, type:, index:)
-      ActionEvent.new(product: self, date: date, type: type, index: index)
+    
+    class MotoState
+      include Toji::Brew::MotoState
+    
+      def self.create(args)
+        new.tap {|s|
+          s.progress = args[:progress]
+          s.time = args[:time].to_time
+          s.mark = args[:mark]
+          s.temps = [args[:temps]].flatten.compact
+          s.preset_temp = args[:preset_temp]
+          s.room_temp = args[:room_temp]
+          s.room_psychrometry = args[:room_psychrometry]
+          s.baume = args[:baume]
+          s.acid = args[:acid]
+          s.warmings = [args[:warmings]].flatten.compact
+          s.note = args[:note]
+        }
+      end
     end
+    
+    
+    class MoromiProgress
+      include Toji::Brew::MoromiProgress
+      extend BrewGenerator
 
-    def self.create(args)
-      if self===args
-        args
-      elsif Hash===args
-        recipe = args.fetch(:recipe)
-        if Symbol===recipe
-          recipe = Recipe::TEMPLATES.fetch(recipe)
-        end
-        if args[:scale]
-          recipe = recipe.scale(args[:scale])
-        end
-        if args[:round]
-          recipe = recipe.round(args[:round])
-        end
-
-        new(
-          args[:id],
-          args[:name],
-          args[:description],
-          recipe,
-          args[:base_date],
-          args[:color]
-        )
-      else
-        raise "not supported class: #{args.class}"
+      attr_accessor :states
+      attr_accessor :prefix_day_labels
+    
+      def self.builder
+        Toji::Brew::Builder.new(MoromiProgress, MoromiState)
+      end
+    end
+    
+    class MoromiState
+      include Toji::Brew::MoromiState
+      include Toji::Brew::State::BaumeToNihonshudo
+    
+      def self.create(args)
+        new.tap {|s|
+          s.progress = args[:progress]
+          s.time = args[:time].to_time
+          s.mark = args[:mark]
+          s.temps = [args[:temps]].flatten.compact
+          s.preset_temp = args[:preset_temp]
+          s.room_temp = args[:room_temp]
+          s.room_psychrometry = args[:room_psychrometry]
+          if args[:baume]
+            s.baume = args[:baume]
+          else
+            s.nihonshudo = args[:nihonshudo]
+          end
+          s.acid = args[:acid]
+          s.amino_acid = args[:amino_acid]
+          s.alcohol = args[:alcohol]
+          s.warmings = [args[:warmings]].flatten.compact
+          s.note = args[:note]
+        }
       end
     end
   end

@@ -3,12 +3,15 @@ module Toji
     module BaseProgress
       include Progress
 
-      #attr_accessor :states
-      #attr_accessor :day_offset
-      #attr_accessor :base_time
-
       def base_time
-        states&.first&.time
+        states&.first&.time&.to_time
+      end
+    
+      def day_offset
+        t = base_time
+        if t
+          (t - Time.mktime(t.year, t.month, t.day)).to_i
+        end
       end
 
       def days

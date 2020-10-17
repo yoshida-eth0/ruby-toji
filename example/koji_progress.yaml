@@ -1,50 +1,49 @@
 date_line: 0
 states:
-- time: 2020-1-1 9:00
-  elapsed_time: 0
+- time: 2020-01-01 09:00
   mark: 引込み
   temps: 35.0
   room_temp: 28.0
   room_psychrometry: 
-- elapsed_time: 3600
+- time: 2020-01-01 10:00
   mark: 床揉み
   temps: 32.0
   room_temp: 28.0
   room_psychrometry: 
-- elapsed_time: 32400
+- time: 2020-01-01 19:00
   mark: 切返し
   temps:
   - 32.0
   - 31.0
   room_temp: 28.0
   room_psychrometry: 
-- elapsed_time: 75600
+- time: 2020-01-02 7:00
   mark: 盛り
   temps:
   - 35.0
   - 33.0
   room_temp: 28.0
   room_psychrometry: 4
-- elapsed_time: 104400
+- time: 2020-01-02 15:00
   mark: 仲仕事
   temps:
   - 37.0
   - 35.0
   room_temp: 28.0
   room_psychrometry: 4
-- elapsed_time: 126000
+- time: 2020-01-02 21:00
   mark: 仕舞仕事
   temps:
   - 38.0
   - 37.0
   room_temp: 28.0
   room_psychrometry: 5
-- elapsed_time: 140400
+- time: 2020-01-03 1:00
   mark: 最高積替
   temps: 40.0
   room_temp: 28.0
   room_psychrometry: 5
-- elapsed_time: 158400
+- time: 2020-01-03 6:00
   mark: 出麹
   temps: 40.0
   room_temp: 28.0
