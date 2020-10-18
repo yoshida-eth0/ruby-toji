@@ -8,9 +8,6 @@ module Toji
         @states = []
         @date_line = 0
         @prefix_day_labels = nil
-        @base_time = nil
-        @time_interpolation = false
-        @elapsed_time_interpolation = false
       end
 
       def <<(state)
@@ -35,70 +32,20 @@ module Toji
         self
       end
 
-      def time_interpolation(base_time)
-        @base_time = base_time&.to_time
-        @time_interpolation = true
-        #@elapsed_time_interpolation = false
-        self
-      end
-
-      def elapsed_time_interpolation
-        #@base_time = nil
-        #@time_interpolation = false
-        @elapsed_time_interpolation = true
-        self
-      end
-
       def build
         progress = @progress_cls.new
 
         states = @states.map{|s|
           s.progress = progress
           s
-        }
-
-        ## time interpolation
-        #if @time_interpolation
-        #  base_time = @base_time
-
-        #  base_state = @states.select{|w| w.time && w.elapsed_time}.first
-        #  if base_state
-        #    base_time = base_state.time - base_state.elapsed_time
-        #  end
-
-        #  @states.each {|w|
-        #    if w.elapsed_time
-        #      w.time = base_time + w.elapsed_time
-        #    end
-        #  }
-        #end
-
-        ## elapsed_time interpolation
-        #if @elapsed_time_interpolation
-        #  base_time = @states.map(&:time).sort.first
-        #  @states.each {|w|
-        #    if w.time
-        #      w.elapsed_time = (w.time - base_time).to_i
-        #    end
-        #  }
-        #end
-
-        ##@states = @states.sort_by(&:elapsed_time)
-        #base_time = @states.first&.time
-
-        ## day_offset
-        #day_offset = 0
-        #if base_time
-        #  day_offset = base_time - Time.mktime(base_time.year, base_time.month, base_time.day)
-        #end
-        #day_offset = (DAY - @date_line + day_offset) % DAY
+        }.sort_by(&:time)
 
         progress.states = states
-        #progress.day_offset = day_offset
-        #progress.base_time = base_time
-        if MoromiProgress===progress
+        progress.date_line = @date_line
+        if progress.respond_to?(:prefix_day_labels=)
           progress.prefix_day_labels = @prefix_day_labels
         end
+
         progress
       end
     end

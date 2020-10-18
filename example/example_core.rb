@@ -297,8 +297,6 @@ module Example
           .add(hash[:states] || [])
           .date_line(hash[:date_line] || 0, Toji::Brew::HOUR)
           .prefix_day_labels(hash[:prefix_day_labels])
-          .time_interpolation(nil)
-          .elapsed_time_interpolation
           .build
       end
 
@@ -313,6 +311,7 @@ module Example
       extend BrewGenerator
     
       attr_accessor :states
+      attr_accessor :date_line
 
       def self.builder
         Toji::Brew::Builder.new(KojiProgress, KojiState)
@@ -341,6 +340,7 @@ module Example
       extend BrewGenerator
 
       attr_accessor :states
+      attr_accessor :date_line
     
       def self.builder
         Toji::Brew::Builder.new(MotoProgress, MotoState)
@@ -373,6 +373,7 @@ module Example
       extend BrewGenerator
 
       attr_accessor :states
+      attr_accessor :date_line
       attr_accessor :prefix_day_labels
     
       def self.builder

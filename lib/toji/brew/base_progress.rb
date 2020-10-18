@@ -10,7 +10,8 @@ module Toji
       def day_offset
         t = base_time
         if t
-          (t - Time.mktime(t.year, t.month, t.day)).to_i
+          offset = (t - Time.mktime(t.year, t.month, t.day)).to_i
+          (DAY - date_line + offset) % DAY
         end
       end
 
