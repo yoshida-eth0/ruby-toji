@@ -19,10 +19,10 @@ module Toji
           {
             index: i,
             date: date,
-            weight: recipe.steps[i].koji,
+            koji: recipe.steps[i].koji,
           }
         }.select {|event|
-          0<event[:weight]
+          0<event[:koji]&.raw.to_f
         }.group_by{|event|
           event[:date]
         }.map {|date,events|
@@ -30,7 +30,7 @@ module Toji
             date: date,
             index: koji_dates.find_index(date),
             step_indexes: events.map{|ev| ev[:index]},
-            raw: events.map{|ev| ev[:weight]}.sum,
+            raw: events.map{|ev| ev[:koji].raw}.sum,
           )
         }
       end
@@ -40,10 +40,10 @@ module Toji
           {
             index: i,
             date: date,
-            weight: recipe.steps[i].kake,
+            kake: recipe.steps[i].kake,
           }
         }.select {|event|
-          0<event[:weight]
+          0<event[:kake]&.raw.to_f
         }.group_by{|event|
           event[:date]
         }.map {|date,events|
@@ -51,7 +51,7 @@ module Toji
             date: date,
             index: kake_dates.find_index(date),
             step_indexes: events.map{|ev| ev[:index]},
-            raw: events.map{|ev| ev[:weight]}.sum,
+            raw: events.map{|ev| ev[:kake].raw}.sum,
           )
         }
       end

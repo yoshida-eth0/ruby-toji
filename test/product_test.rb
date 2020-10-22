@@ -7,48 +7,102 @@ class ProductTest < Minitest::Test
     @recipe = Recipe.create(
       [
         Step.create(
-          koji: 20,
-          koji_interval_days: 0,
-
-          kake: 45,
-          kake_interval_days: 5,
-
-          water: 70,
+          koji: Koji.create(
+            raw: 20,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            tanekoji_rate: 0.001,
+            dekoji_rate: 0.18,
+            interval_days: 0,
+          ),
+          kake: Kake.create(
+            raw: 45,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            interval_days: 5,
+          ),
+          water: Water.create(
+            weight: 70,
+          ),
           lactic_acid: 70/100.0*0.685,
           yeast: (45+20)/100.0*1.5,
         ),
         Step.create(
-          koji: 40,
-          koji_interval_days: 14,
-
-          kake: 100,
-          kake_interval_days: 15,
-
-          water: 130,
+          koji: Koji.create(
+            raw: 40,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            tanekoji_rate: 0.001,
+            dekoji_rate: 0.18,
+            interval_days: 14,
+          ),
+          kake: Kake.create(
+            raw: 100,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            interval_days: 15,
+          ),
+          water: Water.create(
+            weight: 130,
+          ),
         ),
         Step.create(
-          koji: 60,
-          koji_interval_days: 0,
-
-          kake: 215,
-          kake_interval_days: 2,
-
-          water: 330,
+          koji: Koji.create(
+            raw: 60,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            tanekoji_rate: 0.001,
+            dekoji_rate: 0.18,
+            interval_days: 0,
+          ),
+          kake: Kake.create(
+            raw: 215,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            interval_days: 2,
+          ),
+          water: Water.create(
+            weight: 330,
+          ),
         ),
         Step.create(
-          koji: 80,
-          koji_interval_days: 0,
-
-          kake: 360,
-          kake_interval_days: 1,
-
-          water: 630,
+          koji: Koji.create(
+            raw: 80,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            tanekoji_rate: 0.001,
+            dekoji_rate: 0.18,
+            interval_days: 0,
+          ),
+          kake: Kake.create(
+            raw: 360,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            interval_days: 1,
+          ),
+          water: Water.create(
+            weight: 630,
+          ),
         ),
         Step.create(
-          kake: 80,
-          kake_interval_days: 25,
-
-          water: 120,
+          kake: Kake.create(
+            raw: 80,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            interval_days: 25,
+          ),
+          water: Water.create(
+            weight: 120,
+          ),
         ),
       ].map(&:freeze).freeze,
       [

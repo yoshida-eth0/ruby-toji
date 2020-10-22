@@ -7,48 +7,102 @@ class RecipeTest < Minitest::Test
     @recipe = Recipe.create(
       [
         Step.create(
-          koji: 20,
-          koji_interval_days: 0,
-
-          kake: 45,
-          kake_interval_days: 5,
-
-          water: 70,
+          koji: Koji.create(
+            raw: 20,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            tanekoji_rate: 0.001,
+            dekoji_rate: 0.18,
+            interval_days: 0,
+          ),
+          kake: Kake.create(
+            raw: 45,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            interval_days: 5,
+          ),
+          water: Water.create(
+            weight: 70,
+          ),
           lactic_acid: 70/100.0*0.685,
           yeast: (45+20)/100.0*1.5,
         ),
         Step.create(
-          koji: 40,
-          koji_interval_days: 14,
-
-          kake: 100,
-          kake_interval_days: 15,
-
-          water: 130,
+          koji: Koji.create(
+            raw: 40,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            tanekoji_rate: 0.001,
+            dekoji_rate: 0.18,
+            interval_days: 14,
+          ),
+          kake: Kake.create(
+            raw: 100,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            interval_days: 15,
+          ),
+          water: Water.create(
+            weight: 130,
+          ),
         ),
         Step.create(
-          koji: 60,
-          koji_interval_days: 0,
-
-          kake: 215,
-          kake_interval_days: 2,
-
-          water: 330,
+          koji: Koji.create(
+            raw: 60,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            tanekoji_rate: 0.001,
+            dekoji_rate: 0.18,
+            interval_days: 0,
+          ),
+          kake: Kake.create(
+            raw: 215,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            interval_days: 2,
+          ),
+          water: Water.create(
+            weight: 330,
+          ),
         ),
         Step.create(
-          koji: 80,
-          koji_interval_days: 0,
-
-          kake: 360,
-          kake_interval_days: 1,
-
-          water: 630,
+          koji: Koji.create(
+            raw: 80,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            tanekoji_rate: 0.001,
+            dekoji_rate: 0.18,
+            interval_days: 0,
+          ),
+          kake: Kake.create(
+            raw: 360,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            interval_days: 1,
+          ),
+          water: Water.create(
+            weight: 630,
+          ),
         ),
         Step.create(
-          kake: 80,
-          kake_interval_days: 25,
-
-          water: 120,
+          kake: Kake.create(
+            raw: 80,
+            soaked_rate: 0.33,
+            steamed_rate: 0.41,
+            cooled_rate: 0.33,
+            interval_days: 25,
+          ),
+          water: Water.create(
+            weight: 120,
+          ),
         ),
       ].map(&:freeze).freeze,
       [
@@ -67,13 +121,13 @@ class RecipeTest < Minitest::Test
   def test_step_basic
     moto = @recipe.steps[0]
 
-    assert_equal 20, moto.koji
-    assert_equal 0, moto.koji_interval_days
+    assert_equal 20, moto.koji.raw
+    assert_equal 0, moto.koji.interval_days
 
-    assert_equal 45, moto.kake
-    assert_equal 5, moto.kake_interval_days
+    assert_equal 45, moto.kake.raw
+    assert_equal 5, moto.kake.interval_days
 
-    assert_equal 70, moto.water
+    assert_equal 70, moto.water.weight
     assert_in_delta 0.4795, moto.lactic_acid
     assert_equal 0, moto.alcohol
     assert_in_delta 0.975, moto.yeast
@@ -88,13 +142,13 @@ class RecipeTest < Minitest::Test
     soe = @recipe.steps[1]
     step = moto + soe
 
-    assert_equal 60, step.koji
-    assert_equal 0, step.koji_interval_days
+    assert_equal 60, step.koji.raw
+    assert_equal 0, step.koji.interval_days
 
-    assert_equal 145, step.kake
-    assert_equal 5, step.kake_interval_days
+    assert_equal 145, step.kake.raw
+    assert_equal 5, step.kake.interval_days
 
-    assert_equal 200, step.water
+    assert_equal 200, step.water.weight
     assert_in_delta 0.4795, step.lactic_acid
     assert_equal 0, step.alcohol
     assert_in_delta 0.975, step.yeast
@@ -108,13 +162,13 @@ class RecipeTest < Minitest::Test
     moto = @recipe.steps[0]
     step = moto * 2
 
-    assert_equal 40, step.koji
-    assert_equal 0, step.koji_interval_days
+    assert_equal 40, step.koji.raw
+    assert_equal 0, step.koji.interval_days
 
-    assert_equal 90, step.kake
-    assert_equal 5, step.kake_interval_days
+    assert_equal 90, step.kake.raw
+    assert_equal 5, step.kake.interval_days
 
-    assert_equal 140, step.water
+    assert_equal 140, step.water.weight
     assert_in_delta 0.959, step.lactic_acid
     assert_equal 0, step.alcohol
     assert_in_delta 1.95, step.yeast
@@ -128,13 +182,13 @@ class RecipeTest < Minitest::Test
     moto = @recipe.steps[0]
     step = (moto * 1.3333333333333333).round
 
-    assert_equal 27, step.koji
-    assert_equal 0, step.koji_interval_days
+    assert_equal 27, step.koji.raw
+    assert_equal 0, step.koji.interval_days
 
-    assert_equal 60, step.kake
-    assert_equal 5, step.kake_interval_days
+    assert_equal 60, step.kake.raw
+    assert_equal 5, step.kake.interval_days
 
-    assert_equal 93, step.water
+    assert_equal 93, step.water.weight
     assert_in_delta 0.639, step.lactic_acid
     assert_equal 0, step.alcohol
     assert_in_delta 1.3, step.yeast

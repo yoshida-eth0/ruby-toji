@@ -2,16 +2,7 @@ module Toji
   module Recipe
     module Step
       attr_accessor :koji
-      attr_accessor :koji_soaked_rate
-      attr_accessor :koji_steamed_rate
-      attr_accessor :koji_dekoji_rate
-      attr_accessor :koji_interval_days
-
       attr_accessor :kake
-      attr_accessor :kake_soaked_rate
-      attr_accessor :kake_steamed_rate
-      attr_accessor :kake_interval_days
-
       attr_accessor :water
       attr_accessor :lactic_acid
       attr_accessor :alcohol
@@ -19,7 +10,7 @@ module Toji
 
       # 総米
       def rice_total
-        kake.to_f + koji.to_f
+        kake&.raw.to_f + koji&.raw.to_f
       end
 
       # 麹歩合
@@ -28,7 +19,7 @@ module Toji
       # なお、留め仕込みまでの麹歩合が20%を下回ると蒸米の溶解糖化に影響が出るので注意がいる
       # 出典: 酒造教本 P95
       def koji_rate
-        val = koji.to_f / rice_total
+        val = koji&.raw.to_f / rice_total
         val.nan? ? 0.0 : val
       end
 
@@ -42,53 +33,54 @@ module Toji
       #
       # 出典: 酒造教本 P96
       def water_rate
-        val = water.to_f / rice_total
+        val = water&.weight.to_f / rice_total
         val.nan? ? 0.0 : val
       end
 
-      def round(ndigit=0, mini_ndigit=nil, half: :up)
+      def round!(ndigit=0, mini_ndigit=nil, half: :up)
         if !mini_ndigit
           mini_ndigit = ndigit + 3
         end
 
-        self.class.new.tap {|o|
-          o.koji = koji.to_f.round(ndigit, half: half)
-          o.koji_soaked_rate = koji_soaked_rate.to_f
-          o.koji_steamed_rate = koji_steamed_rate.to_f
-          o.koji_dekoji_rate = koji_dekoji_rate.to_f
-          o.koji_interval_days = koji_interval_days.to_i
+        if koji
+          self.koji.raw = koji.raw.to_f.round(ndigit, half: half)
+        end
+        if kake
+          self.kake.raw = kake.raw.to_f.round(ndigit, half: half)
+        end
+        if water
+          self.water.weight = water.weight.to_f.round(ndigit, half: half)
+        end
+        self.lactic_acid = lactic_acid.to_f.round(mini_ndigit, half: half)
+        self.alcohol = alcohol.to_f.round(ndigit, half: half)
+        self.yeast = yeast.to_f.round(mini_ndigit, half: half)
 
-          o.kake = kake.to_f.round(ndigit, half: half)
-          o.kake_soaked_rate = kake_soaked_rate.to_f
-          o.kake_steamed_rate = kake_steamed_rate.to_f
-          o.kake_interval_days = kake_interval_days.to_i
+        self
+      end
 
-          o.water = water.to_f.round(ndigit, half: half)
-          o.lactic_acid = lactic_acid.to_f.round(mini_ndigit, half: half)
-          o.alcohol = alcohol.to_f.round(ndigit, half: half)
-          o.yeast = yeast.to_f.round(mini_ndigit, half: half)
-        }
+      def round(ndigit=0, mini_ndigit=nil, half: :up)
+        if !self.class.private_method_defined?(:initialize_copy)
+          raise Error, "implementation required: #{self.class}.initialize_copy"
+        end
+
+        dst = self.dup
+        dst.round!(ndigit, mini_ndigit, half: half)
       end
 
       def +(other)
         if Step===other
-          self.class.new.tap {|o|
-            o.koji = koji.to_f + other.koji.to_f
-            o.koji_soaked_rate = koji_soaked_rate.to_f
-            o.koji_steamed_rate = koji_steamed_rate.to_f
-            o.koji_dekoji_rate = koji_dekoji_rate.to_f
-            o.koji_interval_days = koji_interval_days.to_i
+          if !self.class.private_method_defined?(:initialize_copy)
+            raise Error, "implementation required: #{self.class}.initialize_copy"
+          end
 
-            o.kake = kake.to_f + other.kake.to_f
-            o.kake_soaked_rate = kake_soaked_rate.to_f
-            o.kake_steamed_rate = kake_steamed_rate.to_f
-            o.kake_interval_days = kake_interval_days.to_i
-
-            o.water = water.to_f + other.water.to_f
-            o.lactic_acid = lactic_acid.to_f + other.lactic_acid.to_f
-            o.alcohol = alcohol.to_f + other.alcohol.to_f
-            o.yeast = yeast.to_f + other.yeast.to_f
-          }
+          dst = self.dup
+          dst.koji&.raw += other.koji&.raw || 0
+          dst.kake&.raw += other.kake&.raw || 0
+          dst.water&.weight += other.water&.weight || 0
+          dst.lactic_acid += other.lactic_acid || 0
+          dst.alcohol += other.alcohol || 0
+          dst.yeast += other.yeast || 0
+          dst
         else
           x, y = other.coerce(self)
           x + y
@@ -97,23 +89,18 @@ module Toji
 
       def *(other)
         if Integer===other || Float===other
-          self.class.new.tap {|o|
-            o.koji = koji.to_f * other
-            o.koji_soaked_rate = koji_soaked_rate.to_f
-            o.koji_steamed_rate = koji_steamed_rate.to_f
-            o.koji_dekoji_rate = koji_dekoji_rate.to_f
-            o.koji_interval_days = koji_interval_days.to_i
+          if !self.class.private_method_defined?(:initialize_copy)
+            raise Error, "implementation required: #{self.class}.initialize_copy"
+          end
 
-            o.kake = kake.to_f * other
-            o.kake_soaked_rate = kake_soaked_rate.to_f
-            o.kake_steamed_rate = kake_steamed_rate.to_f
-            o.kake_interval_days = kake_interval_days.to_i
-
-            o.water = water.to_f * other
-            o.lactic_acid = lactic_acid.to_f * other
-            o.alcohol = alcohol.to_f * other
-            o.yeast = yeast.to_f * other
-          }
+          dst = self.dup
+          dst.koji&.raw *= other
+          dst.kake&.raw *= other
+          dst.water&.weight *= other
+          dst.lactic_acid *= other
+          dst.alcohol *= other
+          dst.yeast *= other
+          dst
         else
           x, y = other.coerce(self)
           x * y

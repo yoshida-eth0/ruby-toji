@@ -13,14 +13,14 @@ module Toji
     def koji_dates
       date = base_date
       recipe.steps.map {|step|
-        date = date.next_day(step.koji_interval_days)
+        date = date.next_day(step.koji&.interval_days || 0)
       }
     end
 
     def kake_dates
       date = base_date
       recipe.steps.map {|step|
-        date = date.next_day(step.kake_interval_days)
+        date = date.next_day(step.kake&.interval_days || 0)
       }
     end
 

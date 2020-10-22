@@ -43,23 +43,79 @@ class Recipe
   end
 end
 
+class Koji
+  include Toji::Ingredient::Koji
+
+  attr_accessor :raw
+  attr_accessor :soaked_rate
+  attr_accessor :steamed_rate
+  attr_accessor :cooled_rate
+  attr_accessor :tanekoji_rate
+  attr_accessor :dekoji_rate
+  attr_accessor :interval_days
+
+  def self.create(raw:, soaked_rate:, steamed_rate:, cooled_rate:, tanekoji_rate:, dekoji_rate:, interval_days:)
+    new.tap {|o|
+      o.raw = raw
+      o.soaked_rate = soaked_rate
+      o.steamed_rate = steamed_rate
+      o.cooled_rate = cooled_rate
+      o.tanekoji_rate = tanekoji_rate
+      o.dekoji_rate = dekoji_rate
+      o.interval_days = interval_days
+    }
+  end
+end
+
+class Kake
+  include Toji::Ingredient::Kake
+
+  attr_accessor :raw
+  attr_accessor :soaked_rate
+  attr_accessor :steamed_rate
+  attr_accessor :cooled_rate
+  attr_accessor :interval_days
+
+  def self.create(raw:, soaked_rate:, steamed_rate:, cooled_rate:, interval_days:)
+    new.tap {|o|
+      o.raw = raw
+      o.soaked_rate = soaked_rate
+      o.steamed_rate = steamed_rate
+      o.cooled_rate = cooled_rate
+      o.interval_days = interval_days
+    }
+  end
+end
+
+class Water
+  include Toji::Ingredient::Water
+
+  attr_accessor :weight
+
+  def self.create(weight:)
+    new.tap {|o|
+      o.weight = weight
+    }
+  end
+end
+
 class Step
   include Toji::Recipe::Step
 
-  def self.create(koji: 0, koji_interval_days: 0, kake: 0, kake_interval_days: 0, water: 0, lactic_acid: 0, alcohol: 0, yeast: 0)
+  def initialize_copy(obj)
+    self.koji = obj.koji.dup
+    self.kake = obj.kake.dup
+    self.water = obj.water.dup
+    self.lactic_acid = obj.lactic_acid
+    self.alcohol = obj.alcohol
+    self.yeast = obj.yeast
+  end
+
+  def self.create(koji: nil, kake: nil, water: nil, lactic_acid: 0, alcohol: 0, yeast: 0)
     new.tap {|o|
-      o.koji = koji.to_f
-      o.koji_soaked_rate = 0.0
-      o.koji_steamed_rate = 0.0
-      o.koji_dekoji_rate = 0.0
-      o.koji_interval_days = koji_interval_days.to_i
-
-      o.kake = kake.to_f
-      o.kake_soaked_rate = 0.0
-      o.kake_steamed_rate = 0.0
-      o.kake_interval_days = kake_interval_days.to_i
-
-      o.water = water.to_f
+      o.koji = koji
+      o.kake = kake
+      o.water = water
       o.lactic_acid = lactic_acid.to_f
       o.alcohol = alcohol.to_f
       o.yeast = yeast.to_f
