@@ -54,12 +54,16 @@ class Koji
   attr_accessor :dekoji_rate
   attr_accessor :interval_days
 
-  def self.create(raw:, soaked_rate:, steamed_rate:, cooled_rate:, tanekoji_rate:, dekoji_rate:, interval_days:)
+  def self.create(raw:, brand:, made_in:, year:, soaked_rate:, steamed_rate:, cooled_rate:, tanekoji_brand:, tanekoji_rate:, dekoji_rate:, interval_days:)
     new.tap {|o|
       o.raw = raw
+      o.brand = brand
+      o.made_in = made_in
+      o.year = year
       o.soaked_rate = soaked_rate
       o.steamed_rate = steamed_rate
       o.cooled_rate = cooled_rate
+      o.tanekoji_brand = tanekoji_brand
       o.tanekoji_rate = tanekoji_rate
       o.dekoji_rate = dekoji_rate
       o.interval_days = interval_days
@@ -76,9 +80,12 @@ class Kake
   attr_accessor :cooled_rate
   attr_accessor :interval_days
 
-  def self.create(raw:, soaked_rate:, steamed_rate:, cooled_rate:, interval_days:)
+  def self.create(raw:, brand:, made_in:, year:, soaked_rate:, steamed_rate:, cooled_rate:, interval_days:)
     new.tap {|o|
       o.raw = raw
+      o.brand = brand
+      o.made_in = made_in
+      o.year = year
       o.soaked_rate = soaked_rate
       o.steamed_rate = steamed_rate
       o.cooled_rate = cooled_rate
@@ -89,6 +96,42 @@ end
 
 class Water
   include Toji::Ingredient::Water
+
+  attr_accessor :weight
+
+  def self.create(weight:)
+    new.tap {|o|
+      o.weight = weight
+    }
+  end
+end
+
+class LacticAcid
+  include Toji::Ingredient::LacticAcid
+
+  attr_accessor :weight
+
+  def self.create(weight:)
+    new.tap {|o|
+      o.weight = weight
+    }
+  end
+end
+
+class Alcohol
+  include Toji::Ingredient::Alcohol
+
+  attr_accessor :weight
+
+  def self.create(weight:)
+    new.tap {|o|
+      o.weight = weight
+    }
+  end
+end
+
+class Yeast
+  include Toji::Ingredient::Yeast
 
   attr_accessor :weight
 
@@ -111,14 +154,14 @@ class Step
     self.yeast = obj.yeast
   end
 
-  def self.create(koji: nil, kake: nil, water: nil, lactic_acid: 0, alcohol: 0, yeast: 0)
+  def self.create(koji: nil, kake: nil, water: nil, lactic_acid: nil, alcohol: nil, yeast: nil)
     new.tap {|o|
       o.koji = koji
       o.kake = kake
       o.water = water
-      o.lactic_acid = lactic_acid.to_f
-      o.alcohol = alcohol.to_f
-      o.yeast = yeast.to_f
+      o.lactic_acid = lactic_acid
+      o.alcohol = alcohol
+      o.yeast = yeast
     }
   end
 end

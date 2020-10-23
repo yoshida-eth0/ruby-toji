@@ -9,15 +9,22 @@ class ProductTest < Minitest::Test
         Step.create(
           koji: Koji.create(
             raw: 20,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
+            tanekoji_brand: :byakuya,
             tanekoji_rate: 0.001,
             dekoji_rate: 0.18,
             interval_days: 0,
           ),
           kake: Kake.create(
             raw: 45,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
@@ -26,21 +33,32 @@ class ProductTest < Minitest::Test
           water: Water.create(
             weight: 70,
           ),
-          lactic_acid: 70/100.0*0.685,
-          yeast: (45+20)/100.0*1.5,
+          lactic_acid: LacticAcid.create(
+            weight: 70/100.0*0.685,
+          ),
+          yeast: Yeast.create(
+            weight: (45+20)/100.0*1.5,
+          ),
         ),
         Step.create(
           koji: Koji.create(
             raw: 40,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
+            tanekoji_brand: :byakuya,
             tanekoji_rate: 0.001,
             dekoji_rate: 0.18,
             interval_days: 14,
           ),
           kake: Kake.create(
             raw: 100,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
@@ -53,15 +71,22 @@ class ProductTest < Minitest::Test
         Step.create(
           koji: Koji.create(
             raw: 60,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
+            tanekoji_brand: :byakuya,
             tanekoji_rate: 0.001,
             dekoji_rate: 0.18,
             interval_days: 0,
           ),
           kake: Kake.create(
             raw: 215,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
@@ -74,15 +99,22 @@ class ProductTest < Minitest::Test
         Step.create(
           koji: Koji.create(
             raw: 80,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
+            tanekoji_brand: :byakuya,
             tanekoji_rate: 0.001,
             dekoji_rate: 0.18,
             interval_days: 0,
           ),
           kake: Kake.create(
             raw: 360,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
@@ -95,6 +127,9 @@ class ProductTest < Minitest::Test
         Step.create(
           kake: Kake.create(
             raw: 80,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,

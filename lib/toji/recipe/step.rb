@@ -51,9 +51,15 @@ module Toji
         if water
           self.water.weight = water.weight.to_f.round(ndigit, half: half)
         end
-        self.lactic_acid = lactic_acid.to_f.round(mini_ndigit, half: half)
-        self.alcohol = alcohol.to_f.round(ndigit, half: half)
-        self.yeast = yeast.to_f.round(mini_ndigit, half: half)
+        if lactic_acid
+          self.lactic_acid.weight = lactic_acid.weight.to_f.round(mini_ndigit, half: half)
+        end
+        if alcohol
+          self.alcohol.weight = alcohol.weight.to_f.round(ndigit, half: half)
+        end
+        if yeast
+          self.yeast.weight = yeast.weight.to_f.round(mini_ndigit, half: half)
+        end
 
         self
       end
@@ -73,13 +79,14 @@ module Toji
             raise Error, "implementation required: #{self.class}.initialize_copy"
           end
 
+          # CAUTION: dst.xxxがnilだった場合、dst.xxxはnilのままになる
           dst = self.dup
           dst.koji&.raw += other.koji&.raw || 0
           dst.kake&.raw += other.kake&.raw || 0
           dst.water&.weight += other.water&.weight || 0
-          dst.lactic_acid += other.lactic_acid || 0
-          dst.alcohol += other.alcohol || 0
-          dst.yeast += other.yeast || 0
+          dst.lactic_acid&.weight += other.lactic_acid&.weight || 0
+          dst.alcohol&.weight += other.alcohol&.weight || 0
+          dst.yeast&.weight += other.yeast&.weight || 0
           dst
         else
           x, y = other.coerce(self)
@@ -97,9 +104,9 @@ module Toji
           dst.koji&.raw *= other
           dst.kake&.raw *= other
           dst.water&.weight *= other
-          dst.lactic_acid *= other
-          dst.alcohol *= other
-          dst.yeast *= other
+          dst.lactic_acid&.weight *= other
+          dst.alcohol&.weight *= other
+          dst.yeast&.weight *= other
           dst
         else
           x, y = other.coerce(self)

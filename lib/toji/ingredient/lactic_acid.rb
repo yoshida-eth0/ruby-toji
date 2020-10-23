@@ -1,11 +1,8 @@
 module Toji
   module Ingredient
-    module Water
-      # 汲水
+    module LacticAcid
+      # 乳酸
       attr_accessor :weight
-
-      # 硬度
-      attr_accessor :hardness
     end
   end
 end

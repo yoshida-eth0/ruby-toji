@@ -4,6 +4,9 @@ class IngredientKakeTest < Minitest::Test
   def setup
     @kake = Kake.create(
       raw: 100,
+      brand: :yamadanishiki,
+      made_in: :hyogo,
+      year: 2020,
       soaked_rate: 0.33,
       steamed_rate: 0.41,
       cooled_rate: 0.33,
@@ -14,6 +17,10 @@ class IngredientKakeTest < Minitest::Test
   def test_basic
     assert_equal 100, @kake.raw
 
+    assert_equal :yamadanishiki, @kake.brand
+    assert_equal :hyogo, @kake.made_in
+    assert_equal 2020, @kake.year
+
     assert_equal 0.33, @kake.soaked_rate
     assert_equal 133, @kake.soaked
 
@@ -22,5 +29,7 @@ class IngredientKakeTest < Minitest::Test
 
     assert_equal 0.33, @kake.cooled_rate
     assert_equal 133, @kake.cooled
+
+    assert_equal 0, @kake.interval_days
   end
 end

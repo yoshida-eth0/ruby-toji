@@ -3,6 +3,9 @@ module Toji
     module Koji
       include Rice
 
+      # 種麹の種類
+      attr_accessor :tanekoji_brand
+
       # 種麹
       #
       # 総破精麹を造るには、種麹の量を麹米100kgあたり種麹100gとする

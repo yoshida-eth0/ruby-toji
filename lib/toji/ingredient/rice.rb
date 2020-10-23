@@ -4,6 +4,11 @@ module Toji
       # 白米
       attr_accessor :raw
 
+      # 品種、産地、年度
+      attr_accessor :brand
+      attr_accessor :made_in
+      attr_accessor :year
+
       # 浸漬米吸水率
       #
       # 標準的な白米吸水率は掛米で30〜35%、麹米で33%前後で許容範囲はかなり狭い

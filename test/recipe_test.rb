@@ -9,15 +9,22 @@ class RecipeTest < Minitest::Test
         Step.create(
           koji: Koji.create(
             raw: 20,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
+            tanekoji_brand: :byakuya,
             tanekoji_rate: 0.001,
             dekoji_rate: 0.18,
             interval_days: 0,
           ),
           kake: Kake.create(
             raw: 45,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
@@ -26,21 +33,32 @@ class RecipeTest < Minitest::Test
           water: Water.create(
             weight: 70,
           ),
-          lactic_acid: 70/100.0*0.685,
-          yeast: (45+20)/100.0*1.5,
+          lactic_acid: LacticAcid.create(
+            weight: 70/100.0*0.685,
+          ),
+          yeast: Yeast.create(
+            weight: (45+20)/100.0*1.5,
+          ),
         ),
         Step.create(
           koji: Koji.create(
             raw: 40,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
+            tanekoji_brand: :byakuya,
             tanekoji_rate: 0.001,
             dekoji_rate: 0.18,
             interval_days: 14,
           ),
           kake: Kake.create(
             raw: 100,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
@@ -53,15 +71,22 @@ class RecipeTest < Minitest::Test
         Step.create(
           koji: Koji.create(
             raw: 60,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
+            tanekoji_brand: :byakuya,
             tanekoji_rate: 0.001,
             dekoji_rate: 0.18,
             interval_days: 0,
           ),
           kake: Kake.create(
             raw: 215,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
@@ -74,15 +99,22 @@ class RecipeTest < Minitest::Test
         Step.create(
           koji: Koji.create(
             raw: 80,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
+            tanekoji_brand: :byakuya,
             tanekoji_rate: 0.001,
             dekoji_rate: 0.18,
             interval_days: 0,
           ),
           kake: Kake.create(
             raw: 360,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
@@ -95,6 +127,9 @@ class RecipeTest < Minitest::Test
         Step.create(
           kake: Kake.create(
             raw: 80,
+            brand: :yamadanishiki,
+            made_in: :hyogo,
+            year: 2020,
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
@@ -128,9 +163,9 @@ class RecipeTest < Minitest::Test
     assert_equal 5, moto.kake.interval_days
 
     assert_equal 70, moto.water.weight
-    assert_in_delta 0.4795, moto.lactic_acid
-    assert_equal 0, moto.alcohol
-    assert_in_delta 0.975, moto.yeast
+    assert_in_delta 0.4795, moto.lactic_acid.weight
+    assert_nil moto.alcohol
+    assert_in_delta 0.975, moto.yeast.weight
 
     assert_equal 65, moto.rice_total
     assert_in_delta 0.3076923076923077, moto.koji_rate
@@ -149,9 +184,9 @@ class RecipeTest < Minitest::Test
     assert_equal 5, step.kake.interval_days
 
     assert_equal 200, step.water.weight
-    assert_in_delta 0.4795, step.lactic_acid
-    assert_equal 0, step.alcohol
-    assert_in_delta 0.975, step.yeast
+    assert_in_delta 0.4795, step.lactic_acid.weight
+    assert_nil step.alcohol
+    assert_in_delta 0.975, step.yeast.weight
 
     assert_equal 205, step.rice_total
     assert_in_delta 0.2926829268292683, step.koji_rate
@@ -169,9 +204,9 @@ class RecipeTest < Minitest::Test
     assert_equal 5, step.kake.interval_days
 
     assert_equal 140, step.water.weight
-    assert_in_delta 0.959, step.lactic_acid
-    assert_equal 0, step.alcohol
-    assert_in_delta 1.95, step.yeast
+    assert_in_delta 0.959, step.lactic_acid.weight
+    assert_nil step.alcohol
+    assert_in_delta 1.95, step.yeast.weight
 
     assert_equal 130, step.rice_total
     assert_in_delta 0.3076923076923077, step.koji_rate
@@ -189,9 +224,9 @@ class RecipeTest < Minitest::Test
     assert_equal 5, step.kake.interval_days
 
     assert_equal 93, step.water.weight
-    assert_in_delta 0.639, step.lactic_acid
-    assert_equal 0, step.alcohol
-    assert_in_delta 1.3, step.yeast
+    assert_in_delta 0.639, step.lactic_acid.weight
+    assert_nil step.alcohol
+    assert_in_delta 1.3, step.yeast.weight
 
     assert_equal 87, step.rice_total
     assert_in_delta 0.3103448275862069, step.koji_rate
