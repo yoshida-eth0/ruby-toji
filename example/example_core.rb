@@ -64,19 +64,123 @@ module Example
 
   class Step
     include Toji::Recipe::Step
-    attr_accessor :name
 
-    def self.create(name:, kake: 0, koji: 0, water: 0, lactic_acid: 0, alcohol: 0, yeast: 0, koji_interval_days: 0, kake_interval_days: 0)
+    def initialize_copy(obj)
+      self.koji = obj.koji.dup
+      self.kake = obj.kake.dup
+      self.water = obj.water.dup
+      self.lactic_acid = obj.lactic_acid
+      self.alcohol = obj.alcohol
+      self.yeast = obj.yeast
+    end
+
+    def self.create(koji: nil, kake: nil, water: nil, lactic_acid: nil, alcohol: nil, yeast: nil)
       new.tap {|o|
-        o.name = name
-        o.kake = kake.to_f
-        o.koji = koji.to_f
-        o.water = water.to_f
-        o.lactic_acid = lactic_acid.to_f
-        o.alcohol = alcohol.to_f
-        o.yeast = yeast.to_f
-        o.koji_interval_days = koji_interval_days.to_i
-        o.kake_interval_days = kake_interval_days.to_i
+        o.koji = koji
+        o.kake = kake
+        o.water = water
+        o.lactic_acid = lactic_acid
+        o.alcohol = alcohol
+        o.yeast = yeast
+      }
+    end
+  end
+
+  class Koji
+    include Toji::Ingredient::Koji
+
+    attr_accessor :raw
+    attr_accessor :soaked_rate
+    attr_accessor :steamed_rate
+    attr_accessor :cooled_rate
+    attr_accessor :tanekoji_rate
+    attr_accessor :dekoji_rate
+    attr_accessor :interval_days
+
+    def self.create(raw:, brand:, made_in:, year:, soaked_rate:, steamed_rate:, cooled_rate:, tanekoji_brand:, tanekoji_rate:, dekoji_rate:, interval_days:)
+      new.tap {|o|
+        o.raw = raw
+        o.brand = brand
+        o.made_in = made_in
+        o.year = year
+        o.soaked_rate = soaked_rate
+        o.steamed_rate = steamed_rate
+        o.cooled_rate = cooled_rate
+        o.tanekoji_brand = tanekoji_brand
+        o.tanekoji_rate = tanekoji_rate
+        o.dekoji_rate = dekoji_rate
+        o.interval_days = interval_days
+      }
+    end
+  end
+
+  class Kake
+    include Toji::Ingredient::Kake
+
+    attr_accessor :raw
+    attr_accessor :soaked_rate
+    attr_accessor :steamed_rate
+    attr_accessor :cooled_rate
+    attr_accessor :interval_days
+
+    def self.create(raw:, brand:, made_in:, year:, soaked_rate:, steamed_rate:, cooled_rate:, interval_days:)
+      new.tap {|o|
+        o.raw = raw
+        o.brand = brand
+        o.made_in = made_in
+        o.year = year
+        o.soaked_rate = soaked_rate
+        o.steamed_rate = steamed_rate
+        o.cooled_rate = cooled_rate
+        o.interval_days = interval_days
+      }
+    end
+  end
+
+  class Water
+    include Toji::Ingredient::Water
+
+    attr_accessor :weight
+
+    def self.create(weight:)
+      new.tap {|o|
+        o.weight = weight
+      }
+    end
+  end
+
+  class LacticAcid
+    include Toji::Ingredient::LacticAcid
+
+    attr_accessor :weight
+
+    def self.create(weight:)
+      new.tap {|o|
+        o.weight = weight
+      }
+    end
+  end
+
+  class Alcohol
+    include Toji::Ingredient::Alcohol
+
+    attr_accessor :weight
+
+    def self.create(weight:)
+      new.tap {|o|
+        o.weight = weight
+      }
+    end
+  end
+
+  class Yeast
+    include Toji::Ingredient::Yeast
+
+    attr_accessor :weight
+
+    def self.create(weight:)
+      new.tap {|o|
+        o.weight = weight
       }
     end
   end
@@ -84,7 +188,7 @@ module Example
 
   class Action
     include Toji::Recipe::Action
-  
+
     def self.create(type:, interval_days:)
       new.tap {|o|
         o.type = type
@@ -119,44 +223,137 @@ module Example
       sokujo_textbook: create(
         [
           Step.create(
-            name: :moto,
-            kake: 45,
-            koji: 20,
-            water: 70,
-            lactic_acid: 70/100.0*0.685,
-            yeast: (45+20)/100.0*1.5,
-            koji_interval_days: 0,
-            kake_interval_days: 5,
+            koji: Koji.create(
+              raw: 20,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              tanekoji_brand: :byakuya,
+              tanekoji_rate: 0.001,
+              dekoji_rate: 0.18,
+              interval_days: 0,
+            ),
+            kake: Kake.create(
+              raw: 45,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              interval_days: 5,
+            ),
+            water: Water.create(
+              weight: 70,
+            ),
+            lactic_acid: LacticAcid.create(
+              weight: 70/100.0*0.685,
+            ),
+            yeast: Yeast.create(
+              weight: (45+20)/100.0*1.5,
+            ),
           ),
           Step.create(
-            name: :soe,
-            kake: 100,
-            koji: 40,
-            water: 130,
-            koji_interval_days: 14,
-            kake_interval_days: 15,
+            koji: Koji.create(
+              raw: 40,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              tanekoji_brand: :byakuya,
+              tanekoji_rate: 0.001,
+              dekoji_rate: 0.18,
+              interval_days: 14,
+            ),
+            kake: Kake.create(
+              raw: 100,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              interval_days: 15,
+            ),
+            water: Water.create(
+              weight: 130,
+            ),
           ),
           Step.create(
-            name: :naka,
-            kake: 215,
-            koji: 60,
-            water: 330,
-            koji_interval_days: 0,
-            kake_interval_days: 2,
+            koji: Koji.create(
+              raw: 60,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              tanekoji_brand: :byakuya,
+              tanekoji_rate: 0.001,
+              dekoji_rate: 0.18,
+              interval_days: 0,
+            ),
+            kake: Kake.create(
+              raw: 215,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              interval_days: 2,
+            ),
+            water: Water.create(
+              weight: 330,
+            ),
           ),
           Step.create(
-            name: :tome,
-            kake: 360,
-            koji: 80,
-            water: 630,
-            koji_interval_days: 0,
-            kake_interval_days: 1,
+            koji: Koji.create(
+              raw: 80,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              tanekoji_brand: :byakuya,
+              tanekoji_rate: 0.001,
+              dekoji_rate: 0.18,
+              interval_days: 0,
+            ),
+            kake: Kake.create(
+              raw: 360,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              interval_days: 1,
+            ),
+            water: Water.create(
+              weight: 630,
+            ),
           ),
           Step.create(
-            name: :yodan,
-            kake: 80,
-            water: 120,
-            kake_interval_days: 25,
+            kake: Kake.create(
+              raw: 80,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              interval_days: 25,
+            ),
+            water: Water.create(
+              weight: 120,
+            ),
           ),
         ].map(&:freeze).freeze
       ).freeze,
@@ -165,42 +362,127 @@ module Example
       sokujo_nada: create(
         [
           Step.create(
-            name: :moto,
-            kake: 93,
-            koji: 47,
-            water: 170,
-            lactic_acid: 170/100.0*0.685,
-            yeast: (93+47)/100.0*1.5,
-            koji_interval_days: 0,
-            kake_interval_days: 5,
+            koji: Koji.create(
+              raw: 47,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              tanekoji_brand: :byakuya,
+              tanekoji_rate: 0.001,
+              dekoji_rate: 0.18,
+              interval_days: 0,
+            ),
+            kake: Kake.create(
+              raw: 93,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              interval_days: 5,
+            ),
+            water: Water.create(
+              weight: 170,
+            ),
+            lactic_acid: LacticAcid.create(
+              weight: 170/100.0*0.685,
+            ),
+            yeast: Yeast.create(
+              weight: (93+47)/100.0*1.5,
+            ),
           ),
           Step.create(
-            name: :soe,
-            kake: 217,
-            koji: 99,
-            water: 270,
-            koji_interval_days: 14,
-            kake_interval_days: 15,
+            koji: Koji.create(
+              raw: 99,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              tanekoji_brand: :byakuya,
+              tanekoji_rate: 0.001,
+              dekoji_rate: 0.18,
+              interval_days: 14,
+            ),
+            kake: Kake.create(
+              raw: 217,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              interval_days: 15,
+            ),
+            water: Water.create(
+              weight: 270,
+            ),
           ),
           Step.create(
-            name: :naka,
-            kake: 423,
-            koji: 143,
-            water: 670,
-            koji_interval_days: 0,
-            kake_interval_days: 2,
+            koji: Koji.create(
+              raw: 143,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              tanekoji_brand: :byakuya,
+              tanekoji_rate: 0.001,
+              dekoji_rate: 0.18,
+              interval_days: 0,
+            ),
+            kake: Kake.create(
+              raw: 423,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              interval_days: 2,
+            ),
+            water: Water.create(
+              weight: 670,
+            ),
           ),
           Step.create(
-            name: :tome,
-            kake: 813,
-            koji: 165,
-            water: 1330,
-            koji_interval_days: 0,
-            kake_interval_days: 1,
+            koji: Koji.create(
+              raw: 165,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              tanekoji_brand: :byakuya,
+              tanekoji_rate: 0.001,
+              dekoji_rate: 0.18,
+              interval_days: 0,
+            ),
+            kake: Kake.create(
+              raw: 813,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              interval_days: 1,
+            ),
+            water: Water.create(
+              weight: 1330,
+            ),
           ),
           Step.create(
-            name: :alcohol,
-            alcohol: 900
+            alcohol: Alcohol.create(
+              weight: 900,
+            ),
           ),
         ].map(&:freeze).freeze
       ).freeze,
@@ -209,42 +491,127 @@ module Example
       simple_sokujo_himeno: create(
         [
           Step.create(
-            name: :moto,
-            kake: 0,
-            koji: 70,
-            water: 245,
-            lactic_acid: 1.6,
-            yeast: 5,
-            koji_interval_days: 0,
-            kake_interval_days: 6,
+            koji: Koji.create(
+              raw: 70,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              tanekoji_brand: :byakuya,
+              tanekoji_rate: 0.001,
+              dekoji_rate: 0.18,
+              interval_days: 0,
+            ),
+            kake: Kake.create(
+              raw: 0,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              interval_days: 6,
+            ),
+            water: Water.create(
+              weight: 245,
+            ),
+            lactic_acid: LacticAcid.create(
+              weight: 1.6,
+            ),
+            yeast: Yeast.create(
+              weight: 5,
+            ),
           ),
           Step.create(
-            name: :soe,
-            kake: 130,
-            koji: 0,
-            water: 0,
-            koji_interval_days: 0,
-            kake_interval_days: 1,
+            koji: Koji.create(
+              raw: 0,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              tanekoji_brand: :byakuya,
+              tanekoji_rate: 0.001,
+              dekoji_rate: 0.18,
+              interval_days: 0,
+            ),
+            kake: Kake.create(
+              raw: 130,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              interval_days: 1,
+            ),
+            water: Water.create(
+              weight: 0,
+            ),
           ),
           Step.create(
-            name: :naka,
-            kake: 300,
-            koji: 100,
-            water: 400,
-            koji_interval_days: 0,
-            kake_interval_days: 2,
+            koji: Koji.create(
+              raw: 100,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              tanekoji_brand: :byakuya,
+              tanekoji_rate: 0.001,
+              dekoji_rate: 0.18,
+              interval_days: 0,
+            ),
+            kake: Kake.create(
+              raw: 300,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              interval_days: 2,
+            ),
+            water: Water.create(
+              weight: 400,
+            ),
           ),
           Step.create(
-            name: :tome,
-            kake: 490,
-            koji: 110,
-            water: 800,
-            koji_interval_days: 0,
-            kake_interval_days: 1,
+            koji: Koji.create(
+              raw: 110,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              tanekoji_brand: :byakuya,
+              tanekoji_rate: 0.001,
+              dekoji_rate: 0.18,
+              interval_days: 0,
+            ),
+            kake: Kake.create(
+              raw: 490,
+              brand: :yamadanishiki,
+              made_in: :hyogo,
+              year: 2020,
+              soaked_rate: 0.33,
+              steamed_rate: 0.41,
+              cooled_rate: 0.33,
+              interval_days: 1,
+            ),
+            water: Water.create(
+              weight: 800,
+            ),
           ),
           Step.create(
-            name: :yodan,
-            water: 255
+            water: Water.create(
+              weight: 255,
+            ),
           ),
         ].map(&:freeze).freeze
       ).freeze,
@@ -309,7 +676,7 @@ module Example
     class KojiProgress
       include Toji::Brew::KojiProgress
       extend BrewGenerator
-    
+
       attr_accessor :states
       attr_accessor :date_line
 
@@ -317,10 +684,10 @@ module Example
         Toji::Brew::Builder.new(KojiProgress, KojiState)
       end
     end
-    
+
     class KojiState
       include Toji::Brew::KojiState
-    
+
       def self.create(args)
         new.tap {|s|
           s.progress = args[:progress]
@@ -341,15 +708,15 @@ module Example
 
       attr_accessor :states
       attr_accessor :date_line
-    
+
       def self.builder
         Toji::Brew::Builder.new(MotoProgress, MotoState)
       end
     end
-    
+
     class MotoState
       include Toji::Brew::MotoState
-    
+
       def self.create(args)
         new.tap {|s|
           s.progress = args[:progress]
@@ -366,8 +733,8 @@ module Example
         }
       end
     end
-    
-    
+
+
     class MoromiProgress
       include Toji::Brew::MoromiProgress
       extend BrewGenerator
@@ -375,16 +742,16 @@ module Example
       attr_accessor :states
       attr_accessor :date_line
       attr_accessor :prefix_day_labels
-    
+
       def self.builder
         Toji::Brew::Builder.new(MoromiProgress, MoromiState)
       end
     end
-    
+
     class MoromiState
       include Toji::Brew::MoromiState
       include Toji::Brew::State::BaumeToNihonshudo
-    
+
       def self.create(args)
         new.tap {|s|
           s.progress = args[:progress]

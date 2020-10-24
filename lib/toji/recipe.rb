@@ -87,14 +87,16 @@ module Toji
 
     def table_data
       headers = [""] + steps.map.with_index{|s,i| :"step#{i}"} + [:total]
-      keys = [:rice_total, :kake, :koji, :alcohol, :water, :lactic_acid]
+      keys = [[:rice_total, :itself], [:kake, :raw], [:koji, :raw], [:alcohol, :weight], [:water, :weight], [:lactic_acid, :weight]]
 
-      cells = [keys]
+      cells = [keys.map(&:first)]
       cells += steps.map {|step|
-        [step.rice_total, step.kake, step.koji, step.alcohol, step.water, step.lactic_acid]
+        keys.map {|k1, k2|
+          step.send(k1)&.send(k2)
+        }
       }
-      cells << keys.map {|key|
-        steps.map(&key).compact.sum
+      cells << keys.map {|k1, k2|
+        steps.map(&k1).compact.map(&k2).compact.sum
       }
 
       cells = cells.map {|cell|

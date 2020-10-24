@@ -43,6 +43,30 @@ class Recipe
   end
 end
 
+class Step
+  include Toji::Recipe::Step
+
+  def initialize_copy(obj)
+    self.koji = obj.koji.dup
+    self.kake = obj.kake.dup
+    self.water = obj.water.dup
+    self.lactic_acid = obj.lactic_acid
+    self.alcohol = obj.alcohol
+    self.yeast = obj.yeast
+  end
+
+  def self.create(koji: nil, kake: nil, water: nil, lactic_acid: nil, alcohol: nil, yeast: nil)
+    new.tap {|o|
+      o.koji = koji
+      o.kake = kake
+      o.water = water
+      o.lactic_acid = lactic_acid
+      o.alcohol = alcohol
+      o.yeast = yeast
+    }
+  end
+end
+
 class Koji
   include Toji::Ingredient::Koji
 
@@ -138,30 +162,6 @@ class Yeast
   def self.create(weight:)
     new.tap {|o|
       o.weight = weight
-    }
-  end
-end
-
-class Step
-  include Toji::Recipe::Step
-
-  def initialize_copy(obj)
-    self.koji = obj.koji.dup
-    self.kake = obj.kake.dup
-    self.water = obj.water.dup
-    self.lactic_acid = obj.lactic_acid
-    self.alcohol = obj.alcohol
-    self.yeast = obj.yeast
-  end
-
-  def self.create(koji: nil, kake: nil, water: nil, lactic_acid: nil, alcohol: nil, yeast: nil)
-    new.tap {|o|
-      o.koji = koji
-      o.kake = kake
-      o.water = water
-      o.lactic_acid = lactic_acid
-      o.alcohol = alcohol
-      o.yeast = yeast
     }
   end
 end
