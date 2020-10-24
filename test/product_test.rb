@@ -10,6 +10,7 @@ class ProductTest < Minitest::Test
           koji: Koji.create(
             weight: 20,
             brand: :yamadanishiki,
+            polishing_ratio: 0.55,
             made_in: :hyogo,
             year: 2020,
             soaking_ratio: 0.33,
@@ -27,6 +28,7 @@ class ProductTest < Minitest::Test
           kake: Kake.create(
             weight: 45,
             brand: :yamadanishiki,
+            polishing_ratio: 0.55,
             made_in: :hyogo,
             year: 2020,
             soaking_ratio: 0.33,
@@ -48,6 +50,7 @@ class ProductTest < Minitest::Test
           koji: Koji.create(
             weight: 40,
             brand: :yamadanishiki,
+            polishing_ratio: 0.55,
             made_in: :hyogo,
             year: 2020,
             soaking_ratio: 0.33,
@@ -65,6 +68,7 @@ class ProductTest < Minitest::Test
           kake: Kake.create(
             weight: 100,
             brand: :yamadanishiki,
+            polishing_ratio: 0.55,
             made_in: :hyogo,
             year: 2020,
             soaking_ratio: 0.33,
@@ -80,6 +84,7 @@ class ProductTest < Minitest::Test
           koji: Koji.create(
             weight: 60,
             brand: :yamadanishiki,
+            polishing_ratio: 0.55,
             made_in: :hyogo,
             year: 2020,
             soaking_ratio: 0.33,
@@ -97,6 +102,7 @@ class ProductTest < Minitest::Test
           kake: Kake.create(
             weight: 215,
             brand: :yamadanishiki,
+            polishing_ratio: 0.55,
             made_in: :hyogo,
             year: 2020,
             soaking_ratio: 0.33,
@@ -112,6 +118,7 @@ class ProductTest < Minitest::Test
           koji: Koji.create(
             weight: 80,
             brand: :yamadanishiki,
+            polishing_ratio: 0.55,
             made_in: :hyogo,
             year: 2020,
             soaking_ratio: 0.33,
@@ -129,6 +136,7 @@ class ProductTest < Minitest::Test
           kake: Kake.create(
             weight: 360,
             brand: :yamadanishiki,
+            polishing_ratio: 0.55,
             made_in: :hyogo,
             year: 2020,
             soaking_ratio: 0.33,
@@ -144,6 +152,7 @@ class ProductTest < Minitest::Test
           kake: Kake.create(
             weight: 80,
             brand: :yamadanishiki,
+            polishing_ratio: 0.55,
             made_in: :hyogo,
             year: 2020,
             soaking_ratio: 0.33,

@@ -4,8 +4,9 @@ module Toji
       # 白米
       attr_accessor :weight
 
-      # 品種、産地、年度
+      # 品種、精米歩合、産地、年度
       attr_accessor :brand
+      attr_accessor :polishing_ratio
       attr_accessor :made_in
       attr_accessor :year
 

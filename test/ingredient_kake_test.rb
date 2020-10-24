@@ -5,6 +5,7 @@ class IngredientKakeTest < Minitest::Test
     @kake = Kake.create(
       weight: 100,
       brand: :yamadanishiki,
+      polishing_ratio: 0.55,
       made_in: :hyogo,
       year: 2020,
       soaking_ratio: 0.33,
@@ -18,6 +19,7 @@ class IngredientKakeTest < Minitest::Test
     assert_equal 100, @kake.weight
 
     assert_equal :yamadanishiki, @kake.brand
+    assert_equal 0.55, @kake.polishing_ratio
     assert_equal :hyogo, @kake.made_in
     assert_equal 2020, @kake.year
 

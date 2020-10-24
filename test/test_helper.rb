@@ -50,9 +50,9 @@ class Step
     self.koji = obj.koji.dup
     self.kake = obj.kake.dup
     self.water = obj.water.dup
-    self.lactic_acid = obj.lactic_acid
-    self.alcohol = obj.alcohol
-    self.yeast = obj.yeast
+    self.lactic_acid = obj.lactic_acid.dup
+    self.alcohol = obj.alcohol.dup
+    self.yeast = obj.yeast.dup
   end
 
   def self.create(koji: nil, kake: nil, water: nil, lactic_acid: nil, alcohol: nil, yeast: nil)
@@ -81,6 +81,7 @@ class Koji
   def initialize_copy(obj)
     self.weight = obj.weight.dup
     self.brand = obj.brand.dup
+    self.polishing_ratio = obj.polishing_ratio.dup
     self.made_in = obj.made_in.dup
     self.year = obj.year.dup
     self.soaking_ratio = obj.soaking_ratio.dup
@@ -97,10 +98,11 @@ class Koji
     self.interval_days = obj.interval_days.dup
   end
 
-  def self.create(weight:, brand:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
+  def self.create(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
     new.tap {|o|
       o.weight = weight
       o.brand = brand
+      o.polishing_ratio = polishing_ratio
       o.made_in = made_in
       o.year = year
       o.soaking_ratio = soaking_ratio
@@ -141,10 +143,11 @@ class Kake
   attr_accessor :cooling_ratio
   attr_accessor :interval_days
 
-  def self.create(weight:, brand:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
+  def self.create(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
     new.tap {|o|
       o.weight = weight
       o.brand = brand
+      o.polishing_ratio = polishing_ratio
       o.made_in = made_in
       o.year = year
       o.soaking_ratio = soaking_ratio

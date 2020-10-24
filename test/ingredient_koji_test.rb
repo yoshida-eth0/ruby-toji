@@ -5,6 +5,7 @@ class IngredientKojiTest < Minitest::Test
     @koji = Koji.create(
       weight: 100,
       brand: :yamadanishiki,
+      polishing_ratio: 0.55,
       made_in: :hyogo,
       year: 2020,
       soaking_ratio: 0.33,
@@ -25,6 +26,7 @@ class IngredientKojiTest < Minitest::Test
     assert_equal 100, @koji.weight
 
     assert_equal :yamadanishiki, @koji.brand
+    assert_equal 0.55, @koji.polishing_ratio
     assert_equal :hyogo, @koji.made_in
     assert_equal 2020, @koji.year
 
