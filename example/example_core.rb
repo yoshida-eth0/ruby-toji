@@ -100,6 +100,7 @@ module Example
     def initialize_copy(obj)
       self.weight = obj.weight.dup
       self.brand = obj.brand.dup
+      self.polishing_ratio = obj.polishing_ratio.dup
       self.made_in = obj.made_in.dup
       self.year = obj.year.dup
       self.soaking_ratio = obj.soaking_ratio.dup
@@ -116,10 +117,11 @@ module Example
       self.interval_days = obj.interval_days.dup
     end
 
-    def self.create(weight:, brand:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
+    def self.create(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
       new.tap {|o|
         o.weight = weight
         o.brand = brand
+        o.polishing_ratio = polishing_ratio
         o.made_in = made_in
         o.year = year
         o.soaking_ratio = soaking_ratio
@@ -160,10 +162,11 @@ module Example
     attr_accessor :cooling_ratio
     attr_accessor :interval_days
 
-    def self.create(weight:, brand:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
+    def self.create(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
       new.tap {|o|
         o.weight = weight
         o.brand = brand
+        o.polishing_ratio = polishing_ratio
         o.made_in = made_in
         o.year = year
         o.soaking_ratio = soaking_ratio
@@ -263,6 +266,7 @@ module Example
             koji: Koji.create(
               weight: 20,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -280,6 +284,7 @@ module Example
             kake: Kake.create(
               weight: 45,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -301,6 +306,7 @@ module Example
             koji: Koji.create(
               weight: 40,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -318,6 +324,7 @@ module Example
             kake: Kake.create(
               weight: 100,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -333,6 +340,7 @@ module Example
             koji: Koji.create(
               weight: 60,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -350,6 +358,7 @@ module Example
             kake: Kake.create(
               weight: 215,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -365,6 +374,7 @@ module Example
             koji: Koji.create(
               weight: 80,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -382,6 +392,7 @@ module Example
             kake: Kake.create(
               weight: 360,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -397,6 +408,7 @@ module Example
             kake: Kake.create(
               weight: 80,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -418,6 +430,7 @@ module Example
             koji: Koji.create(
               weight: 47,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -435,6 +448,7 @@ module Example
             kake: Kake.create(
               weight: 93,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -456,6 +470,7 @@ module Example
             koji: Koji.create(
               weight: 99,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -473,6 +488,7 @@ module Example
             kake: Kake.create(
               weight: 217,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -488,6 +504,7 @@ module Example
             koji: Koji.create(
               weight: 143,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -505,6 +522,7 @@ module Example
             kake: Kake.create(
               weight: 423,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -520,6 +538,7 @@ module Example
             koji: Koji.create(
               weight: 165,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -537,6 +556,7 @@ module Example
             kake: Kake.create(
               weight: 813,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -563,6 +583,7 @@ module Example
             koji: Koji.create(
               weight: 70,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -580,6 +601,7 @@ module Example
             kake: Kake.create(
               weight: 0,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -601,6 +623,7 @@ module Example
             koji: Koji.create(
               weight: 0,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -618,6 +641,7 @@ module Example
             kake: Kake.create(
               weight: 130,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -633,6 +657,7 @@ module Example
             koji: Koji.create(
               weight: 100,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -650,6 +675,7 @@ module Example
             kake: Kake.create(
               weight: 300,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -665,6 +691,7 @@ module Example
             koji: Koji.create(
               weight: 110,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
@@ -682,6 +709,7 @@ module Example
             kake: Kake.create(
               weight: 490,
               brand: :yamadanishiki,
+              polishing_ratio: 0.55,
               made_in: :hyogo,
               year: 2020,
               soaking_ratio: 0.33,
