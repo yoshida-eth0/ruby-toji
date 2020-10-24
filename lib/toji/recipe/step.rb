@@ -65,9 +65,7 @@ module Toji
       end
 
       def round(ndigit=0, mini_ndigit=nil, half: :up)
-        if !self.class.private_method_defined?(:initialize_copy)
-          raise Error, "implementation required: #{self.class}.initialize_copy"
-        end
+        Utils.check_dup(self)
 
         dst = self.dup
         dst.round!(ndigit, mini_ndigit, half: half)
@@ -75,9 +73,7 @@ module Toji
 
       def +(other)
         if Step===other
-          if !self.class.private_method_defined?(:initialize_copy)
-            raise Error, "implementation required: #{self.class}.initialize_copy"
-          end
+          Utils.check_dup(self)
 
           # CAUTION: dst.xxxがnilだった場合、dst.xxxはnilのままになる
           dst = self.dup
@@ -96,9 +92,7 @@ module Toji
 
       def *(other)
         if Integer===other || Float===other
-          if !self.class.private_method_defined?(:initialize_copy)
-            raise Error, "implementation required: #{self.class}.initialize_copy"
-          end
+          Utils.check_dup(self)
 
           dst = self.dup
           dst.koji&.raw *= other

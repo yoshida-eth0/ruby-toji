@@ -74,11 +74,30 @@ class Koji
   attr_accessor :soaked_rate
   attr_accessor :steamed_rate
   attr_accessor :cooled_rate
-  attr_accessor :tanekoji_rate
+  attr_accessor :tanekojis
   attr_accessor :dekoji_rate
   attr_accessor :interval_days
 
-  def self.create(raw:, brand:, made_in:, year:, soaked_rate:, steamed_rate:, cooled_rate:, tanekoji_brand:, tanekoji_rate:, dekoji_rate:, interval_days:)
+  def initialize_copy(obj)
+    self.raw = obj.raw.dup
+    self.brand = obj.brand.dup
+    self.made_in = obj.made_in.dup
+    self.year = obj.year.dup
+    self.soaked_rate = obj.soaked_rate.dup
+    self.steamed_rate = obj.steamed_rate.dup
+    self.cooled_rate = obj.cooled_rate.dup
+
+    self.tanekojis = obj.tanekojis.map {|tanekoji|
+      tanekoji = tanekoji.dup
+      tanekoji.koji = self
+      tanekoji
+    }
+
+    self.dekoji_rate = obj.dekoji_rate.dup
+    self.interval_days = obj.interval_days.dup
+  end
+
+  def self.create(raw:, brand:, made_in:, year:, soaked_rate:, steamed_rate:, cooled_rate:, tanekojis:, dekoji_rate:, interval_days:)
     new.tap {|o|
       o.raw = raw
       o.brand = brand
@@ -87,10 +106,28 @@ class Koji
       o.soaked_rate = soaked_rate
       o.steamed_rate = steamed_rate
       o.cooled_rate = cooled_rate
-      o.tanekoji_brand = tanekoji_brand
-      o.tanekoji_rate = tanekoji_rate
+      o.tanekojis = tanekojis.map {|tanekoji|
+        tanekoji.koji = o
+        tanekoji
+      }
       o.dekoji_rate = dekoji_rate
       o.interval_days = interval_days
+    }
+  end
+end
+
+class Tanekoji
+  include Toji::Ingredient::Tanekoji
+
+  def initialize_copy(obj)
+    self.brand = obj.brand.dup
+    self.rate = obj.rate.dup
+  end
+
+  def self.create(koji: nil, brand:, rate:)
+    new.tap {|o|
+      o.brand = brand
+      o.rate = rate
     }
   end
 end

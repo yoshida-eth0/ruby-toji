@@ -15,8 +15,12 @@ class RecipeTest < Minitest::Test
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
-            tanekoji_brand: :byakuya,
-            tanekoji_rate: 0.001,
+            tanekojis: [
+              Tanekoji.create(
+                brand: :byakuya,
+                rate: 0.001,
+              ),
+            ],
             dekoji_rate: 0.18,
             interval_days: 0,
           ),
@@ -49,8 +53,12 @@ class RecipeTest < Minitest::Test
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
-            tanekoji_brand: :byakuya,
-            tanekoji_rate: 0.001,
+            tanekojis: [
+              Tanekoji.create(
+                brand: :byakuya,
+                rate: 0.001,
+              ),
+            ],
             dekoji_rate: 0.18,
             interval_days: 14,
           ),
@@ -77,8 +85,12 @@ class RecipeTest < Minitest::Test
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
-            tanekoji_brand: :byakuya,
-            tanekoji_rate: 0.001,
+            tanekojis: [
+              Tanekoji.create(
+                brand: :byakuya,
+                rate: 0.001,
+              ),
+            ],
             dekoji_rate: 0.18,
             interval_days: 0,
           ),
@@ -105,8 +117,12 @@ class RecipeTest < Minitest::Test
             soaked_rate: 0.33,
             steamed_rate: 0.41,
             cooled_rate: 0.33,
-            tanekoji_brand: :byakuya,
-            tanekoji_rate: 0.001,
+            tanekojis: [
+              Tanekoji.create(
+                brand: :byakuya,
+                rate: 0.001,
+              ),
+            ],
             dekoji_rate: 0.18,
             interval_days: 0,
           ),

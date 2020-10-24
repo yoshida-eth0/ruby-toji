@@ -8,6 +8,7 @@ require 'toji/brew'
 require 'toji/calendar'
 require 'toji/event'
 require 'toji/product'
+require 'toji/utils'
 
 module Toji
   class Error < StandardError; end

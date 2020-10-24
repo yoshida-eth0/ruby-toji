@@ -1,6 +1,7 @@
 require 'toji/ingredient/rice'
 require 'toji/ingredient/kake'
 require 'toji/ingredient/koji'
+require 'toji/ingredient/tanekoji'
 require 'toji/ingredient/water'
 require 'toji/ingredient/lactic_acid'
 require 'toji/ingredient/alcohol'
