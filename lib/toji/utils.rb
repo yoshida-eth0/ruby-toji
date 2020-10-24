@@ -7,7 +7,7 @@ module Toji
     def self.check_dup(obj)
       if activerecord_defined? && ActiveRecord::Base===obj
         if !obj.class.method_defined?(:initialize_dup, false)
-          raise Error, "implementation required: #{obj.class}.initialize_copy"
+          raise Error, "implementation required: #{obj.class}.initialize_dup"
         end
       else
         if !obj.class.private_method_defined?(:initialize_copy, false)
