@@ -20,12 +20,12 @@ module Example
       @color = color
     end
 
-    def create_koji_event(date:, index:, step_indexes:, raw:)
-      KojiEvent.new(product: self, date: date, index: index, step_indexes: step_indexes, raw: raw)
+    def create_koji_event(date:, index:, step_indexes:, weight:)
+      KojiEvent.new(product: self, date: date, index: index, step_indexes: step_indexes, weight: weight)
     end
 
-    def create_kake_event(date:, index:, step_indexes:, raw:)
-      KakeEvent.new(product: self, date: date, index: index, step_indexes: step_indexes, raw: raw)
+    def create_kake_event(date:, index:, step_indexes:, weight:)
+      KakeEvent.new(product: self, date: date, index: index, step_indexes: step_indexes, weight: weight)
     end
 
     def create_action_event(date:, type:, index:)
@@ -89,22 +89,22 @@ module Example
   class Koji
     include Toji::Ingredient::Koji
 
-    attr_accessor :raw
-    attr_accessor :soaked_rate
-    attr_accessor :steamed_rate
-    attr_accessor :cooled_rate
+    attr_accessor :weight
+    attr_accessor :soaking_ratio
+    attr_accessor :steaming_ratio
+    attr_accessor :cooling_ratio
     attr_accessor :tanekojis
-    attr_accessor :dekoji_rate
+    attr_accessor :dekoji_ratio
     attr_accessor :interval_days
 
     def initialize_copy(obj)
-      self.raw = obj.raw.dup
+      self.weight = obj.weight.dup
       self.brand = obj.brand.dup
       self.made_in = obj.made_in.dup
       self.year = obj.year.dup
-      self.soaked_rate = obj.soaked_rate.dup
-      self.steamed_rate = obj.steamed_rate.dup
-      self.cooled_rate = obj.cooled_rate.dup
+      self.soaking_ratio = obj.soaking_ratio.dup
+      self.steaming_ratio = obj.steaming_ratio.dup
+      self.cooling_ratio = obj.cooling_ratio.dup
 
       self.tanekojis = obj.tanekojis.map {|tanekoji|
         tanekoji = tanekoji.dup
@@ -112,24 +112,24 @@ module Example
         tanekoji
       }
 
-      self.dekoji_rate = obj.dekoji_rate.dup
+      self.dekoji_ratio = obj.dekoji_ratio.dup
       self.interval_days = obj.interval_days.dup
     end
 
-    def self.create(raw:, brand:, made_in:, year:, soaked_rate:, steamed_rate:, cooled_rate:, tanekojis:, dekoji_rate:, interval_days:)
+    def self.create(weight:, brand:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
       new.tap {|o|
-        o.raw = raw
+        o.weight = weight
         o.brand = brand
         o.made_in = made_in
         o.year = year
-        o.soaked_rate = soaked_rate
-        o.steamed_rate = steamed_rate
-        o.cooled_rate = cooled_rate
+        o.soaking_ratio = soaking_ratio
+        o.steaming_ratio = steaming_ratio
+        o.cooling_ratio = cooling_ratio
         o.tanekojis = tanekojis.map {|tanekoji|
           tanekoji.koji = o
           tanekoji
         }
-        o.dekoji_rate = dekoji_rate
+        o.dekoji_ratio = dekoji_ratio
         o.interval_days = interval_days
       }
     end
@@ -140,13 +140,13 @@ module Example
 
     def initialize_copy(obj)
       self.brand = obj.brand.dup
-      self.rate = obj.rate.dup
+      self.ratio = obj.ratio.dup
     end
 
-    def self.create(koji: nil, brand:, rate:)
+    def self.create(koji: nil, brand:, ratio:)
       new.tap {|o|
         o.brand = brand
-        o.rate = rate
+        o.ratio = ratio
       }
     end
   end
@@ -154,21 +154,21 @@ module Example
   class Kake
     include Toji::Ingredient::Kake
 
-    attr_accessor :raw
-    attr_accessor :soaked_rate
-    attr_accessor :steamed_rate
-    attr_accessor :cooled_rate
+    attr_accessor :weight
+    attr_accessor :soaking_ratio
+    attr_accessor :steaming_ratio
+    attr_accessor :cooling_ratio
     attr_accessor :interval_days
 
-    def self.create(raw:, brand:, made_in:, year:, soaked_rate:, steamed_rate:, cooled_rate:, interval_days:)
+    def self.create(weight:, brand:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
       new.tap {|o|
-        o.raw = raw
+        o.weight = weight
         o.brand = brand
         o.made_in = made_in
         o.year = year
-        o.soaked_rate = soaked_rate
-        o.steamed_rate = steamed_rate
-        o.cooled_rate = cooled_rate
+        o.soaking_ratio = soaking_ratio
+        o.steaming_ratio = steaming_ratio
+        o.cooling_ratio = cooling_ratio
         o.interval_days = interval_days
       }
     end
@@ -261,30 +261,30 @@ module Example
         [
           Step.create(
             koji: Koji.create(
-              raw: 20,
+              weight: 20,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               tanekojis: [
                 Tanekoji.create(
                   brand: :byakuya,
-                  rate: 0.001,
+                  ratio: 0.001,
                 ),
               ],
-              dekoji_rate: 0.18,
+              dekoji_ratio: 0.18,
               interval_days: 0,
             ),
             kake: Kake.create(
-              raw: 45,
+              weight: 45,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               interval_days: 5,
             ),
             water: Water.create(
@@ -299,30 +299,30 @@ module Example
           ),
           Step.create(
             koji: Koji.create(
-              raw: 40,
+              weight: 40,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               tanekojis: [
                 Tanekoji.create(
                   brand: :byakuya,
-                  rate: 0.001,
+                  ratio: 0.001,
                 ),
               ],
-              dekoji_rate: 0.18,
+              dekoji_ratio: 0.18,
               interval_days: 14,
             ),
             kake: Kake.create(
-              raw: 100,
+              weight: 100,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               interval_days: 15,
             ),
             water: Water.create(
@@ -331,30 +331,30 @@ module Example
           ),
           Step.create(
             koji: Koji.create(
-              raw: 60,
+              weight: 60,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               tanekojis: [
                 Tanekoji.create(
                   brand: :byakuya,
-                  rate: 0.001,
+                  ratio: 0.001,
                 ),
               ],
-              dekoji_rate: 0.18,
+              dekoji_ratio: 0.18,
               interval_days: 0,
             ),
             kake: Kake.create(
-              raw: 215,
+              weight: 215,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               interval_days: 2,
             ),
             water: Water.create(
@@ -363,30 +363,30 @@ module Example
           ),
           Step.create(
             koji: Koji.create(
-              raw: 80,
+              weight: 80,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               tanekojis: [
                 Tanekoji.create(
                   brand: :byakuya,
-                  rate: 0.001,
+                  ratio: 0.001,
                 ),
               ],
-              dekoji_rate: 0.18,
+              dekoji_ratio: 0.18,
               interval_days: 0,
             ),
             kake: Kake.create(
-              raw: 360,
+              weight: 360,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               interval_days: 1,
             ),
             water: Water.create(
@@ -395,13 +395,13 @@ module Example
           ),
           Step.create(
             kake: Kake.create(
-              raw: 80,
+              weight: 80,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               interval_days: 25,
             ),
             water: Water.create(
@@ -416,30 +416,30 @@ module Example
         [
           Step.create(
             koji: Koji.create(
-              raw: 47,
+              weight: 47,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               tanekojis: [
                 Tanekoji.create(
                   brand: :byakuya,
-                  rate: 0.001,
+                  ratio: 0.001,
                 ),
               ],
-              dekoji_rate: 0.18,
+              dekoji_ratio: 0.18,
               interval_days: 0,
             ),
             kake: Kake.create(
-              raw: 93,
+              weight: 93,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               interval_days: 5,
             ),
             water: Water.create(
@@ -454,30 +454,30 @@ module Example
           ),
           Step.create(
             koji: Koji.create(
-              raw: 99,
+              weight: 99,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               tanekojis: [
                 Tanekoji.create(
                   brand: :byakuya,
-                  rate: 0.001,
+                  ratio: 0.001,
                 ),
               ],
-              dekoji_rate: 0.18,
+              dekoji_ratio: 0.18,
               interval_days: 14,
             ),
             kake: Kake.create(
-              raw: 217,
+              weight: 217,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               interval_days: 15,
             ),
             water: Water.create(
@@ -486,30 +486,30 @@ module Example
           ),
           Step.create(
             koji: Koji.create(
-              raw: 143,
+              weight: 143,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               tanekojis: [
                 Tanekoji.create(
                   brand: :byakuya,
-                  rate: 0.001,
+                  ratio: 0.001,
                 ),
               ],
-              dekoji_rate: 0.18,
+              dekoji_ratio: 0.18,
               interval_days: 0,
             ),
             kake: Kake.create(
-              raw: 423,
+              weight: 423,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               interval_days: 2,
             ),
             water: Water.create(
@@ -518,30 +518,30 @@ module Example
           ),
           Step.create(
             koji: Koji.create(
-              raw: 165,
+              weight: 165,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               tanekojis: [
                 Tanekoji.create(
                   brand: :byakuya,
-                  rate: 0.001,
+                  ratio: 0.001,
                 ),
               ],
-              dekoji_rate: 0.18,
+              dekoji_ratio: 0.18,
               interval_days: 0,
             ),
             kake: Kake.create(
-              raw: 813,
+              weight: 813,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               interval_days: 1,
             ),
             water: Water.create(
@@ -561,30 +561,30 @@ module Example
         [
           Step.create(
             koji: Koji.create(
-              raw: 70,
+              weight: 70,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               tanekojis: [
                 Tanekoji.create(
                   brand: :byakuya,
-                  rate: 0.001,
+                  ratio: 0.001,
                 ),
               ],
-              dekoji_rate: 0.18,
+              dekoji_ratio: 0.18,
               interval_days: 0,
             ),
             kake: Kake.create(
-              raw: 0,
+              weight: 0,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               interval_days: 6,
             ),
             water: Water.create(
@@ -599,30 +599,30 @@ module Example
           ),
           Step.create(
             koji: Koji.create(
-              raw: 0,
+              weight: 0,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               tanekojis: [
                 Tanekoji.create(
                   brand: :byakuya,
-                  rate: 0.001,
+                  ratio: 0.001,
                 ),
               ],
-              dekoji_rate: 0.18,
+              dekoji_ratio: 0.18,
               interval_days: 0,
             ),
             kake: Kake.create(
-              raw: 130,
+              weight: 130,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               interval_days: 1,
             ),
             water: Water.create(
@@ -631,30 +631,30 @@ module Example
           ),
           Step.create(
             koji: Koji.create(
-              raw: 100,
+              weight: 100,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               tanekojis: [
                 Tanekoji.create(
                   brand: :byakuya,
-                  rate: 0.001,
+                  ratio: 0.001,
                 ),
               ],
-              dekoji_rate: 0.18,
+              dekoji_ratio: 0.18,
               interval_days: 0,
             ),
             kake: Kake.create(
-              raw: 300,
+              weight: 300,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               interval_days: 2,
             ),
             water: Water.create(
@@ -663,30 +663,30 @@ module Example
           ),
           Step.create(
             koji: Koji.create(
-              raw: 110,
+              weight: 110,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               tanekojis: [
                 Tanekoji.create(
                   brand: :byakuya,
-                  rate: 0.001,
+                  ratio: 0.001,
                 ),
               ],
-              dekoji_rate: 0.18,
+              dekoji_ratio: 0.18,
               interval_days: 0,
             ),
             kake: Kake.create(
-              raw: 490,
+              weight: 490,
               brand: :yamadanishiki,
               made_in: :hyogo,
               year: 2020,
-              soaked_rate: 0.33,
-              steamed_rate: 0.41,
-              cooled_rate: 0.33,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
               interval_days: 1,
             ),
             water: Water.create(
@@ -707,24 +707,24 @@ module Example
   class KojiEvent
     include Toji::Event::KojiEvent
 
-    def initialize(product:, date:, index:, step_indexes:, raw:)
+    def initialize(product:, date:, index:, step_indexes:, weight:)
       @product = product
       @date = date
       @index = index
       @step_indexes = step_indexes
-      @raw = raw
+      @weight = weight
     end
   end
 
   class KakeEvent
     include Toji::Event::KakeEvent
 
-    def initialize(product:, date:, index:, step_indexes:, raw:)
+    def initialize(product:, date:, index:, step_indexes:, weight:)
       @product = product
       @date = date
       @index = index
       @step_indexes = step_indexes
-      @raw = raw
+      @weight = weight
     end
   end
 

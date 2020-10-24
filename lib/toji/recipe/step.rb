@@ -10,7 +10,7 @@ module Toji
 
       # 総米
       def rice_total
-        kake&.raw.to_f + koji&.raw.to_f
+        kake&.weight.to_f + koji&.weight.to_f
       end
 
       # 麹歩合
@@ -18,8 +18,8 @@ module Toji
       # 留め仕込みまでの総米重量の20〜22%が標準である
       # なお、留め仕込みまでの麹歩合が20%を下回ると蒸米の溶解糖化に影響が出るので注意がいる
       # 出典: 酒造教本 P95
-      def koji_rate
-        val = koji&.raw.to_f / rice_total
+      def koji_ratio
+        val = koji&.weight.to_f / rice_total
         val.nan? ? 0.0 : val
       end
 
@@ -32,7 +32,7 @@ module Toji
       # 全体: 留までの総米に対し120〜130%、標準は125%、高級酒は130〜145%である
       #
       # 出典: 酒造教本 P96
-      def water_rate
+      def water_ratio
         val = water&.weight.to_f / rice_total
         val.nan? ? 0.0 : val
       end
@@ -43,10 +43,10 @@ module Toji
         end
 
         if koji
-          self.koji.raw = koji.raw.to_f.round(ndigit, half: half)
+          self.koji.weight = koji.weight.to_f.round(ndigit, half: half)
         end
         if kake
-          self.kake.raw = kake.raw.to_f.round(ndigit, half: half)
+          self.kake.weight = kake.weight.to_f.round(ndigit, half: half)
         end
         if water
           self.water.weight = water.weight.to_f.round(ndigit, half: half)
@@ -77,8 +77,8 @@ module Toji
 
           # CAUTION: dst.xxxがnilだった場合、dst.xxxはnilのままになる
           dst = self.dup
-          dst.koji&.raw += other.koji&.raw || 0
-          dst.kake&.raw += other.kake&.raw || 0
+          dst.koji&.weight += other.koji&.weight || 0
+          dst.kake&.weight += other.kake&.weight || 0
           dst.water&.weight += other.water&.weight || 0
           dst.lactic_acid&.weight += other.lactic_acid&.weight || 0
           dst.alcohol&.weight += other.alcohol&.weight || 0
@@ -95,8 +95,8 @@ module Toji
           Utils.check_dup(self)
 
           dst = self.dup
-          dst.koji&.raw *= other
-          dst.kake&.raw *= other
+          dst.koji&.weight *= other
+          dst.kake&.weight *= other
           dst.water&.weight *= other
           dst.lactic_acid&.weight *= other
           dst.alcohol&.weight *= other

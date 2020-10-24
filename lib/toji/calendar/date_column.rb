@@ -15,8 +15,8 @@ module Toji
       def text
         @rice_events.map {|ev|
           name = ev.product.name
-          raw = "%.17g" % ev.raw
-          "#{name}: #{raw}"
+          weight = "%.17g" % ev.weight
+          "#{name}: #{weight}"
         }.join("<br>")
       end
     end

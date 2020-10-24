@@ -13,10 +13,10 @@ module Toji
       # 突き破精麹を造るには、種麹の量を麹米100kgあたり種麹80gとする
       #
       # 出典: 酒造教本 P66
-      attr_accessor :rate
+      attr_accessor :ratio
 
       def weight
-        koji.raw * rate
+        koji.weight * ratio
       end
     end
   end

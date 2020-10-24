@@ -19,13 +19,13 @@ table = Terminal::Table.new do |t|
   t << :separator
   t << ["[合計]"]
   t << ["総米(g)"] + recipe.steps.map(&:rice_total)
-  t << ["麹歩合(%)"] + recipe.steps.map{|s| s.koji_rate * 100}.map{|v| v&.round(2)}
-  t << ["汲水歩合(%)"] + recipe.steps.map{|s| s.water_rate * 100}.map{|v| v&.round(2)}
+  t << ["麹歩合(%)"] + recipe.steps.map{|s| s.koji_ratio * 100}.map{|v| v&.round(2)}
+  t << ["汲水歩合(%)"] + recipe.steps.map{|s| s.water_ratio * 100}.map{|v| v&.round(2)}
   t << :separator
   t << ["[累計]"]
   t << ["総米(g)"] + recipe.cumulative_rice_totals
-  t << ["白米比率"] + recipe.rice_rates.map{|v| v&.round(2)}
-  t << ["酒母歩合(%)"] + recipe.cumulative_moto_rates.map{|s| s * 100}.map{|v| v&.round(2)}
+  t << ["白米比率"] + recipe.rice_ratios.map{|v| v&.round(2)}
+  t << ["酒母歩合(%)"] + recipe.cumulative_moto_ratios.map{|s| s * 100}.map{|v| v&.round(2)}
   t << ["タンク内容量(ml)"] + recipe.steps.map {|s|
     kake = Toji::Ingredient::Kake::Expected.create(s.kake)
     koji = Toji::Ingredient::Koji::Expected.create(s.koji)
@@ -47,7 +47,7 @@ table = Terminal::Table.new do |t|
 
   t << ["工程", "原料"] + step_names
   t << :separator
-  t << ["洗米・浸漬", "白米(g)"] + kakes.map(&:raw).map{|v| v&.round(2)}
+  t << ["洗米・浸漬", "白米(g)"] + kakes.map(&:weight).map{|v| v&.round(2)}
   t << ["", "吸水増加量(ml)"] + kakes.map(&:soaking_water).map{|v| v&.round(2)}
   t << :separator
   t << ["水切り", "浸漬米(g)"] + kakes.map(&:soaked).map{|v| v&.round(2)}
@@ -66,7 +66,7 @@ table = Terminal::Table.new do |t|
 
   t << ["工程", "原料"] + step_names
   t << :separator
-  t << ["洗米・浸漬", "白米(g)"] + kojis.map(&:raw).map{|v| v&.round(2)}
+  t << ["洗米・浸漬", "白米(g)"] + kojis.map(&:weight).map{|v| v&.round(2)}
   t << ["", "吸水増加量(ml)"] + kojis.map(&:soaking_water).map{|v| v&.round(2)}
   t << :separator
   t << ["水切り", "浸漬米(g)"] + kojis.map(&:soaked).map{|v| v&.round(2)}

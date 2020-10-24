@@ -11,10 +11,10 @@ module Toji
       # 出麹歩合17〜19%のものが麹菌の繁殖のほどよい麹である
       #
       # 出典: 酒造教本 P67
-      attr_accessor :dekoji_rate
+      attr_accessor :dekoji_ratio
 
       def dekoji
-        raw + raw * dekoji_rate
+        weight + weight * dekoji_ratio
       end
     end
   end

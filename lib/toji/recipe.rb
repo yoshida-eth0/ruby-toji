@@ -12,9 +12,9 @@ module Toji
     attr_accessor :ab_expects
 
     def scale(rice_total)
-      rate = rice_total / steps.map(&:rice_total).sum
+      ratio = rice_total / steps.map(&:rice_total).sum
       new_steps = steps.map {|step|
-        step * rate
+        step * ratio
       }
 
       self.class.new.tap {|o|
@@ -52,7 +52,7 @@ module Toji
     end
 
     # 酒母歩合の累計
-    def cumulative_moto_rates
+    def cumulative_moto_ratios
       rice_total = steps.map(&:rice_total)
       moto = rice_total.first
 
@@ -67,8 +67,8 @@ module Toji
     # 汲水歩合が大きい高温糖化酒母では6%程度である
     #
     # 出典: 酒造教本 P96
-    def moto_rate
-      cumulative_moto_rates.last || 0.0
+    def moto_ratio
+      cumulative_moto_ratios.last || 0.0
     end
 
     # 白米比率
@@ -79,7 +79,7 @@ module Toji
     #   湧き抑え型     1   2   4   7  長期醪、甘口、おだやかな酒質
     #
     # 出典: 酒造教本 P95
-    def rice_rates
+    def rice_ratios
       steps.map {|step|
         step.rice_total / steps.first.rice_total
       }
@@ -87,7 +87,7 @@ module Toji
 
     def table_data
       headers = [""] + steps.map.with_index{|s,i| :"step#{i}"} + [:total]
-      keys = [[:rice_total, :itself], [:kake, :raw], [:koji, :raw], [:alcohol, :weight], [:water, :weight], [:lactic_acid, :weight]]
+      keys = [[:rice_total, :itself], [:kake, :weight], [:koji, :weight], [:alcohol, :weight], [:water, :weight], [:lactic_acid, :weight]]
 
       cells = [keys.map(&:first)]
       cells += steps.map {|step|

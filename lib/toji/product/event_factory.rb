@@ -2,11 +2,11 @@ module Toji
   module Product
     module EventFactory
 
-      def create_koji_event(date:, index:, step_indexes:, raw:)
+      def create_koji_event(date:, index:, step_indexes:, weight:)
         raise Error, "implement required: create_koji_event"
       end
 
-      def create_kake_event(date:, index:, step_indexes:, raw:)
+      def create_kake_event(date:, index:, step_indexes:, weight:)
         raise Error, "implement required: create_kake_event"
       end
 
@@ -22,7 +22,7 @@ module Toji
             koji: recipe.steps[i].koji,
           }
         }.select {|event|
-          0<event[:koji]&.raw.to_f
+          0<event[:koji]&.weight.to_f
         }.group_by{|event|
           event[:date]
         }.map {|date,events|
@@ -30,7 +30,7 @@ module Toji
             date: date,
             index: koji_dates.find_index(date),
             step_indexes: events.map{|ev| ev[:index]},
-            raw: events.map{|ev| ev[:koji].raw}.sum,
+            weight: events.map{|ev| ev[:koji].weight}.sum,
           )
         }
       end
@@ -43,7 +43,7 @@ module Toji
             kake: recipe.steps[i].kake,
           }
         }.select {|event|
-          0<event[:kake]&.raw.to_f
+          0<event[:kake]&.weight.to_f
         }.group_by{|event|
           event[:date]
         }.map {|date,events|
@@ -51,7 +51,7 @@ module Toji
             date: date,
             index: kake_dates.find_index(date),
             step_indexes: events.map{|ev| ev[:index]},
-            raw: events.map{|ev| ev[:kake].raw}.sum,
+            weight: events.map{|ev| ev[:kake].weight}.sum,
           )
         }
       end

@@ -11,8 +11,8 @@ module Toji
         :koji
       end
 
-      def dekoji_rate
-        (dekoji.to_f - raw.to_f) / raw.to_f
+      def dekoji_ratio
+        (dekoji.to_f - weight.to_f) / weight.to_f
       end
     end
   end

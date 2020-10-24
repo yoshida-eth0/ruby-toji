@@ -2,7 +2,7 @@ module Toji
   module Ingredient
     module Rice
       # 白米
-      attr_accessor :raw
+      attr_accessor :weight
 
       # 品種、産地、年度
       attr_accessor :brand
@@ -14,10 +14,10 @@ module Toji
       # 標準的な白米吸水率は掛米で30〜35%、麹米で33%前後で許容範囲はかなり狭い
       #
       # 出典: 酒造教本 P38
-      attr_accessor :soaked_rate
+      attr_accessor :soaking_ratio
 
       def soaked
-        raw + raw * soaked_rate
+        weight + weight * soaking_ratio
       end
 
       # 蒸米吸水率
@@ -27,10 +27,10 @@ module Toji
       # 蒸米吸水率は麹米及び酒母米で41〜43%、掛米は39〜40%で、吟醸造りの場合は数%低い
       #
       # 出典: 酒造教本 P48
-      attr_accessor :steamed_rate
+      attr_accessor :steaming_ratio
 
       def steamed
-        raw + raw * steamed_rate
+        weight + weight * steaming_ratio
       end
 
       # 放冷
@@ -40,10 +40,10 @@ module Toji
       #
       # 麹を造るのに適した蒸米は、引込時の吸水率が33%を理想とし、許容幅はプラスマイナス1%である
       # 出典: 酒造教本 P59
-      attr_accessor :cooled_rate
+      attr_accessor :cooling_ratio
 
       def cooled
-        raw + raw * cooled_rate
+        weight + weight * cooling_ratio
       end
     end
   end
