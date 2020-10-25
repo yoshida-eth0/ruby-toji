@@ -1,8 +1,8 @@
-require 'toji/event/base'
+require 'toji/schedule/base'
 
 module Toji
-  module Event
-    module RiceEvent
+  module Schedule
+    module RiceSchedule
       include Base
 
       attr_reader :rice_type

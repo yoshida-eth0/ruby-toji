@@ -1,5 +1,0 @@
-require 'toji/event/base'
-require 'toji/event/rice_event'
-require 'toji/event/koji_event'
-require 'toji/event/kake_event'
-require 'toji/event/action_event'

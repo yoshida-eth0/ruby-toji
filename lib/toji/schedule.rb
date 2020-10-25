@@ -1,0 +1,5 @@
+require 'toji/schedule/base'
+require 'toji/schedule/rice_schedule'
+require 'toji/schedule/koji_schedule'
+require 'toji/schedule/kake_schedule'
+require 'toji/schedule/action_schedule'

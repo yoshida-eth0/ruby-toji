@@ -1,4 +1,4 @@
-require 'toji/product/event_factory'
+require 'toji/product/schedule_factory'
 
 module Toji
   module Product
@@ -6,9 +6,9 @@ module Toji
     attr_accessor :recipe
     attr_accessor :base_date
 
-    attr_accessor :koji_events
-    attr_accessor :kake_events
-    attr_accessor :action_events
+    attr_accessor :koji_schedules
+    attr_accessor :kake_schedules
+    attr_accessor :action_schedules
 
     def koji_dates
       date = base_date
@@ -31,12 +31,12 @@ module Toji
       }
     end
 
-    def rice_events
-      koji_events + kake_events
+    def rice_schedules
+      koji_schedules + kake_schedules
     end
 
-    def events
-      rice_events + action_events
+    def schedules
+      rice_schedules + action_schedules
     end
   end
 end

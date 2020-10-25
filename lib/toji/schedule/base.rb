@@ -1,5 +1,5 @@
 module Toji
-  module Event
+  module Schedule
     module Base
       attr_reader :product
       attr_reader :date

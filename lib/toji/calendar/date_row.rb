@@ -11,16 +11,16 @@ module Toji
         @kakes = []
       end
 
-      def <<(event)
-        case event.rice_type
+      def <<(schedule)
+        case schedule.rice_type
         when :koji
-          index = event.index
+          index = schedule.index
           @kojis[index] ||= DateColumn.new
-          @kojis[index] << event
+          @kojis[index] << schedule
         when :kake
-          index = event.index
+          index = schedule.index
           @kakes[index] ||= DateColumn.new
-          @kakes[index] << event
+          @kakes[index] << schedule
         end
       end
       alias_method :add, :<<

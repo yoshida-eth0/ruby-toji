@@ -1,9 +1,9 @@
-require 'toji/event/rice_event'
+require 'toji/schedule/rice_schedule'
 
 module Toji
-  module Event
-    module KojiEvent
-      include RiceEvent
+  module Schedule
+    module KojiSchedule
+      include RiceSchedule
 
       attr_reader :dekoji
 

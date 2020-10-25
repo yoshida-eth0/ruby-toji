@@ -190,21 +190,21 @@ class ProductTest < Minitest::Test
     assert_equal [Time.mktime(2020, 3, 31)], @product.action_dates
   end
 
-  def test_rice_events
-    rice_events = @product.rice_events
-    event1 = rice_events[1]
-    event4 = rice_events[4]
+  def test_rice_schedules
+    rice_schedules = @product.rice_schedules
+    schedule1 = rice_schedules[1]
+    schedule4 = rice_schedules[4]
 
-    assert_equal 7, rice_events.length
+    assert_equal 7, rice_schedules.length
 
-    assert_equal Time.mktime(2020, 2, 24), event1.date
-    assert_equal :koji, event1.rice_type
-    #assert_equal 180, event1.weight
-    assert_equal 3, event1.step_indexes.length
+    assert_equal Time.mktime(2020, 2, 24), schedule1.date
+    assert_equal :koji, schedule1.rice_type
+    #assert_equal 180, schedule1.weight
+    assert_equal 3, schedule1.step_indexes.length
 
-    assert_equal Time.mktime(2020, 3, 3), event4.date
-    assert_equal :kake, event4.rice_type
-    #assert_equal 215, event4.weight
-    assert_equal 1, event4.step_indexes.length
+    assert_equal Time.mktime(2020, 3, 3), schedule4.date
+    assert_equal :kake, schedule4.rice_type
+    #assert_equal 215, schedule4.weight
+    assert_equal 1, schedule4.step_indexes.length
   end
 end

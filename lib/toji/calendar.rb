@@ -16,26 +16,26 @@ module Toji
     alias_method :add, :<<
 
     def date_rows
-      events = @products.map{|product| product.rice_events}.flatten
+      schedules = @products.map{|product| product.rice_schedules}.flatten
 
       result = {}
-      events.each {|event|
-        result[event.date] ||= DateRow.new(event.date)
-        result[event.date] << event
+      schedules.each {|schedule|
+        result[schedule.date] ||= DateRow.new(schedule.date)
+        result[schedule.date] << schedule
       }
 
       result
     end
 
     def table_data
-      koji_events = @products.map{|product| product.koji_events}.flatten
-      kake_events = @products.map{|product| product.kake_events}.flatten
-      events = koji_events + kake_events
+      koji_schedules = @products.map{|product| product.koji_schedules}.flatten
+      kake_schedules = @products.map{|product| product.kake_schedules}.flatten
+      schedules = koji_schedules + kake_schedules
 
-      koji_len = koji_events.map(&:index).max + 1
-      kake_len = kake_events.map(&:index).max + 1
-      min_date = events.map(&:date).min
-      max_date = events.map(&:date).max
+      koji_len = koji_schedules.map(&:index).max + 1
+      kake_len = kake_schedules.map(&:index).max + 1
+      min_date = schedules.map(&:date).min
+      max_date = schedules.map(&:date).max
 
       headers = [:date]
 

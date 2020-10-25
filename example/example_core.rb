@@ -6,7 +6,7 @@ module Example
 
   class Product
     include Toji::Product
-    include Toji::Product::EventFactory
+    include Toji::Product::ScheduleFactory
 
     attr_accessor :description
     attr_accessor :color
@@ -20,16 +20,16 @@ module Example
       @color = color
     end
 
-    def create_koji_event(date:, index:, step_indexes:, weight:)
-      KojiEvent.new(product: self, date: date, index: index, step_indexes: step_indexes, weight: weight)
+    def create_koji_schedule(date:, index:, step_indexes:, weight:)
+      KojiSchedule.new(product: self, date: date, index: index, step_indexes: step_indexes, weight: weight)
     end
 
-    def create_kake_event(date:, index:, step_indexes:, weight:)
-      KakeEvent.new(product: self, date: date, index: index, step_indexes: step_indexes, weight: weight)
+    def create_kake_schedule(date:, index:, step_indexes:, weight:)
+      KakeSchedule.new(product: self, date: date, index: index, step_indexes: step_indexes, weight: weight)
     end
 
-    def create_action_event(date:, type:, index:)
-      ActionEvent.new(product: self, date: date, type: type, index: index)
+    def create_action_schedule(date:, type:, index:)
+      ActionSchedule.new(product: self, date: date, type: type, index: index)
     end
 
     def self.create(args)
@@ -732,8 +732,8 @@ module Example
   end
 
 
-  class KojiEvent
-    include Toji::Event::KojiEvent
+  class KojiSchedule
+    include Toji::Schedule::KojiSchedule
 
     def initialize(product:, date:, index:, step_indexes:, weight:)
       @product = product
@@ -744,8 +744,8 @@ module Example
     end
   end
 
-  class KakeEvent
-    include Toji::Event::KakeEvent
+  class KakeSchedule
+    include Toji::Schedule::KakeSchedule
 
     def initialize(product:, date:, index:, step_indexes:, weight:)
       @product = product
@@ -756,8 +756,8 @@ module Example
     end
   end
 
-  class ActionEvent
-    include Toji::Event::ActionEvent
+  class ActionSchedule
+    include Toji::Schedule::ActionSchedule
 
     def initialize(product:, date:, type:, index:)
       @product = product
