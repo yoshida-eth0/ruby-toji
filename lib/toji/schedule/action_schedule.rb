@@ -1,12 +1,9 @@
-require 'toji/schedule/base'
-
 module Toji
   module Schedule
     module ActionSchedule
-      include Schedule
+      include Base
 
       attr_reader :index
-
     end
   end
 end

@@ -1,5 +1,3 @@
-require 'toji/schedule/rice_schedule'
-
 module Toji
   module Schedule
     module KakeSchedule

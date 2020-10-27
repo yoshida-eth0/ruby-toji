@@ -1,5 +1,3 @@
-require 'toji/schedule/base'
-
 module Toji
   module Schedule
     module RiceSchedule
