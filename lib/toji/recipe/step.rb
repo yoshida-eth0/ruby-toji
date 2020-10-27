@@ -1,16 +1,31 @@
 module Toji
   module Recipe
     module Step
-      attr_accessor :koji
-      attr_accessor :kake
-      attr_accessor :water
-      attr_accessor :lactic_acid
-      attr_accessor :alcohol
-      attr_accessor :yeast
+      attr_accessor :kojis
+      attr_accessor :kakes
+      attr_accessor :waters
+      attr_accessor :lactic_acids
+      attr_accessor :alcohols
+      attr_accessor :yeasts
+
+      # 麹米
+      def koji_total
+        (kojis || []).map(&:weight).map(&:to_f).sum.to_f
+      end
+
+      # 掛米
+      def kake_total
+        (kakes || []).map(&:weight).map(&:to_f).sum.to_f
+      end
 
       # 総米
       def rice_total
-        kake&.weight.to_f + koji&.weight.to_f
+        koji_total + kake_total
+      end
+
+      # 汲水
+      def water_total
+        (waters || []).map(&:weight).map(&:to_f).sum.to_f
       end
 
       # 麹歩合
@@ -19,7 +34,7 @@ module Toji
       # なお、留め仕込みまでの麹歩合が20%を下回ると蒸米の溶解糖化に影響が出るので注意がいる
       # 出典: 酒造教本 P95
       def koji_ratio
-        val = koji&.weight.to_f / rice_total
+        val = koji_total / rice_total
         val.nan? ? 0.0 : val
       end
 
@@ -33,7 +48,7 @@ module Toji
       #
       # 出典: 酒造教本 P96
       def water_ratio
-        val = water&.weight.to_f / rice_total
+        val = water_total / rice_total
         val.nan? ? 0.0 : val
       end
 
@@ -42,24 +57,24 @@ module Toji
           mini_ndigit = ndigit + 3
         end
 
-        if koji
-          self.koji.weight = koji.weight.to_f.round(ndigit, half: half)
-        end
-        if kake
-          self.kake.weight = kake.weight.to_f.round(ndigit, half: half)
-        end
-        if water
-          self.water.weight = water.weight.to_f.round(ndigit, half: half)
-        end
-        if lactic_acid
-          self.lactic_acid.weight = lactic_acid.weight.to_f.round(mini_ndigit, half: half)
-        end
-        if alcohol
-          self.alcohol.weight = alcohol.weight.to_f.round(ndigit, half: half)
-        end
-        if yeast
-          self.yeast.weight = yeast.weight.to_f.round(mini_ndigit, half: half)
-        end
+        kojis&.each {|koji|
+          koji.weight = koji.weight.to_f.round(ndigit, half: half)
+        }
+        kakes&.each {|kake|
+          kake.weight = kake.weight.to_f.round(ndigit, half: half)
+        }
+        waters&.each {|water|
+          water.weight = water.weight.to_f.round(ndigit, half: half)
+        }
+        lactic_acids&.each {|lactic_acid|
+          lactic_acid.weight = lactic_acid.weight.to_f.round(mini_ndigit, half: half)
+        }
+        alcohols&.each {|alcohol|
+          alcohol.weight = alcohol.weight.to_f.round(ndigit, half: half)
+        }
+        yeasts&.each {|yeast|
+          yeast.weight = yeast.weight.to_f.round(mini_ndigit, half: half)
+        }
 
         self
       end
@@ -74,15 +89,18 @@ module Toji
       def +(other)
         if Step===other
           Utils.check_dup(self)
+          Utils.check_dup(other)
 
-          # CAUTION: dst.xxxがnilだった場合、dst.xxxはnilのままになる
           dst = self.dup
-          dst.koji&.weight += other.koji&.weight || 0
-          dst.kake&.weight += other.kake&.weight || 0
-          dst.water&.weight += other.water&.weight || 0
-          dst.lactic_acid&.weight += other.lactic_acid&.weight || 0
-          dst.alcohol&.weight += other.alcohol&.weight || 0
-          dst.yeast&.weight += other.yeast&.weight || 0
+          other = other.dup
+
+          dst.kojis = Utils.merge_ingredients(dst.kojis, other.kojis)
+          dst.kakes = Utils.merge_ingredients(dst.kakes, other.kakes)
+          dst.waters = Utils.merge_ingredients(dst.waters, other.waters)
+          dst.lactic_acids = Utils.merge_ingredients(dst.lactic_acids, other.lactic_acids)
+          dst.alcohols = Utils.merge_ingredients(dst.alcohols, other.alcohols)
+          dst.yeasts = Utils.merge_ingredients(dst.yeasts, other.yeasts)
+
           dst
         else
           x, y = other.coerce(self)
@@ -95,12 +113,24 @@ module Toji
           Utils.check_dup(self)
 
           dst = self.dup
-          dst.koji&.weight *= other
-          dst.kake&.weight *= other
-          dst.water&.weight *= other
-          dst.lactic_acid&.weight *= other
-          dst.alcohol&.weight *= other
-          dst.yeast&.weight *= other
+          dst.kojis&.each {|koji|
+            koji.weight *= other
+          }
+          dst.kakes&.each {|kake|
+            kake.weight *= other
+          }
+          dst.waters&.each {|water|
+            water.weight *= other
+          }
+          dst.lactic_acids&.each {|lactic_acid|
+            lactic_acid.weight *= other
+          }
+          dst.alcohols&.each {|alcohol|
+            alcohol.weight *= other
+          }
+          dst.yeasts&.each {|yeast|
+            yeast.weight *= other
+          }
           dst
         else
           x, y = other.coerce(self)

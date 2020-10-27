@@ -1,6 +1,8 @@
 module Toji
   module Ingredient
     module Yeast
+      include Base
+
       # 酵母
       attr_accessor :weight
 
@@ -9,6 +11,10 @@ module Toji
 
       # 酵母名、協会酵母番号
       attr_accessor :brand
+
+      def group_key
+        [brand, unit].join(":")
+      end
     end
   end
 end

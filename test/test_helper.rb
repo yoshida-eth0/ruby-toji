@@ -11,16 +11,37 @@ class Product
     @base_date = base_date
   end
 
-  def create_koji_schedule(date:, index:, step_indexes:, weight:)
-    KojiSchedule.new(product: self, date: date, index: index, step_indexes: step_indexes, weight: weight)
+  def create_koji_schedule(date:, step_indexes:, kojis:)
+    expect = kojis.first.dup
+    expect.weight = kojis.map(&:weight).sum
+
+    KojiSchedule.new(
+      product: self,
+      date: date,
+      step_indexes: step_indexes,
+      expect: expect,
+    )
   end
 
-  def create_kake_schedule(date:, index:, step_indexes:, weight:)
-    KakeSchedule.new(product: self, date: date, index: index, step_indexes: step_indexes, weight: weight)
+  def create_kake_schedule(date:, step_indexes:, kakes:)
+    expect = kakes.first.dup
+    expect.weight = kakes.map(&:weight).sum
+
+    KakeSchedule.new(
+      product: self,
+      date: date,
+      step_indexes: step_indexes,
+      expect: expect,
+    )
   end
 
-  def create_action_schedule(date:, type:, index:)
-    ActionSchedule.new(product: self, date: date, type: type, index: index)
+  def create_action_schedule(date:, action_index:, action:)
+    ActionSchedule.new(
+      product: self,
+      date: date,
+      type: action.type,
+      action_index: index,
+    )
   end
 end
 
@@ -47,22 +68,22 @@ class Step
   include Toji::Recipe::Step
 
   def initialize_copy(obj)
-    self.koji = obj.koji.dup
-    self.kake = obj.kake.dup
-    self.water = obj.water.dup
-    self.lactic_acid = obj.lactic_acid.dup
-    self.alcohol = obj.alcohol.dup
-    self.yeast = obj.yeast.dup
+    self.kojis = obj.kojis&.map(&:dup) || []
+    self.kakes = obj.kakes&.map(&:dup) || []
+    self.waters = obj.waters&.map(&:dup) || []
+    self.lactic_acids = obj.lactic_acids&.map(&:dup) || []
+    self.alcohols = obj.alcohols&.map(&:dup) || []
+    self.yeasts = obj.yeasts&.map(&:dup) || []
   end
 
-  def self.create(koji: nil, kake: nil, water: nil, lactic_acid: nil, alcohol: nil, yeast: nil)
+  def self.create(kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
     new.tap {|o|
-      o.koji = koji
-      o.kake = kake
-      o.water = water
-      o.lactic_acid = lactic_acid
-      o.alcohol = alcohol
-      o.yeast = yeast
+      o.kojis = kojis
+      o.kakes = kakes
+      o.waters = waters
+      o.lactic_acids = lactic_acids
+      o.alcohols = alcohols
+      o.yeasts = yeasts
     }
   end
 end
@@ -220,35 +241,33 @@ end
 class KojiSchedule
   include Toji::Schedule::KojiSchedule
 
-  def initialize(product:, date:, index:, step_indexes:, weight:)
+  def initialize(product:, date:, step_indexes:, expect:)
     @product = product
     @date = date
-    @index = index
     @step_indexes = step_indexes
-    @weight = weight
+    @expect = expect
   end
 end
 
 class KakeSchedule
   include Toji::Schedule::KakeSchedule
 
-  def initialize(product:, date:, index:, step_indexes:, weight:)
+  def initialize(product:, date:, step_indexes:, expect:)
     @product = product
     @date = date
-    @index = index
     @step_indexes = step_indexes
-    @weight = weight
+    @expect = expect
   end
 end
 
 class ActionSchedule
   include Toji::Schedule::ActionSchedule
 
-  def initialize(product:, date:, type:, index:)
+  def initialize(product:, date:, type:, action_index:)
     @product = product
     @date = date
     @type = type
-    @index = index
+    @action_index = action_index
   end
 end
 

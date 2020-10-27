@@ -1,3 +1,4 @@
+require 'toji/ingredient/base'
 require 'toji/ingredient/rice'
 require 'toji/ingredient/kake'
 require 'toji/ingredient/koji'

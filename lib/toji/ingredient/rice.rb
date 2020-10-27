@@ -1,6 +1,8 @@
 module Toji
   module Ingredient
     module Rice
+      include Base
+
       # 白米
       attr_accessor :weight
 
@@ -46,6 +48,9 @@ module Toji
       def cooled
         weight + weight * cooling_ratio
       end
+
+      # Product.base_dateからの日数差
+      attr_accessor :interval_days
     end
   end
 end

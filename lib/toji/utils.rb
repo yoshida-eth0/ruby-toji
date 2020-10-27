@@ -15,5 +15,29 @@ module Toji
         end
       end
     end
+
+    def self.merge_ingredients(ingredients1, ingredients2)
+      result = {}
+
+      ingredients1&.each {|src|
+        dst = result[src.group_key]
+        if dst
+          dst.weight = dst.weight.to_f + src.weight.to_f
+        else
+          result[src.group_key] = src
+        end
+      }
+
+      ingredients2&.each {|src|
+        dst = result[src.group_key]
+        if dst
+          dst.weight = dst.weight.to_f + src.weight.to_f
+        else
+          result[src.group_key] = src.dup
+        end
+      }
+
+      result.values
+    end
   end
 end

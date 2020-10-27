@@ -1,6 +1,8 @@
 module Toji
   module Ingredient
     module Tanekoji
+      include Base
+
       # 麹(belongs_to)
       attr_accessor :koji
 
@@ -17,6 +19,10 @@ module Toji
 
       def weight
         koji.weight * ratio
+      end
+
+      def group_key
+        [brand, ratio].join(":")
       end
     end
   end

@@ -16,6 +16,13 @@ module Toji
       def dekoji
         weight + weight * dekoji_ratio
       end
+
+      # Scheduleへのグループ識別子
+      def group_key
+        keys1 = [brand, polishing_ratio, made_in, year, soaking_ratio, steaming_ratio, cooling_ratio, dekoji_ratio]
+        keys2 = tanekojis&.map(&:group_key)&.sort || []
+        (keys1 + keys2).join(":")
+      end
     end
   end
 end

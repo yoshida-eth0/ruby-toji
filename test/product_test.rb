@@ -7,162 +7,194 @@ class ProductTest < Minitest::Test
     @recipe = Recipe.create(
       [
         Step.create(
-          koji: Koji.create(
-            weight: 20,
-            brand: :yamadanishiki,
-            polishing_ratio: 0.55,
-            made_in: :hyogo,
-            year: 2020,
-            soaking_ratio: 0.33,
-            steaming_ratio: 0.41,
-            cooling_ratio: 0.33,
-            tanekojis: [
-              Tanekoji.create(
-                brand: :byakuya,
-                ratio: 0.001,
-              ),
-            ],
-            dekoji_ratio: 0.18,
-            interval_days: 0,
-          ),
-          kake: Kake.create(
-            weight: 45,
-            brand: :yamadanishiki,
-            polishing_ratio: 0.55,
-            made_in: :hyogo,
-            year: 2020,
-            soaking_ratio: 0.33,
-            steaming_ratio: 0.41,
-            cooling_ratio: 0.33,
-            interval_days: 5,
-          ),
-          water: Water.create(
-            weight: 70,
-          ),
-          lactic_acid: LacticAcid.create(
-            weight: 70/100.0*0.685,
-          ),
-          yeast: Yeast.create(
-            weight: (45+20)/100.0*1.5,
-          ),
+          kojis: [
+            Koji.create(
+              weight: 20,
+              brand: :yamadanishiki,
+              polishing_ratio: 0.55,
+              made_in: :hyogo,
+              year: 2020,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
+              tanekojis: [
+                Tanekoji.create(
+                  brand: :byakuya,
+                  ratio: 0.001,
+                ),
+              ],
+              dekoji_ratio: 0.18,
+              interval_days: 0,
+            ),
+          ],
+          kakes: [
+            Kake.create(
+              weight: 45,
+              brand: :yamadanishiki,
+              polishing_ratio: 0.55,
+              made_in: :hyogo,
+              year: 2020,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
+              interval_days: 5,
+            ),
+          ],
+          waters: [
+            Water.create(
+              weight: 70,
+            ),
+          ],
+          lactic_acids: [
+            LacticAcid.create(
+              weight: 70/100.0*0.685,
+            ),
+          ],
+          yeasts: [
+            Yeast.create(
+              weight: (45+20)/100.0*1.5,
+            ),
+          ],
         ),
         Step.create(
-          koji: Koji.create(
-            weight: 40,
-            brand: :yamadanishiki,
-            polishing_ratio: 0.55,
-            made_in: :hyogo,
-            year: 2020,
-            soaking_ratio: 0.33,
-            steaming_ratio: 0.41,
-            cooling_ratio: 0.33,
-            tanekojis: [
-              Tanekoji.create(
-                brand: :byakuya,
-                ratio: 0.001,
-              ),
-            ],
-            dekoji_ratio: 0.18,
-            interval_days: 14,
-          ),
-          kake: Kake.create(
-            weight: 100,
-            brand: :yamadanishiki,
-            polishing_ratio: 0.55,
-            made_in: :hyogo,
-            year: 2020,
-            soaking_ratio: 0.33,
-            steaming_ratio: 0.41,
-            cooling_ratio: 0.33,
-            interval_days: 15,
-          ),
-          water: Water.create(
-            weight: 130,
-          ),
+          kojis: [
+            Koji.create(
+              weight: 40,
+              brand: :yamadanishiki,
+              polishing_ratio: 0.55,
+              made_in: :hyogo,
+              year: 2020,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
+              tanekojis: [
+                Tanekoji.create(
+                  brand: :byakuya,
+                  ratio: 0.001,
+                ),
+              ],
+              dekoji_ratio: 0.18,
+              interval_days: 14,
+            ),
+          ],
+          kakes: [
+            Kake.create(
+              weight: 100,
+              brand: :yamadanishiki,
+              polishing_ratio: 0.55,
+              made_in: :hyogo,
+              year: 2020,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
+              interval_days: 20,
+            ),
+          ],
+          waters: [
+            Water.create(
+              weight: 130,
+            ),
+          ],
         ),
         Step.create(
-          koji: Koji.create(
-            weight: 60,
-            brand: :yamadanishiki,
-            polishing_ratio: 0.55,
-            made_in: :hyogo,
-            year: 2020,
-            soaking_ratio: 0.33,
-            steaming_ratio: 0.41,
-            cooling_ratio: 0.33,
-            tanekojis: [
-              Tanekoji.create(
-                brand: :byakuya,
-                ratio: 0.001,
-              ),
-            ],
-            dekoji_ratio: 0.18,
-            interval_days: 0,
-          ),
-          kake: Kake.create(
-            weight: 215,
-            brand: :yamadanishiki,
-            polishing_ratio: 0.55,
-            made_in: :hyogo,
-            year: 2020,
-            soaking_ratio: 0.33,
-            steaming_ratio: 0.41,
-            cooling_ratio: 0.33,
-            interval_days: 2,
-          ),
-          water: Water.create(
-            weight: 330,
-          ),
+          kojis: [
+            Koji.create(
+              weight: 60,
+              brand: :yamadanishiki,
+              polishing_ratio: 0.55,
+              made_in: :hyogo,
+              year: 2020,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
+              tanekojis: [
+                Tanekoji.create(
+                  brand: :byakuya,
+                  ratio: 0.001,
+                ),
+              ],
+              dekoji_ratio: 0.18,
+              interval_days: 14,
+            ),
+          ],
+          kakes: [
+            Kake.create(
+              weight: 215,
+              brand: :yamadanishiki,
+              polishing_ratio: 0.55,
+              made_in: :hyogo,
+              year: 2020,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
+              interval_days: 22,
+            ),
+          ],
+          waters: [
+            Water.create(
+              weight: 330,
+            ),
+          ],
         ),
         Step.create(
-          koji: Koji.create(
-            weight: 80,
-            brand: :yamadanishiki,
-            polishing_ratio: 0.55,
-            made_in: :hyogo,
-            year: 2020,
-            soaking_ratio: 0.33,
-            steaming_ratio: 0.41,
-            cooling_ratio: 0.33,
-            tanekojis: [
-              Tanekoji.create(
-                brand: :byakuya,
-                ratio: 0.001,
-              ),
-            ],
-            dekoji_ratio: 0.18,
-            interval_days: 0,
-          ),
-          kake: Kake.create(
-            weight: 360,
-            brand: :yamadanishiki,
-            polishing_ratio: 0.55,
-            made_in: :hyogo,
-            year: 2020,
-            soaking_ratio: 0.33,
-            steaming_ratio: 0.41,
-            cooling_ratio: 0.33,
-            interval_days: 1,
-          ),
-          water: Water.create(
-            weight: 630,
-          ),
+          kojis: [
+            Koji.create(
+              weight: 80,
+              brand: :yamadanishiki,
+              polishing_ratio: 0.55,
+              made_in: :hyogo,
+              year: 2020,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
+              tanekojis: [
+                Tanekoji.create(
+                  brand: :byakuya,
+                  ratio: 0.001,
+                ),
+              ],
+              dekoji_ratio: 0.18,
+              interval_days: 14,
+            ),
+          ],
+          kakes: [
+            Kake.create(
+              weight: 360,
+              brand: :yamadanishiki,
+              polishing_ratio: 0.55,
+              made_in: :hyogo,
+              year: 2020,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
+              interval_days: 23,
+            ),
+          ],
+          waters: [
+            Water.create(
+              weight: 630,
+            ),
+          ],
         ),
         Step.create(
-          kake: Kake.create(
-            weight: 80,
-            brand: :yamadanishiki,
-            polishing_ratio: 0.55,
-            made_in: :hyogo,
-            year: 2020,
-            soaking_ratio: 0.33,
-            steaming_ratio: 0.41,
-            cooling_ratio: 0.33,
-            interval_days: 25,
-          ),
-          water: Water.create(
-            weight: 120,
-          ),
+          kakes: [
+            Kake.create(
+              weight: 80,
+              brand: :yamadanishiki,
+              polishing_ratio: 0.55,
+              made_in: :hyogo,
+              year: 2020,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
+              interval_days: 48,
+            ),
+          ],
+          waters: [
+            Water.create(
+              weight: 120,
+            ),
+          ],
         ),
       ].map(&:freeze).freeze,
       [
@@ -184,10 +216,6 @@ class ProductTest < Minitest::Test
     assert_equal "仕1", @product.name
     assert_equal @recipe, @product.recipe
     assert_equal Time.mktime(2020, 2, 10), @product.base_date
-
-    assert_equal [Time.mktime(2020, 2, 10), Time.mktime(2020, 2, 24), Time.mktime(2020, 2, 24), Time.mktime(2020, 2, 24), Time.mktime(2020, 2, 24)], @product.koji_dates
-    assert_equal [Time.mktime(2020, 2, 15), Time.mktime(2020, 3, 1), Time.mktime(2020, 3, 3), Time.mktime(2020, 3, 4), Time.mktime(2020, 3, 29)], @product.kake_dates
-    assert_equal [Time.mktime(2020, 3, 31)], @product.action_dates
   end
 
   def test_rice_schedules
@@ -199,12 +227,12 @@ class ProductTest < Minitest::Test
 
     assert_equal Time.mktime(2020, 2, 24), schedule1.date
     assert_equal :koji, schedule1.rice_type
-    #assert_equal 180, schedule1.weight
+    assert_equal 180, schedule1.expect.weight
     assert_equal 3, schedule1.step_indexes.length
 
     assert_equal Time.mktime(2020, 3, 3), schedule4.date
     assert_equal :kake, schedule4.rice_type
-    #assert_equal 215, schedule4.weight
+    assert_equal 215, schedule4.expect.weight
     assert_equal 1, schedule4.step_indexes.length
   end
 end
