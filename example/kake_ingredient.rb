@@ -21,12 +21,12 @@ table = Terminal::Table.new do |t|
   t << ["", "白米", kake.weight.round(2)]
   t << :separator
   t << ["洗米・浸漬", "浸漬米(g)", kake.soaked.round(2)]
-  t << ["", "浸漬歩合", kake.soaking_ratio.round(2)]
+  t << ["", "浸漬米吸水率", kake.soaking_ratio.round(2)]
   t << :separator
   t << ["蒸し", "蒸米(g)", kake.steamed.round(2)]
-  t << ["", "蒸米歩合", kake.steaming_ratio.round(2)]
+  t << ["", "蒸米吸水率", kake.steaming_ratio.round(2)]
   t << :separator
   t << ["放冷", "蒸米(g)", kake.cooled.round(2)]
-  t << ["", "蒸米歩合", kake.cooling_ratio.round(2)]
+  t << ["", "蒸米吸水率", kake.cooling_ratio.round(2)]
 end
 puts table

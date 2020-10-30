@@ -28,13 +28,13 @@ table = Terminal::Table.new do |t|
   t << ["", "白米", koji.weight.round(2)]
   t << :separator
   t << ["洗米・浸漬", "浸漬米(g)", koji.soaked.round(2)]
-  t << ["", "浸漬歩合", koji.soaking_ratio.round(2)]
+  t << ["", "浸漬米吸水率", koji.soaking_ratio.round(2)]
   t << :separator
   t << ["蒸し", "蒸米(g)", koji.steamed.round(2)]
-  t << ["", "蒸米歩合", koji.steaming_ratio.round(2)]
+  t << ["", "蒸米吸水率", koji.steaming_ratio.round(2)]
   t << :separator
   t << ["放冷・引込み", "蒸米(g)", koji.cooled.round(2)]
-  t << ["", "蒸米歩合", koji.cooling_ratio.round(2)]
+  t << ["", "蒸米吸水率", koji.cooling_ratio.round(2)]
   t << ["", "種麹", koji.tanekojis.map(&:weight).sum.round(2)]
   t << :separator
   t << ["出麹", "麹(g)", koji.dekoji.round(2)]

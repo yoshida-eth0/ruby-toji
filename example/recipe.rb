@@ -52,13 +52,13 @@ table = Terminal::Table.new do |t|
   t << ["", "白米(g)"] + kakes.map(&:weight).map{|v| v&.round(2)}
   t << :separator
   t << ["洗米・浸漬", "浸漬米(g)"] + kakes.map(&:soaked).map{|v| v&.round(2)}
-  t << ["", "浸漬歩合"] + kakes.map(&:soaking_ratio).map{|v| v&.round(2)}
+  t << ["", "浸漬米吸水率"] + kakes.map(&:soaking_ratio).map{|v| v&.round(2)}
   t << :separator
   t << ["蒸し", "蒸米(g)"] + kakes.map(&:steamed).map{|v| v&.round(2)}
-  t << ["", "蒸米歩合"] + kakes.map(&:steaming_ratio).map{|v| v&.round(2)}
+  t << ["", "蒸米吸水率"] + kakes.map(&:steaming_ratio).map{|v| v&.round(2)}
   t << :separator
   t << ["放冷", "蒸米(g)"] + kakes.map(&:cooled).map{|v| v&.round(2)}
-  t << ["", "蒸米歩合"] + kakes.map(&:cooling_ratio).map{|v| v&.round(2)}
+  t << ["", "蒸米吸水率"] + kakes.map(&:cooling_ratio).map{|v| v&.round(2)}
 end
 puts table
 puts
@@ -78,13 +78,13 @@ table = Terminal::Table.new do |t|
   t << ["", "白米(g)"] + kojis.map(&:weight).map{|v| v&.round(2)}
   t << :separator
   t << ["洗米・浸漬", "浸漬米(g)"] + kojis.map(&:soaked).map{|v| v&.round(2)}
-  t << ["", "浸漬歩合"] + kojis.map(&:soaking_ratio).map{|v| v&.round(2)}
+  t << ["", "浸漬米吸水率"] + kojis.map(&:soaking_ratio).map{|v| v&.round(2)}
   t << :separator
   t << ["蒸し", "蒸米(g)"] + kojis.map(&:steamed).map{|v| v&.round(2)}
-  t << ["", "蒸米歩合"] + kojis.map(&:steaming_ratio).map{|v| v&.round(2)}
+  t << ["", "蒸米吸水率"] + kojis.map(&:steaming_ratio).map{|v| v&.round(2)}
   t << :separator
   t << ["放冷・引き込み", "蒸米(g)"] + kojis.map(&:cooled).map{|v| v&.round(2)}
-  t << ["", "蒸米歩合"] + kojis.map(&:cooling_ratio).map{|v| v&.round(2)}
+  t << ["", "蒸米吸水率"] + kojis.map(&:cooling_ratio).map{|v| v&.round(2)}
   t << ["", "種麹(g)"] + kojis.map{|k| k.tanekojis.map(&:weight).sum}.map{|v| v&.round(2)}
   t << :separator
   t << ["出麹", "麹(g)"] + kojis.map(&:dekoji).map{|v| v&.round(2)}
