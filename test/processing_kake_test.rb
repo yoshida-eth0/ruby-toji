@@ -62,16 +62,16 @@ class ProcessingKakeTest < Minitest::Test
         ),
       ],
       cooled_rices: [
-        SteamedRice.new(
+        CooledRice.new(
           weight: 16.94,
         ),
-        SteamedRice.new(
+        CooledRice.new(
           weight: 17.43,
         ),
-        SteamedRice.new(
+        CooledRice.new(
           weight: 16.76,
         ),
-        SteamedRice.new(
+        CooledRice.new(
           weight: 15.88,
         ),
       ],
