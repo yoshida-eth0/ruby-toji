@@ -1,6 +1,6 @@
 require "test_helper"
 
-class BrewKojiTest < Minitest::Test
+class ProgressKojiTest < Minitest::Test
   def setup
     @koji = KojiProgress.new
   end

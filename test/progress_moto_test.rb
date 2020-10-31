@@ -1,6 +1,6 @@
 require "test_helper"
 
-class BrewMotoTest < Minitest::Test
+class ProgressMotoTest < Minitest::Test
   def setup
     @moto = MotoProgress.new
   end

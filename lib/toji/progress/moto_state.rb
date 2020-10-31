@@ -1,6 +1,6 @@
 module Toji
-  module Brew
-    module KojiState
+  module Progress
+    module MotoState
       include BaseState
 
       OPTIONAL_KEYS = [
@@ -9,6 +9,10 @@ module Toji
         :room_temp,
         :room_psychrometry,
 
+        :baume,
+        :acid,
+
+        :warmings,
         :note,
       ].freeze
 
@@ -17,6 +21,10 @@ module Toji
       attr_accessor :room_temp
       attr_accessor :room_psychrometry
 
+      attr_accessor :baume
+      attr_accessor :acid
+
+      attr_accessor :warmings
       attr_accessor :note
     end
   end

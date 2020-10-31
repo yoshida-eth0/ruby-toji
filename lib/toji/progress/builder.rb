@@ -1,5 +1,5 @@
 module Toji
-  module Brew
+  module Progress
     class Builder
 
       def initialize(progress_cls, state_cls)

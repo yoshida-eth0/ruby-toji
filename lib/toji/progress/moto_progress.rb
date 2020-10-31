@@ -1,5 +1,5 @@
 module Toji
-  module Brew
+  module Progress
     module MotoProgress
       include BaseProgress
 

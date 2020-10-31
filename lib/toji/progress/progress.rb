@@ -1,5 +1,5 @@
 module Toji
-  module Brew
+  module Progress
     module Progress
       attr_reader :states
       attr_reader :date_line

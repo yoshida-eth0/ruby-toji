@@ -1,5 +1,5 @@
 module Toji
-  module Brew
+  module Progress
     module Graph
       class MultiProgressNote
 
@@ -31,7 +31,7 @@ module Toji
           when Progress
             progress = source.progress_note(name: name, dash: dash, enable_annotations: enable_annotations)
           else
-            raise Error, "ArgumentError: Toji::Brew::Graph::ProgressNote or Toji::Brew::Progress required"
+            raise Error, "ArgumentError: Toji::Progress::Graph::ProgressNote or Toji::Progress::Progress required"
           end
 
           @progresses << progress

@@ -4,7 +4,7 @@ require 'yaml'
 
 require 'toji/ingredient'
 require 'toji/recipe'
-require 'toji/brew'
+require 'toji/progress'
 require 'toji/calendar'
 require 'toji/schedule'
 require 'toji/product'

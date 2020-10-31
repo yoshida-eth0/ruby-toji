@@ -1,6 +1,6 @@
 require "test_helper"
 
-class BrewMoromiTest < Minitest::Test
+class ProgressMoromiTest < Minitest::Test
   def setup
     @moromi = MoromiProgress.new
   end

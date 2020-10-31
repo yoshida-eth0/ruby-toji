@@ -343,7 +343,7 @@ end
 
 
 class KojiProgress
-  include Toji::Brew::KojiProgress
+  include Toji::Progress::KojiProgress
 
   def states
     [
@@ -381,7 +381,7 @@ class KojiProgress
 end
 
 class KojiState
-  include Toji::Brew::KojiState
+  include Toji::Progress::KojiState
 
   KEYS = [
     :progress,
@@ -407,7 +407,7 @@ end
 
 
 class MotoProgress
-  include Toji::Brew::MotoProgress
+  include Toji::Progress::MotoProgress
 
   def states
     [
@@ -446,7 +446,7 @@ class MotoProgress
 end
 
 class MotoState
-  include Toji::Brew::MotoState
+  include Toji::Progress::MotoState
 
   KEYS = [
     :progress,
@@ -475,7 +475,7 @@ end
 
 
 class MoromiProgress
-  include Toji::Brew::MoromiProgress
+  include Toji::Progress::MoromiProgress
 
   def prefix_day_labels
     ["添", "踊", "踊", "仲", "留"]
@@ -541,8 +541,8 @@ class MoromiProgress
 end
 
 class MoromiState
-  include Toji::Brew::MoromiState
-  include Toji::Brew::State::BaumeToNihonshudo
+  include Toji::Progress::MoromiState
+  include Toji::Progress::State::BaumeToNihonshudo
 
   KEYS = [
     :progress,

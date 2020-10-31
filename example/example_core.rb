@@ -879,14 +879,14 @@ module Example
   end
 
 
-  module Brew
-    module BrewGenerator
+  module Progress
+    module ProgressGenerator
       def load_hash(hash)
         hash = hash.deep_symbolize_keys
 
         builder
           .add(hash[:states] || [])
-          .date_line(hash[:date_line] || 0, Toji::Brew::HOUR)
+          .date_line(hash[:date_line] || 0, Toji::Progress::HOUR)
           .prefix_day_labels(hash[:prefix_day_labels])
           .build
       end
@@ -898,19 +898,19 @@ module Example
     end
 
     class KojiProgress
-      include Toji::Brew::KojiProgress
-      extend BrewGenerator
+      include Toji::Progress::KojiProgress
+      extend ProgressGenerator
 
       attr_accessor :states
       attr_accessor :date_line
 
       def self.builder
-        Toji::Brew::Builder.new(KojiProgress, KojiState)
+        Toji::Progress::Builder.new(KojiProgress, KojiState)
       end
     end
 
     class KojiState
-      include Toji::Brew::KojiState
+      include Toji::Progress::KojiState
 
       def self.create(args)
         new.tap {|s|
@@ -927,19 +927,19 @@ module Example
     end
 
     class MotoProgress
-      include Toji::Brew::MotoProgress
-      extend BrewGenerator
+      include Toji::Progress::MotoProgress
+      extend ProgressGenerator
 
       attr_accessor :states
       attr_accessor :date_line
 
       def self.builder
-        Toji::Brew::Builder.new(MotoProgress, MotoState)
+        Toji::Progress::Builder.new(MotoProgress, MotoState)
       end
     end
 
     class MotoState
-      include Toji::Brew::MotoState
+      include Toji::Progress::MotoState
 
       def self.create(args)
         new.tap {|s|
@@ -960,21 +960,21 @@ module Example
 
 
     class MoromiProgress
-      include Toji::Brew::MoromiProgress
-      extend BrewGenerator
+      include Toji::Progress::MoromiProgress
+      extend ProgressGenerator
 
       attr_accessor :states
       attr_accessor :date_line
       attr_accessor :prefix_day_labels
 
       def self.builder
-        Toji::Brew::Builder.new(MoromiProgress, MoromiState)
+        Toji::Progress::Builder.new(MoromiProgress, MoromiState)
       end
     end
 
     class MoromiState
-      include Toji::Brew::MoromiState
-      include Toji::Brew::State::BaumeToNihonshudo
+      include Toji::Progress::MoromiState
+      include Toji::Progress::State::BaumeToNihonshudo
 
       def self.create(args)
         new.tap {|s|
