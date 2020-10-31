@@ -22,80 +22,88 @@ class ProcessingKojiTest < Minitest::Test
         dekoji_ratio: 0.18,
         interval_days: nil
       ),
-      room_temp: 3.0,
-      outside_temp: 3.0,
-      rice_water_content: 11.0,
-      washing_water_temp: 10.0,
-      soaking_water_temp: 10.0,
-      soaked_rices: [
-        SoakedRice.new(
-          weight: 10.0,
-          soaking_time: 13*60+15,
-          soaked: 13.33,
-        ),
-        SoakedRice.new(
-          weight: 10.0,
-          soaking_time: 13*60+0,
-          soaked: 13.29,
-        ),
-        SoakedRice.new(
-          weight: 10.0,
-          soaking_time: 13*60+5,
-          soaked: 13.30,
-        ),
-        SoakedRice.new(
-          weight: 10.0,
-          soaking_time: 13*60+5,
-          soaked: 13.31,
-        ),
-        SoakedRice.new(
-          weight: 10.12,
-          soaking_time: 13*60+5,
-          soaked: 13.46,
-        ),
-      ],
-      steamed_rices: [
-        SteamedRice.new(
-          weight: 17.83,
-        ),
-        SteamedRice.new(
-          weight: 18.35,
-        ),
-        SteamedRice.new(
-          weight: 17.65,
-        ),
-        SteamedRice.new(
-          weight: 16.72,
-        ),
-      ],
-      cooled_rices: [
-        CooledRice.new(
-          weight: 16.94,
-        ),
-        CooledRice.new(
-          weight: 17.43,
-        ),
-        CooledRice.new(
-          weight: 16.76,
-        ),
-        CooledRice.new(
-          weight: 15.88,
-        ),
-      ],
-      dekojis: [
-        Dekoji.new(
-          weight: 15.23,
-        ),
-        Dekoji.new(
-          weight: 15.54,
-        ),
-        Dekoji.new(
-          weight: 15.02,
-        ),
-        Dekoji.new(
-          weight: 13.17,
-        ),
-      ],
+      soaked_rice: SoakedRice.new(
+        room_temp: 3.0,
+        outside_temp: 3.0,
+        rice_water_content: 11.0,
+        washing_water_temp: 10.0,
+        soaking_water_temp: 10.0,
+        elements: [
+          SoakedRiceElement.new(
+            weight: 10.0,
+            soaking_time: 13*60+15,
+            soaked: 13.33,
+          ),
+          SoakedRiceElement.new(
+            weight: 10.0,
+            soaking_time: 13*60+0,
+            soaked: 13.29,
+          ),
+          SoakedRiceElement.new(
+            weight: 10.0,
+            soaking_time: 13*60+5,
+            soaked: 13.30,
+          ),
+          SoakedRiceElement.new(
+            weight: 10.0,
+            soaking_time: 13*60+5,
+            soaked: 13.31,
+          ),
+          SoakedRiceElement.new(
+            weight: 10.12,
+            soaking_time: 13*60+5,
+            soaked: 13.46,
+          ),
+        ],
+      ),
+      steamed_rice: SteamedRice.new(
+        elements: [
+          SteamedRiceElement.new(
+            weight: 17.83,
+          ),
+          SteamedRiceElement.new(
+            weight: 18.35,
+          ),
+          SteamedRiceElement.new(
+            weight: 17.65,
+          ),
+          SteamedRiceElement.new(
+            weight: 16.72,
+          ),
+        ],
+      ),
+      cooled_rice: CooledRice.new(
+        elements: [
+          CooledRiceElement.new(
+            weight: 16.94,
+          ),
+          CooledRiceElement.new(
+            weight: 17.43,
+          ),
+          CooledRiceElement.new(
+            weight: 16.76,
+          ),
+          CooledRiceElement.new(
+            weight: 15.88,
+          ),
+        ],
+      ),
+      dekoji: Dekoji.new(
+        elements: [
+          DekojiElement.new(
+            weight: 15.23,
+          ),
+          DekojiElement.new(
+            weight: 15.54,
+          ),
+          DekojiElement.new(
+            weight: 15.02,
+          ),
+          DekojiElement.new(
+            weight: 13.17,
+          ),
+        ],
+      ),
     )
   end
 
@@ -129,33 +137,33 @@ class ProcessingKojiTest < Minitest::Test
     assert_equal 59, @processing.expect.dekoji
 
     assert_nil @processing.expect.interval_days
-
-    assert_equal 3.0, @processing.room_temp
-    assert_equal 3.0, @processing.outside_temp
-    assert_equal 11.0, @processing.rice_water_content
-    assert_equal 10.0, @processing.washing_water_temp
-    assert_equal 10.0, @processing.soaking_water_temp
   end
 
-  def test_soaked_rices
-    assert_equal 50.12, @processing.weight_total
-    assert_equal 66.69, @processing.soaked_total
-    assert_in_delta 0.3306065442936952, @processing.soaking_ratio
-    assert_in_delta 0.0013530578889090305, @processing.soaking_ratio_sd
+  def test_soaked_rice
+    assert_equal 3.0, @processing.soaked_rice.room_temp
+    assert_equal 3.0, @processing.soaked_rice.outside_temp
+    assert_equal 11.0, @processing.soaked_rice.rice_water_content
+    assert_equal 10.0, @processing.soaked_rice.washing_water_temp
+    assert_equal 10.0, @processing.soaked_rice.soaking_water_temp
+
+    assert_equal 50.12, @processing.soaked_rice.weight
+    assert_equal 66.69, @processing.soaked_rice.soaked
+    assert_in_delta 0.3306065442936952, @processing.soaked_rice.soaking_ratio
+    assert_in_delta 0.0013530578889090305, @processing.soaked_rice.soaking_ratio_sd
   end
 
-  def test_steamed_rices
-    assert_equal 70.55, @processing.steamed_total
-    assert_in_delta 0.4076217079010375, @processing.steaming_ratio
+  def test_steamed_rice
+    assert_equal 70.55, @processing.steamed_rice.weight
+    assert_in_delta 0.4076217079010375, @processing.steamed_rice.steaming_ratio
   end
 
-  def test_cooled_rices
-    assert_equal 67.01, @processing.cooled_total
-    assert_in_delta 0.3369912210694335, @processing.cooling_ratio
+  def test_cooled_rice
+    assert_equal 67.01, @processing.cooled_rice.weight
+    assert_in_delta 0.3369912210694335, @processing.cooled_rice.cooling_ratio
   end
 
-  def test_dekojis
-    assert_equal 58.96, @processing.dekoji_total
-    assert_in_delta 0.17637669592976862, @processing.dekoji_ratio
+  def test_dekoji
+    assert_equal 58.96, @processing.dekoji.weight
+    assert_in_delta 0.17637669592976862, @processing.dekoji.dekoji_ratio
   end
 end

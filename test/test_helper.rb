@@ -275,40 +275,52 @@ end
 class KojiProcessing
   include Toji::Processing::KojiProcessing
 
-  def initialize(date:, expect:, room_temp:, outside_temp:, rice_water_content:, washing_water_temp:, soaking_water_temp:, soaked_rices: [], steamed_rices: [], cooled_rices: [], dekojis: [])
+  def initialize(date:, expect:, soaked_rice:, steamed_rice:, cooled_rice:, dekoji:)
     @date = date
     @expect = expect
-    @room_temp = room_temp
-    @outside_temp = outside_temp
-    @rice_water_content = rice_water_content
-    @washing_water_temp = washing_water_temp
-    @soaking_water_temp = soaking_water_temp
-    @soaked_rices = soaked_rices
-    @steamed_rices = steamed_rices
-    @cooled_rices = cooled_rices
-    @dekojis = dekojis
+    @soaked_rice = soaked_rice
+    @soaked_rice.processing = self
+    @steamed_rice = steamed_rice
+    @steamed_rice.processing = self
+    @cooled_rice = cooled_rice
+    @cooled_rice.processing = self
+    @dekoji = dekoji
+    @dekoji.processing = self
   end
 end
 
 class KakeProcessing
   include Toji::Processing::KakeProcessing
 
-  def initialize(date:, expect:, room_temp:, outside_temp:, rice_water_content:, washing_water_temp:, soaking_water_temp:, soaked_rices: [], steamed_rices: [], cooled_rices: [])
+  def initialize(date:, expect:, soaked_rice:, steamed_rice:, cooled_rice:)
     @date = date
     @expect = expect
-    @room_temp = room_temp
-    @outside_temp = outside_temp
-    @rice_water_content = rice_water_content
-    @washing_water_temp = washing_water_temp
-    @soaking_water_temp = soaking_water_temp
-    @soaked_rices = soaked_rices
-    @steamed_rices = steamed_rices
-    @cooled_rices = cooled_rices
+    @soaked_rice = soaked_rice
+    @soaked_rice.processing = self
+    @steamed_rice = steamed_rice
+    @steamed_rice.processing = self
+    @cooled_rice = cooled_rice
+    @cooled_rice.processing = self
   end
 end
 
 class SoakedRice
   include Toji::Processing::SoakedRice
+
+  attr_accessor :processing
+
+  def initialize(room_temp:, outside_temp:, rice_water_content:, washing_water_temp:, soaking_water_temp:, elements: [])
+    @room_temp = room_temp
+    @outside_temp = outside_temp
+    @rice_water_content = rice_water_content
+    @washing_water_temp = washing_water_temp
+    @soaking_water_temp = soaking_water_temp
+    @elements = elements
+  end
+end
+
+class SoakedRiceElement
+  include Toji::Processing::SoakedRiceElement
 
   def initialize(weight:, soaking_time:, soaked:)
     @weight = weight
@@ -320,6 +332,16 @@ end
 class SteamedRice
   include Toji::Processing::SteamedRice
 
+  attr_accessor :processing
+
+  def initialize(elements: [])
+    @elements = elements
+  end
+end
+
+class SteamedRiceElement
+  include Toji::Processing::SteamedRiceElement
+
   def initialize(weight:)
     @weight = weight
   end
@@ -328,6 +350,16 @@ end
 class CooledRice
   include Toji::Processing::CooledRice
 
+  attr_accessor :processing
+
+  def initialize(elements: [])
+    @elements = elements
+  end
+end
+
+class CooledRiceElement
+  include Toji::Processing::CooledRiceElement
+
   def initialize(weight:)
     @weight = weight
   end
@@ -335,6 +367,16 @@ end
 
 class Dekoji
   include Toji::Processing::Dekoji
+
+  attr_accessor :processing
+
+  def initialize(elements: [])
+    @elements = elements
+  end
+end
+
+class DekojiElement
+  include Toji::Processing::DekojiElement
 
   def initialize(weight:)
     @weight = weight
