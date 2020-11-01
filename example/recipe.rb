@@ -3,7 +3,7 @@ require 'toji'
 require_relative 'example_core'
 require 'terminal-table'
 
-recipe = Example::Recipe::TEMPLATES[:sokujo_nada].scale(900).round(2)
+recipe = Example::Recipe::TEMPLATES[:sokujo_nada].scale_rice_total(900).round(2)
 step_names = ["酛", "添", "仲", "留", "四段"].slice(0, recipe.steps.length)
 
 table = Terminal::Table.new do |t|

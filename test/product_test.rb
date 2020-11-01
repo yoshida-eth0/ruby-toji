@@ -4,11 +4,11 @@ class ProductTest < Minitest::Test
   def setup
     # 酒造教本による標準型仕込配合
     # 出典: 酒造教本 P97
-    @recipe = Recipe.create(
-      [
-        Step.create(
+    @recipe = Recipe.new(
+      steps: [
+        Step.new(
           kojis: [
-            Koji.create(
+            Koji.new(
               weight: 20,
               brand: :yamadanishiki,
               polishing_ratio: 0.55,
@@ -18,7 +18,7 @@ class ProductTest < Minitest::Test
               steaming_ratio: 0.41,
               cooling_ratio: 0.33,
               tanekojis: [
-                Tanekoji.create(
+                Tanekoji.new(
                   brand: :byakuya,
                   ratio: 0.001,
                 ),
@@ -28,7 +28,7 @@ class ProductTest < Minitest::Test
             ),
           ],
           kakes: [
-            Kake.create(
+            Kake.new(
               weight: 45,
               brand: :yamadanishiki,
               polishing_ratio: 0.55,
@@ -41,24 +41,24 @@ class ProductTest < Minitest::Test
             ),
           ],
           waters: [
-            Water.create(
+            Water.new(
               weight: 70,
             ),
           ],
           lactic_acids: [
-            LacticAcid.create(
+            LacticAcid.new(
               weight: 70/100.0*0.685,
             ),
           ],
           yeasts: [
-            Yeast.create(
+            Yeast.new(
               weight: (45+20)/100.0*1.5,
             ),
           ],
         ),
-        Step.create(
+        Step.new(
           kojis: [
-            Koji.create(
+            Koji.new(
               weight: 40,
               brand: :yamadanishiki,
               polishing_ratio: 0.55,
@@ -68,7 +68,7 @@ class ProductTest < Minitest::Test
               steaming_ratio: 0.41,
               cooling_ratio: 0.33,
               tanekojis: [
-                Tanekoji.create(
+                Tanekoji.new(
                   brand: :byakuya,
                   ratio: 0.001,
                 ),
@@ -78,7 +78,7 @@ class ProductTest < Minitest::Test
             ),
           ],
           kakes: [
-            Kake.create(
+            Kake.new(
               weight: 100,
               brand: :yamadanishiki,
               polishing_ratio: 0.55,
@@ -91,14 +91,14 @@ class ProductTest < Minitest::Test
             ),
           ],
           waters: [
-            Water.create(
+            Water.new(
               weight: 130,
             ),
           ],
         ),
-        Step.create(
+        Step.new(
           kojis: [
-            Koji.create(
+            Koji.new(
               weight: 60,
               brand: :yamadanishiki,
               polishing_ratio: 0.55,
@@ -108,7 +108,7 @@ class ProductTest < Minitest::Test
               steaming_ratio: 0.41,
               cooling_ratio: 0.33,
               tanekojis: [
-                Tanekoji.create(
+                Tanekoji.new(
                   brand: :byakuya,
                   ratio: 0.001,
                 ),
@@ -118,7 +118,7 @@ class ProductTest < Minitest::Test
             ),
           ],
           kakes: [
-            Kake.create(
+            Kake.new(
               weight: 215,
               brand: :yamadanishiki,
               polishing_ratio: 0.55,
@@ -131,14 +131,14 @@ class ProductTest < Minitest::Test
             ),
           ],
           waters: [
-            Water.create(
+            Water.new(
               weight: 330,
             ),
           ],
         ),
-        Step.create(
+        Step.new(
           kojis: [
-            Koji.create(
+            Koji.new(
               weight: 80,
               brand: :yamadanishiki,
               polishing_ratio: 0.55,
@@ -148,7 +148,7 @@ class ProductTest < Minitest::Test
               steaming_ratio: 0.41,
               cooling_ratio: 0.33,
               tanekojis: [
-                Tanekoji.create(
+                Tanekoji.new(
                   brand: :byakuya,
                   ratio: 0.001,
                 ),
@@ -158,7 +158,7 @@ class ProductTest < Minitest::Test
             ),
           ],
           kakes: [
-            Kake.create(
+            Kake.new(
               weight: 360,
               brand: :yamadanishiki,
               polishing_ratio: 0.55,
@@ -171,14 +171,14 @@ class ProductTest < Minitest::Test
             ),
           ],
           waters: [
-            Water.create(
+            Water.new(
               weight: 630,
             ),
           ],
         ),
-        Step.create(
+        Step.new(
           kakes: [
-            Kake.create(
+            Kake.new(
               weight: 80,
               brand: :yamadanishiki,
               polishing_ratio: 0.55,
@@ -191,22 +191,22 @@ class ProductTest < Minitest::Test
             ),
           ],
           waters: [
-            Water.create(
+            Water.new(
               weight: 120,
             ),
           ],
         ),
       ].map(&:freeze).freeze,
-      [
-        Action.create(
+      actions: [
+        Action.new(
           type: :squeeze,
           interval_days: 50,
         ),
       ].map(&:freeze).freeze,
-      true,
-      true,
-      1.4,
-      [],
+      has_moto: true,
+      has_moromi: true,
+      ab_coef: 1.4,
+      ab_expects: [],
     ).freeze
 
     @product = Product.new("仕1", @recipe, Time.mktime(2020, 2, 10))

@@ -3,7 +3,7 @@ require 'toji'
 require_relative 'example_core'
 require 'terminal-table'
 
-kake = Example::Kake.create(
+kake = Example::Kake.new(
   weight: 100,
   brand: :yamadanishiki,
   polishing_ratio: 0.55,

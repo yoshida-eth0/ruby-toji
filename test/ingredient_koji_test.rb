@@ -2,7 +2,7 @@ require "test_helper"
 
 class IngredientKojiTest < Minitest::Test
   def setup
-    @koji = Koji.create(
+    @koji = Koji.new(
       weight: 100,
       brand: :yamadanishiki,
       polishing_ratio: 0.55,
@@ -12,7 +12,7 @@ class IngredientKojiTest < Minitest::Test
       steaming_ratio: 0.41,
       cooling_ratio: 0.33,
       tanekojis: [
-        Tanekoji.create(
+        Tanekoji.new(
           brand: :byakuya,
           ratio: 0.001,
         ),

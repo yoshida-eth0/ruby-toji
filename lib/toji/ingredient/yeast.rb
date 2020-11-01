@@ -7,10 +7,10 @@ module Toji
       attr_accessor :weight
 
       # 単位 (ex: ampoule, gram, ml)
-      attr_accessor :unit
+      attr_reader :unit
 
       # 酵母名、協会酵母番号
-      attr_accessor :brand
+      attr_reader :brand
 
       def group_key
         [brand, unit].join(":")

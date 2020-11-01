@@ -52,6 +52,35 @@ module Toji
         val.nan? ? 0.0 : val
       end
 
+      def scale!(ratio)
+        kojis&.each {|koji|
+          koji.weight *= ratio
+        }
+        kakes&.each {|kake|
+          kake.weight *= ratio
+        }
+        waters&.each {|water|
+          water.weight *= ratio
+        }
+        lactic_acids&.each {|lactic_acid|
+          lactic_acid.weight *= ratio
+        }
+        alcohols&.each {|alcohol|
+          alcohol.weight *= ratio
+        }
+        yeasts&.each {|yeast|
+          yeast.weight *= ratio
+        }
+        self
+      end
+
+      def scale(ratio)
+        Utils.check_dup(self)
+
+        dst = self.dup
+        dst.scale!(ratio)
+      end
+
       def round!(ndigit=0, mini_ndigit=nil, half: :up)
         if !mini_ndigit
           mini_ndigit = ndigit + 3
@@ -110,28 +139,7 @@ module Toji
 
       def *(other)
         if Integer===other || Float===other
-          Utils.check_dup(self)
-
-          dst = self.dup
-          dst.kojis&.each {|koji|
-            koji.weight *= other
-          }
-          dst.kakes&.each {|kake|
-            kake.weight *= other
-          }
-          dst.waters&.each {|water|
-            water.weight *= other
-          }
-          dst.lactic_acids&.each {|lactic_acid|
-            lactic_acid.weight *= other
-          }
-          dst.alcohols&.each {|alcohol|
-            alcohol.weight *= other
-          }
-          dst.yeasts&.each {|yeast|
-            yeast.weight *= other
-          }
-          dst
+          scale(other)
         else
           x, y = other.coerce(self)
           x * y

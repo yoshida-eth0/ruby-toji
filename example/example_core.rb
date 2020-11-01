@@ -61,8 +61,8 @@ module Example
         if Symbol===recipe
           recipe = Recipe::TEMPLATES.fetch(recipe)
         end
-        if args[:scale]
-          recipe = recipe.scale(args[:scale])
+        if args[:scale_rice_total]
+          recipe = recipe.scale_rice_total(args[:scale_rice_total])
         end
         if args[:round]
           recipe = recipe.round(args[:round])
@@ -86,163 +86,127 @@ module Example
   class Step
     include Toji::Recipe::Step
 
-    def initialize_copy(obj)
-      self.kojis = obj.kojis.deep_dup
-      self.kakes = obj.kakes.deep_dup
-      self.waters = obj.waters.deep_dup
-      self.lactic_acids = obj.lactic_acids.deep_dup
-      self.alcohols = obj.alcohols.deep_dup
-      self.yeasts = obj.yeasts.deep_dup
+    def initialize(kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
+      @kojis = kojis
+      @kakes = kakes
+      @waters = waters
+      @lactic_acids = lactic_acids
+      @alcohols = alcohols
+      @yeasts = yeasts
     end
 
-    def self.create(kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
-      new.tap {|o|
-        o.kojis = kojis
-        o.kakes = kakes
-        o.waters = waters
-        o.lactic_acids = lactic_acids
-        o.alcohols = alcohols
-        o.yeasts = yeasts
-      }
+    def initialize_copy(obj)
+      @kojis = obj.kojis.deep_dup
+      @kakes = obj.kakes.deep_dup
+      @waters = obj.waters.deep_dup
+      @lactic_acids = obj.lactic_acids.deep_dup
+      @alcohols = obj.alcohols.deep_dup
+      @yeasts = obj.yeasts.deep_dup
     end
   end
 
   class Koji
     include Toji::Ingredient::Koji
 
-    attr_accessor :weight
-    attr_accessor :soaking_ratio
-    attr_accessor :steaming_ratio
-    attr_accessor :cooling_ratio
-    attr_accessor :tanekojis
-    attr_accessor :dekoji_ratio
-    attr_accessor :interval_days
+    def initialize(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
+      @weight = weight
+      @brand = brand
+      @polishing_ratio = polishing_ratio
+      @made_in = made_in
+      @year = year
+      @soaking_ratio = soaking_ratio
+      @steaming_ratio = steaming_ratio
+      @cooling_ratio = cooling_ratio
+      @tanekojis = tanekojis.map {|tanekoji|
+        tanekoji.koji = self
+        tanekoji
+      }
+      @dekoji_ratio = dekoji_ratio
+      @interval_days = interval_days
+    end
 
     def initialize_copy(obj)
-      self.weight = obj.weight.dup
-      self.brand = obj.brand.dup
-      self.polishing_ratio = obj.polishing_ratio.dup
-      self.made_in = obj.made_in.dup
-      self.year = obj.year.dup
-      self.soaking_ratio = obj.soaking_ratio.dup
-      self.steaming_ratio = obj.steaming_ratio.dup
-      self.cooling_ratio = obj.cooling_ratio.dup
+      @weight = obj.weight.dup
+      @brand = obj.brand.dup
+      @polishing_ratio = obj.polishing_ratio.dup
+      @made_in = obj.made_in.dup
+      @year = obj.year.dup
+      @soaking_ratio = obj.soaking_ratio.dup
+      @steaming_ratio = obj.steaming_ratio.dup
+      @cooling_ratio = obj.cooling_ratio.dup
 
-      self.tanekojis = obj.tanekojis.map {|tanekoji|
+      @tanekojis = obj.tanekojis.map {|tanekoji|
         tanekoji = tanekoji.dup
         tanekoji.koji = self
         tanekoji
       }
 
-      self.dekoji_ratio = obj.dekoji_ratio.dup
-      self.interval_days = obj.interval_days.dup
-    end
-
-    def self.create(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
-      new.tap {|o|
-        o.weight = weight
-        o.brand = brand
-        o.polishing_ratio = polishing_ratio
-        o.made_in = made_in
-        o.year = year
-        o.soaking_ratio = soaking_ratio
-        o.steaming_ratio = steaming_ratio
-        o.cooling_ratio = cooling_ratio
-        o.tanekojis = tanekojis.map {|tanekoji|
-          tanekoji.koji = o
-          tanekoji
-        }
-        o.dekoji_ratio = dekoji_ratio
-        o.interval_days = interval_days
-      }
+      @dekoji_ratio = obj.dekoji_ratio.dup
+      @interval_days = obj.interval_days.dup
     end
   end
 
   class Tanekoji
     include Toji::Ingredient::Tanekoji
 
-    def initialize_copy(obj)
-      self.brand = obj.brand.dup
-      self.ratio = obj.ratio.dup
+    attr_accessor :koji
+
+    def initialize(koji: nil, brand:, ratio:)
+      @brand = brand
+      @ratio = ratio
     end
 
-    def self.create(koji: nil, brand:, ratio:)
-      new.tap {|o|
-        o.brand = brand
-        o.ratio = ratio
-      }
+    def initialize_copy(obj)
+      @brand = obj.brand.dup
+      @ratio = obj.ratio.dup
     end
   end
 
   class Kake
     include Toji::Ingredient::Kake
 
-    attr_accessor :weight
-    attr_accessor :soaking_ratio
-    attr_accessor :steaming_ratio
-    attr_accessor :cooling_ratio
-    attr_accessor :interval_days
-
-    def self.create(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
-      new.tap {|o|
-        o.weight = weight
-        o.brand = brand
-        o.polishing_ratio = polishing_ratio
-        o.made_in = made_in
-        o.year = year
-        o.soaking_ratio = soaking_ratio
-        o.steaming_ratio = steaming_ratio
-        o.cooling_ratio = cooling_ratio
-        o.interval_days = interval_days
-      }
+    def initialize(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
+      @weight = weight
+      @brand = brand
+      @polishing_ratio = polishing_ratio
+      @made_in = made_in
+      @year = year
+      @soaking_ratio = soaking_ratio
+      @steaming_ratio = steaming_ratio
+      @cooling_ratio = cooling_ratio
+      @interval_days = interval_days
     end
   end
 
   class Water
     include Toji::Ingredient::Water
 
-    attr_accessor :weight
-
-    def self.create(weight:)
-      new.tap {|o|
-        o.weight = weight
-      }
+    def initialize(weight:)
+      @weight = weight
     end
   end
 
   class LacticAcid
     include Toji::Ingredient::LacticAcid
 
-    attr_accessor :weight
-
-    def self.create(weight:)
-      new.tap {|o|
-        o.weight = weight
-      }
+    def initialize(weight:)
+      @weight = weight
     end
   end
 
   class Alcohol
     include Toji::Ingredient::Alcohol
 
-    attr_accessor :weight
-
-    def self.create(weight:)
-      new.tap {|o|
-        o.weight = weight
-      }
+    def initialize(weight:)
+      @weight = weight
     end
   end
 
   class Yeast
     include Toji::Ingredient::Yeast
 
-    attr_accessor :weight
-
-    def self.create(weight:)
-      new.tap {|o|
-        o.weight = weight
-      }
+    def initialize(weight:)
+      @weight = weight
     end
   end
 
@@ -250,11 +214,9 @@ module Example
   class Action
     include Toji::Recipe::Action
 
-    def self.create(type:, interval_days:)
-      new.tap {|o|
-        o.type = type
-        o.interval_days = interval_days
-      }
+    def initialize(type:, interval_days:)
+      @type = type
+      @interval_days = interval_days
     end
   end
 
@@ -262,14 +224,12 @@ module Example
   class Recipe
     include Toji::Recipe
 
-    def initialize
-      @steps = []
+    def initialize(steps)
+      @steps = steps
     end
 
-    def self.create(steps)
-      new.tap {|o|
-        o.steps = steps
-      }
+    def initialize_copy(obj)
+      @steps = obj.steps.deep_dup
     end
 
     # 乳酸は汲水100L当たり比重1.21の乳酸(90%乳酸と称される)を650〜720ml添加する。
@@ -281,11 +241,11 @@ module Example
     TEMPLATES = {
       # 酒造教本による標準型仕込配合
       # 出典: 酒造教本 P97
-      sokujo_textbook: create(
+      sokujo_textbook: new(
         [
-          Step.create(
+          Step.new(
             kojis: [
-              Koji.create(
+              Koji.new(
                 weight: 20,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -295,7 +255,7 @@ module Example
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
                 tanekojis: [
-                  Tanekoji.create(
+                  Tanekoji.new(
                     brand: :byakuya,
                     ratio: 0.001,
                   ),
@@ -305,7 +265,7 @@ module Example
               ),
             ],
             kakes: [
-              Kake.create(
+              Kake.new(
                 weight: 45,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -318,24 +278,24 @@ module Example
               ),
             ],
             waters: [
-              Water.create(
+              Water.new(
                 weight: 70,
               ),
             ],
             lactic_acids: [
-              LacticAcid.create(
+              LacticAcid.new(
                 weight: 70/100.0*0.685,
               ),
             ],
             yeasts: [
-              Yeast.create(
+              Yeast.new(
                 weight: (45+20)/100.0*1.5,
               ),
             ]
           ),
-          Step.create(
+          Step.new(
             kojis: [
-              Koji.create(
+              Koji.new(
                 weight: 40,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -345,7 +305,7 @@ module Example
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
                 tanekojis: [
-                  Tanekoji.create(
+                  Tanekoji.new(
                     brand: :byakuya,
                     ratio: 0.001,
                   ),
@@ -355,7 +315,7 @@ module Example
               ),
             ],
             kakes: [
-              Kake.create(
+              Kake.new(
                 weight: 100,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -364,18 +324,18 @@ module Example
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
-                interval_days: 15,
+                interval_days: 20,
               ),
             ],
             waters: [
-              Water.create(
+              Water.new(
                 weight: 130,
               ),
             ],
           ),
-          Step.create(
+          Step.new(
             kojis: [
-              Koji.create(
+              Koji.new(
                 weight: 60,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -385,17 +345,17 @@ module Example
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
                 tanekojis: [
-                  Tanekoji.create(
+                  Tanekoji.new(
                     brand: :byakuya,
                     ratio: 0.001,
                   ),
                 ],
                 dekoji_ratio: 0.18,
-                interval_days: 0,
+                interval_days: 14,
               ),
             ],
             kakes: [
-              Kake.create(
+              Kake.new(
                 weight: 215,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -404,18 +364,18 @@ module Example
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
-                interval_days: 2,
+                interval_days: 22,
               ),
             ],
             waters: [
-              Water.create(
+              Water.new(
                 weight: 330,
               ),
             ],
           ),
-          Step.create(
+          Step.new(
             kojis: [
-              Koji.create(
+              Koji.new(
                 weight: 80,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -425,17 +385,17 @@ module Example
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
                 tanekojis: [
-                  Tanekoji.create(
+                  Tanekoji.new(
                     brand: :byakuya,
                     ratio: 0.001,
                   ),
                 ],
                 dekoji_ratio: 0.18,
-                interval_days: 0,
+                interval_days: 14,
               ),
             ],
             kakes: [
-              Kake.create(
+              Kake.new(
                 weight: 360,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -444,18 +404,18 @@ module Example
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
-                interval_days: 1,
+                interval_days: 23,
               ),
             ],
             waters: [
-              Water.create(
+              Water.new(
                 weight: 630,
               ),
             ],
           ),
-          Step.create(
+          Step.new(
             kakes: [
-              Kake.create(
+              Kake.new(
                 weight: 80,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -464,11 +424,11 @@ module Example
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
-                interval_days: 25,
+                interval_days: 48,
               ),
             ],
             waters: [
-              Water.create(
+              Water.new(
                 weight: 120,
               ),
             ],
@@ -477,11 +437,11 @@ module Example
       ).freeze,
       # 灘における仕込配合の平均値
       # 出典: http://www.nada-ken.com/main/jp/index_shi/234.html
-      sokujo_nada: create(
+      sokujo_nada: new(
         [
-          Step.create(
+          Step.new(
             kojis: [
-              Koji.create(
+              Koji.new(
                 weight: 47,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -491,7 +451,7 @@ module Example
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
                 tanekojis: [
-                  Tanekoji.create(
+                  Tanekoji.new(
                     brand: :byakuya,
                     ratio: 0.001,
                   ),
@@ -501,7 +461,7 @@ module Example
               ),
             ],
             kakes: [
-              Kake.create(
+              Kake.new(
                 weight: 93,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -514,24 +474,24 @@ module Example
               ),
             ],
             waters: [
-              Water.create(
+              Water.new(
                 weight: 170,
               ),
             ],
             lactic_acids: [
-              LacticAcid.create(
+              LacticAcid.new(
                 weight: 170/100.0*0.685,
               ),
             ],
             yeasts: [
-              Yeast.create(
+              Yeast.new(
                 weight: (93+47)/100.0*1.5,
               ),
             ],
           ),
-          Step.create(
+          Step.new(
             kojis: [
-              Koji.create(
+              Koji.new(
                 weight: 99,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -541,7 +501,7 @@ module Example
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
                 tanekojis: [
-                  Tanekoji.create(
+                  Tanekoji.new(
                     brand: :byakuya,
                     ratio: 0.001,
                   ),
@@ -551,7 +511,7 @@ module Example
               ),
             ],
             kakes: [
-              Kake.create(
+              Kake.new(
                 weight: 217,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -560,18 +520,18 @@ module Example
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
-                interval_days: 15,
+                interval_days: 20,
               ),
             ],
             waters: [
-              Water.create(
+              Water.new(
                 weight: 270,
               ),
             ],
           ),
-          Step.create(
+          Step.new(
             kojis: [
-              Koji.create(
+              Koji.new(
                 weight: 143,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -581,17 +541,17 @@ module Example
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
                 tanekojis: [
-                  Tanekoji.create(
+                  Tanekoji.new(
                     brand: :byakuya,
                     ratio: 0.001,
                   ),
                 ],
                 dekoji_ratio: 0.18,
-                interval_days: 0,
+                interval_days: 14,
               ),
             ],
             kakes: [
-              Kake.create(
+              Kake.new(
                 weight: 423,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -600,18 +560,18 @@ module Example
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
-                interval_days: 2,
+                interval_days: 22,
               ),
             ],
             waters: [
-              Water.create(
+              Water.new(
                 weight: 670,
               ),
             ],
           ),
-          Step.create(
+          Step.new(
             kojis: [
-              Koji.create(
+              Koji.new(
                 weight: 165,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -621,17 +581,17 @@ module Example
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
                 tanekojis: [
-                  Tanekoji.create(
+                  Tanekoji.new(
                     brand: :byakuya,
                     ratio: 0.001,
                   ),
                 ],
                 dekoji_ratio: 0.18,
-                interval_days: 0,
+                interval_days: 14,
               ),
             ],
             kakes: [
-              Kake.create(
+              Kake.new(
                 weight: 813,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -640,18 +600,18 @@ module Example
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
-                interval_days: 1,
+                interval_days: 23,
               ),
             ],
             waters: [
-              Water.create(
+              Water.new(
                 weight: 1330,
               ),
             ],
           ),
-          Step.create(
+          Step.new(
             alcohols: [
-              Alcohol.create(
+              Alcohol.new(
                 weight: 900,
               ),
             ],
@@ -660,11 +620,11 @@ module Example
       ).freeze,
       # 簡易酒母省略仕込
       # 出典: https://www.jstage.jst.go.jp/article/jbrewsocjapan1915/60/11/60_11_999/_article/-char/ja/
-      simple_sokujo_himeno: create(
+      simple_sokujo_himeno: new(
         [
-          Step.create(
+          Step.new(
             kojis: [
-              Koji.create(
+              Koji.new(
                 weight: 70,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -674,7 +634,7 @@ module Example
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
                 tanekojis: [
-                  Tanekoji.create(
+                  Tanekoji.new(
                     brand: :byakuya,
                     ratio: 0.001,
                   ),
@@ -684,7 +644,7 @@ module Example
               ),
             ],
             kakes: [
-              Kake.create(
+              Kake.new(
                 weight: 0,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -697,24 +657,24 @@ module Example
               ),
             ],
             waters: [
-              Water.create(
+              Water.new(
                 weight: 245,
               ),
             ],
             lactic_acids: [
-              LacticAcid.create(
+              LacticAcid.new(
                 weight: 1.6,
               ),
             ],
             yeasts: [
-              Yeast.create(
+              Yeast.new(
                 weight: 5,
               ),
             ],
           ),
-          Step.create(
+          Step.new(
             kojis: [
-              Koji.create(
+              Koji.new(
                 weight: 0,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -724,7 +684,7 @@ module Example
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
                 tanekojis: [
-                  Tanekoji.create(
+                  Tanekoji.new(
                     brand: :byakuya,
                     ratio: 0.001,
                   ),
@@ -734,7 +694,7 @@ module Example
               ),
             ],
             kakes: [
-              Kake.create(
+              Kake.new(
                 weight: 130,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -743,18 +703,18 @@ module Example
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
-                interval_days: 1,
+                interval_days: 7,
               ),
             ],
             waters: [
-              Water.create(
+              Water.new(
                 weight: 0,
               ),
             ],
           ),
-          Step.create(
+          Step.new(
             kojis: [
-              Koji.create(
+              Koji.new(
                 weight: 100,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -764,7 +724,7 @@ module Example
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
                 tanekojis: [
-                  Tanekoji.create(
+                  Tanekoji.new(
                     brand: :byakuya,
                     ratio: 0.001,
                   ),
@@ -774,7 +734,7 @@ module Example
               ),
             ],
             kakes: [
-              Kake.create(
+              Kake.new(
                 weight: 300,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -783,18 +743,18 @@ module Example
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
-                interval_days: 2,
+                interval_days: 9,
               ),
             ],
             waters: [
-              Water.create(
+              Water.new(
                 weight: 400,
               ),
             ],
           ),
-          Step.create(
+          Step.new(
             kojis: [
-              Koji.create(
+              Koji.new(
                 weight: 110,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -804,7 +764,7 @@ module Example
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
                 tanekojis: [
-                  Tanekoji.create(
+                  Tanekoji.new(
                     brand: :byakuya,
                     ratio: 0.001,
                   ),
@@ -814,7 +774,7 @@ module Example
               ),
             ],
             kakes: [
-              Kake.create(
+              Kake.new(
                 weight: 490,
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
@@ -823,18 +783,18 @@ module Example
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
-                interval_days: 1,
+                interval_days: 10,
               ),
             ],
             waters: [
-              Water.create(
+              Water.new(
                 weight: 800,
               ),
             ],
           ),
-          Step.create(
+          Step.new(
             waters: [
-              Water.create(
+              Water.new(
                 weight: 255,
               ),
             ],

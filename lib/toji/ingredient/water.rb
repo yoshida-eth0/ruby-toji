@@ -7,10 +7,11 @@ module Toji
       attr_accessor :weight
 
       # 硬度
-      attr_accessor :hardness
+      attr_reader :calcium_hardness
+      attr_reader :magnesium_hardness
 
       def group_key
-        [hardness].join(":")
+        [calcium_hardness, magnesium_hardness].join(":")
       end
     end
   end

@@ -4,7 +4,7 @@ class ProcessingKakeTest < Minitest::Test
   def setup
     @processing = KakeProcessing.new(
       date: Time.mktime(2020, 10, 30),
-      expect: Kake.create(
+      expect: Kake.new(
         weight: 50.0,
         brand: :yamadanishiki,
         polishing_ratio: 0.55,

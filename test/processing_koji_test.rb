@@ -4,7 +4,7 @@ class ProcessingKojiTest < Minitest::Test
   def setup
     @processing = KojiProcessing.new(
       date: Time.mktime(2020, 10, 30),
-      expect: Koji.create(
+      expect: Koji.new(
         weight: 50.0,
         brand: :yamadanishiki,
         polishing_ratio: 0.55,
@@ -14,7 +14,7 @@ class ProcessingKojiTest < Minitest::Test
         steaming_ratio: 0.41,
         cooling_ratio: 0.33,
         tanekojis: [
-          Tanekoji.create(
+          Tanekoji.new(
             brand: :byakuya,
             ratio: 0.001,
           ),

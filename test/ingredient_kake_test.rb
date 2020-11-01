@@ -2,7 +2,7 @@ require "test_helper"
 
 class IngredientKakeTest < Minitest::Test
   def setup
-    @kake = Kake.create(
+    @kake = Kake.new(
       weight: 100,
       brand: :yamadanishiki,
       polishing_ratio: 0.55,

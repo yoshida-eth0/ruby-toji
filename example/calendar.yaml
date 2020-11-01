@@ -2,36 +2,36 @@ products:
 - name: 仕1
   description: 姫野国夫による酒母省略仕込
   recipe: :simple_sokujo_himeno
-  scale: 600
+  scale_rice_total: 600
   round: 0
   base_date: 2020-2-24
 - name: 仕2
   description: 姫野国夫による酒母省略仕込
   recipe: :simple_sokujo_himeno
-  scale: 550
+  scale_rice_total: 550
   round: 0
   base_date: 2020-2-27
 - name: 仕3
   description: 灘における仕込配合
   recipe: :sokujo_nada
-  scale: 900
+  scale_rice_total: 900
   round: 0
   base_date: 2020-2-20
 - name: 仕4
   description: 酒造教本による標準型仕込配合
   recipe: :sokujo_textbook
-  scale: 900
+  scale_rice_total: 900
   round: 0
   base_date: 2020-2-20
 - name: 仕5
   description: 灘における仕込配合
   recipe: :sokujo_nada
-  scale: 900
+  scale_rice_total: 900
   round: 0
   base_date: 2020-2-27
 - name: 仕6
   description: 酒造教本による標準型仕込配合
   recipe: :sokujo_textbook
-  scale: 900
+  scale_rice_total: 900
   round: 0
   base_date: 2020-2-27

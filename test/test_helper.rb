@@ -48,193 +48,161 @@ end
 class Recipe
   include Toji::Recipe
 
-  def initialize
-    @steps = []
+  def initialize(steps:, actions:, has_moto:, has_moromi:, ab_coef:, ab_expects:)
+    @steps = steps
+    @actions = actions
+    @has_moto = has_moto
+    @has_moromi = has_moromi
+    @ab_coef = ab_coef
+    @ab_expects = ab_expects
   end
 
-  def self.create(steps, actions, has_moto, has_moromi, ab_coef, ab_expects)
-    new.tap {|o|
-      o.steps = steps
-      o.actions = actions
-      o.has_moto = has_moto
-      o.has_moromi = has_moromi
-      o.ab_coef = ab_coef
-      o.ab_expects = ab_expects
-    }
+  def initialize_copy(obj)
+    @steps = obj.steps.deep_dup
+    @actions = obj.actions.deep_dup
+    @has_moto = obj.has_moto.dup
+    @has_moromi = obj.has_moromi.dup
+    @ab_coef = obj.ab_coef.dup
+    @ab_expects = obj.ab_expects.deep_dup
   end
 end
 
 class Step
   include Toji::Recipe::Step
 
-  def initialize_copy(obj)
-    self.kojis = obj.kojis&.map(&:dup) || []
-    self.kakes = obj.kakes&.map(&:dup) || []
-    self.waters = obj.waters&.map(&:dup) || []
-    self.lactic_acids = obj.lactic_acids&.map(&:dup) || []
-    self.alcohols = obj.alcohols&.map(&:dup) || []
-    self.yeasts = obj.yeasts&.map(&:dup) || []
+  def initialize(kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
+    @kojis = kojis
+    @kakes = kakes
+    @waters = waters
+    @lactic_acids = lactic_acids
+    @alcohols = alcohols
+    @yeasts = yeasts
   end
 
-  def self.create(kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
-    new.tap {|o|
-      o.kojis = kojis
-      o.kakes = kakes
-      o.waters = waters
-      o.lactic_acids = lactic_acids
-      o.alcohols = alcohols
-      o.yeasts = yeasts
-    }
+  def initialize_copy(obj)
+    self.kojis = obj.kojis&.deep_dup || []
+    self.kakes = obj.kakes&.deep_dup || []
+    self.waters = obj.waters&.deep_dup || []
+    self.lactic_acids = obj.lactic_acids&.deep_dup || []
+    self.alcohols = obj.alcohols&.deep_dup || []
+    self.yeasts = obj.yeasts&.deep_dup || []
   end
 end
 
 class Koji
   include Toji::Ingredient::Koji
 
-  attr_accessor :weight
-  attr_accessor :soaking_ratio
-  attr_accessor :steaming_ratio
-  attr_accessor :cooling_ratio
-  attr_accessor :tanekojis
-  attr_accessor :dekoji_ratio
-  attr_accessor :interval_days
+  def initialize(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
+      @weight = weight
+      @brand = brand
+      @polishing_ratio = polishing_ratio
+      @made_in = made_in
+      @year = year
+      @soaking_ratio = soaking_ratio
+      @steaming_ratio = steaming_ratio
+      @cooling_ratio = cooling_ratio
+      @tanekojis = tanekojis.map {|tanekoji|
+        tanekoji.koji = self
+        tanekoji
+      }
+      @dekoji_ratio = dekoji_ratio
+      @interval_days = interval_days
+  end
 
   def initialize_copy(obj)
-    self.weight = obj.weight.dup
-    self.brand = obj.brand.dup
-    self.polishing_ratio = obj.polishing_ratio.dup
-    self.made_in = obj.made_in.dup
-    self.year = obj.year.dup
-    self.soaking_ratio = obj.soaking_ratio.dup
-    self.steaming_ratio = obj.steaming_ratio.dup
-    self.cooling_ratio = obj.cooling_ratio.dup
+    @weight = obj.weight.dup
+    @brand = obj.brand.dup
+    @polishing_ratio = obj.polishing_ratio.dup
+    @made_in = obj.made_in.dup
+    @year = obj.year.dup
+    @soaking_ratio = obj.soaking_ratio.dup
+    @steaming_ratio = obj.steaming_ratio.dup
+    @cooling_ratio = obj.cooling_ratio.dup
 
-    self.tanekojis = obj.tanekojis.map {|tanekoji|
+    @tanekojis = obj.tanekojis.map {|tanekoji|
       tanekoji = tanekoji.dup
       tanekoji.koji = self
       tanekoji
     }
 
-    self.dekoji_ratio = obj.dekoji_ratio.dup
-    self.interval_days = obj.interval_days.dup
-  end
-
-  def self.create(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
-    new.tap {|o|
-      o.weight = weight
-      o.brand = brand
-      o.polishing_ratio = polishing_ratio
-      o.made_in = made_in
-      o.year = year
-      o.soaking_ratio = soaking_ratio
-      o.steaming_ratio = steaming_ratio
-      o.cooling_ratio = cooling_ratio
-      o.tanekojis = tanekojis.map {|tanekoji|
-        tanekoji.koji = o
-        tanekoji
-      }
-      o.dekoji_ratio = dekoji_ratio
-      o.interval_days = interval_days
-    }
+    @dekoji_ratio = obj.dekoji_ratio.dup
+    @interval_days = obj.interval_days.dup
   end
 end
 
 class Tanekoji
   include Toji::Ingredient::Tanekoji
 
-  def initialize_copy(obj)
-    self.brand = obj.brand.dup
-    self.ratio = obj.ratio.dup
+  attr_accessor :koji
+
+  def initialize(koji: nil, brand:, ratio:)
+    @koji = koji
+    @brand = brand
+    @ratio = ratio
   end
 
-  def self.create(koji: nil, brand:, ratio:)
-    new.tap {|o|
-      o.brand = brand
-      o.ratio = ratio
-    }
+  def initialize_copy(obj)
+    @brand = obj.brand.dup
+    @ratio = obj.ratio.dup
   end
 end
 
 class Kake
   include Toji::Ingredient::Kake
 
-  attr_accessor :weight
-  attr_accessor :soaking_ratio
-  attr_accessor :steaming_ratio
-  attr_accessor :cooling_ratio
-  attr_accessor :interval_days
-
-  def self.create(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
-    new.tap {|o|
-      o.weight = weight
-      o.brand = brand
-      o.polishing_ratio = polishing_ratio
-      o.made_in = made_in
-      o.year = year
-      o.soaking_ratio = soaking_ratio
-      o.steaming_ratio = steaming_ratio
-      o.cooling_ratio = cooling_ratio
-      o.interval_days = interval_days
-    }
+  def initialize(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
+    @weight = weight
+    @brand = brand
+    @polishing_ratio = polishing_ratio
+    @made_in = made_in
+    @year = year
+    @soaking_ratio = soaking_ratio
+    @steaming_ratio = steaming_ratio
+    @cooling_ratio = cooling_ratio
+    @interval_days = interval_days
   end
 end
 
 class Water
   include Toji::Ingredient::Water
 
-  attr_accessor :weight
-
-  def self.create(weight:)
-    new.tap {|o|
-      o.weight = weight
-    }
+  def initialize(weight:, calcium_hardness: nil, magnesium_hardness: nil)
+    @weight = weight
+    @calcium_hardness = calcium_hardness
+    @magnesium_hardness = magnesium_hardness
   end
 end
 
 class LacticAcid
   include Toji::Ingredient::LacticAcid
 
-  attr_accessor :weight
-
-  def self.create(weight:)
-    new.tap {|o|
-      o.weight = weight
-    }
+  def initialize(weight:)
+    @weight = weight
   end
 end
 
 class Alcohol
   include Toji::Ingredient::Alcohol
 
-  attr_accessor :weight
-
-  def self.create(weight:)
-    new.tap {|o|
-      o.weight = weight
-    }
+  def initialize(weight:)
+    @weight = weight
   end
 end
 
 class Yeast
   include Toji::Ingredient::Yeast
 
-  attr_accessor :weight
-
-  def self.create(weight:)
-    new.tap {|o|
-      o.weight = weight
-    }
+  def initialize(weight:)
+    @weight = weight
   end
 end
 
 class Action
   include Toji::Recipe::Action
 
-  def self.create(type:, interval_days:)
-    new.tap {|o|
-      o.type = type
-      o.interval_days = interval_days
-    }
+  def initialize(type:, interval_days:)
+    @type = type
+    @interval_days = interval_days
   end
 end
 

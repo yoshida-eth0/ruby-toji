@@ -3,7 +3,7 @@ require 'toji'
 require_relative 'example_core'
 require 'terminal-table'
 
-koji = Example::Koji.create(
+koji = Example::Koji.new(
   weight: 100,
   brand: :yamadanishiki,
   polishing_ratio: 0.55,
@@ -13,7 +13,7 @@ koji = Example::Koji.create(
   steaming_ratio: 0.41,
   cooling_ratio: 0.33,
   tanekojis: [
-    Example::Tanekoji.create(
+    Example::Tanekoji.new(
       brand: :byakuya,
       ratio: 0.001,
     ),

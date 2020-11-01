@@ -4,42 +4,44 @@ require 'toji/recipe/ab_expect'
 
 module Toji
   module Recipe
-    attr_accessor :steps
-    attr_accessor :actions
-    attr_accessor :has_moto
-    attr_accessor :has_moromi
-    attr_accessor :ab_coef
-    attr_accessor :ab_expects
+    attr_reader :steps
+    attr_reader :actions
+    attr_reader :has_moto
+    attr_reader :has_moromi
+    attr_reader :ab_coef
+    attr_reader :ab_expects
 
-    def scale(rice_total)
+    def scale_rice_total(rice_total)
       ratio = rice_total / steps.map(&:rice_total).sum
-      new_steps = steps.map {|step|
-        step * ratio
-      }
+      scale(ratio)
+    end
 
-      self.class.new.tap {|o|
-        o.steps = new_steps
-        o.actions = actions.deep_dup
-        o.has_moto = has_moto
-        o.has_moromi = has_moromi
-        o.ab_coef = ab_coef
-        o.ab_expects = ab_expects.deep_dup
+    def scale!(ratio)
+      steps.each {|step|
+        step.scale!(ratio)
       }
+      self
+    end
+
+    def scale(ratio)
+      Utils.check_dup(self)
+
+      dst = self.dup
+      dst.scale!(ratio)
+    end
+
+    def round!(ndigit=0, mini_ndigit=nil, half: :up)
+      steps.each {|step|
+        step.round!(ndigit, mini_ndigit, half: half)
+      }
+      self
     end
 
     def round(ndigit=0, mini_ndigit=nil, half: :up)
-      new_steps = steps.map {|step|
-        step.round(ndigit, mini_ndigit, half: half)
-      }
+      Utils.check_dup(self)
 
-      self.class.new.tap {|o|
-        o.steps = new_steps
-        o.actions = actions.deep_dup
-        o.has_moto = has_moto
-        o.has_moromi = has_moromi
-        o.ab_coef = ab_coef
-        o.ab_expects = ab_expects.deep_dup
-      }
+      dst = self.dup
+      dst.round!(ndigit, mini_ndigit, half: half)
     end
 
     # 総米の累計
@@ -86,17 +88,27 @@ module Toji
     end
 
     def table_data
-      headers = [""] + steps.map.with_index{|s,i| :"step#{i}"} + [:total]
-      keys = [[:rice_total, :itself], [:kake, :weight], [:koji, :weight], [:alcohol, :weight], [:water, :weight], [:lactic_acid, :weight]]
+      headers = [""] + steps.map.with_index{|s,i| :"Step#{i}"} + [:total]
+      keys = [["RiceTotal", :rice_total], ["Kake", :kakes], ["Koji", :kojis], ["Alcohol", :alcohols], ["Water", :waters], ["LacticAcid", :lactic_acids]]
 
       cells = [keys.map(&:first)]
       cells += steps.map {|step|
-        keys.map {|k1, k2|
-          step.send(k1)&.send(k2)
+        keys.map(&:last).map {|key|
+          vals = step.send(key)
+          if Numeric===vals
+            vals
+          else
+            vals.compact.map(&:weight).sum
+          end
         }
       }
-      cells << keys.map {|k1, k2|
-        steps.map(&k1).compact.map(&k2).compact.sum
+      cells << keys.map(&:last).map {|key|
+        vals = steps.map(&key)
+        if Numeric===vals[0]
+          vals.sum
+        else
+          vals.flatten.compact.map(&:weight).sum
+        end
       }
 
       cells = cells.map {|cell|
