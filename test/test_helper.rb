@@ -275,7 +275,9 @@ end
 class KojiProcessing
   include Toji::Processing::KojiProcessing
 
-  def initialize(date:, expect:, soaked_rice:, steamed_rice:, cooled_rice:, dekoji:)
+  attr_reader :koji_progress
+
+  def initialize(date:, expect:, soaked_rice:, steamed_rice:, cooled_rice:, koji_progress:, dekoji:)
     @date = date
     @expect = expect
     @soaked_rice = soaked_rice
@@ -284,6 +286,7 @@ class KojiProcessing
     @steamed_rice.processing = self
     @cooled_rice = cooled_rice
     @cooled_rice.processing = self
+    @koji_progress = koji_progress
     @dekoji = dekoji
     @dekoji.processing = self
   end
@@ -387,30 +390,11 @@ end
 class KojiProgress
   include Toji::Progress::KojiProgress
 
-  def states
-    [
-      KojiState.create({
-        progress: self,
-        time: Time.mktime(2020, 1, 1, 9, 0),
-        mark: "引込み",
-        temps: 35.0,
-        room_temp: 28.0,
-      }),
-      KojiState.create({
-        progress: self,
-        time: Time.mktime(2020, 1, 1, 10, 0),
-        mark: "床揉み",
-        temps: 32.0,
-        room_temp: 28.0,
-      }),
-      KojiState.create({
-        progress: self,
-        time: Time.mktime(2020, 1, 1, 19, 0),
-        mark: "切返し",
-        temps: [32.0, 31.0],
-        room_temp: 28.0,
-      }),
-    ]
+  def initialize(states:)
+    @states = states.map {|state|
+      state.progress = self
+      state
+    }.sort_by(&:time)
   end
 
   def base_time

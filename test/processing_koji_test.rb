@@ -88,6 +88,28 @@ class ProcessingKojiTest < Minitest::Test
           ),
         ],
       ),
+      koji_progress: KojiProgress.new(
+        states: [
+          KojiState.create({
+            time: Time.mktime(2020, 10, 30, 9, 0),
+            mark: "引込み",
+            temps: 35.0,
+            room_temp: 28.0,
+          }),
+          KojiState.create({
+            time: Time.mktime(2020, 10, 30, 10, 0),
+            mark: "床揉み",
+            temps: 32.0,
+            room_temp: 28.0,
+          }),
+          KojiState.create({
+            time: Time.mktime(2020, 10, 30, 19, 0),
+            mark: "切返し",
+            temps: [32.0, 31.0],
+            room_temp: 28.0,
+          }),
+        ],
+      ),
       dekoji: Dekoji.new(
         elements: [
           DekojiElement.new(
@@ -160,6 +182,22 @@ class ProcessingKojiTest < Minitest::Test
   def test_cooled_rice
     assert_equal 67.01, @processing.cooled_rice.weight
     assert_in_delta 0.3369912210694335, @processing.cooled_rice.cooling_ratio
+  end
+
+  def test_koji_progress
+    assert_equal Time.mktime(2020, 10, 30, 9, 0), @processing.koji_progress.base_time
+    assert_equal 32400, @processing.koji_progress.day_offset
+
+    states = @processing.koji_progress.states
+
+    assert_equal 3, states.length
+    assert_equal 3600, states[1].elapsed_time
+
+    table_data = @processing.koji_progress.progress_note.table_data
+
+    assert_equal [:day_label, :display_time, :mark, :temps, :room_temp], table_data[:header]
+    assert_equal ["1", "10/30 09:00", "引込み", "35.0", "28.0"], table_data[:rows][0]
+    assert_equal 3, table_data[:rows].length
   end
 
   def test_dekoji

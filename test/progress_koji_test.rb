@@ -2,7 +2,28 @@ require "test_helper"
 
 class ProgressKojiTest < Minitest::Test
   def setup
-    @koji = KojiProgress.new
+    @koji = KojiProgress.new(
+      states: [
+        KojiState.create({
+          time: Time.mktime(2020, 1, 1, 9, 0),
+          mark: "引込み",
+          temps: 35.0,
+          room_temp: 28.0,
+        }),
+        KojiState.create({
+          time: Time.mktime(2020, 1, 1, 10, 0),
+          mark: "床揉み",
+          temps: 32.0,
+          room_temp: 28.0,
+        }),
+        KojiState.create({
+          time: Time.mktime(2020, 1, 1, 19, 0),
+          mark: "切返し",
+          temps: [32.0, 31.0],
+          room_temp: 28.0,
+        }),
+      ],
+    )
   end
 
   def test_basic
