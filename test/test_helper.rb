@@ -48,11 +48,9 @@ end
 class Recipe
   include Toji::Recipe
 
-  def initialize(steps:, actions:, has_moto:, has_moromi:, ab_coef:, ab_expects:)
+  def initialize(steps:, actions:, ab_coef:, ab_expects:)
     @steps = steps
     @actions = actions
-    @has_moto = has_moto
-    @has_moromi = has_moromi
     @ab_coef = ab_coef
     @ab_expects = ab_expects
   end
@@ -60,8 +58,6 @@ class Recipe
   def initialize_copy(obj)
     @steps = obj.steps.deep_dup
     @actions = obj.actions.deep_dup
-    @has_moto = obj.has_moto.dup
-    @has_moromi = obj.has_moromi.dup
     @ab_coef = obj.ab_coef.dup
     @ab_expects = obj.ab_expects.deep_dup
   end

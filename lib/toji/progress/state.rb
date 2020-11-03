@@ -3,7 +3,7 @@ require 'toji/progress/state/nihonshudo_to_baume'
 
 module Toji
   module Progress
-    module BaseState
+    module State
     end
   end
 end

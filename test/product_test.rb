@@ -203,8 +203,6 @@ class ProductTest < Minitest::Test
           interval_days: 50,
         ),
       ].map(&:freeze).freeze,
-      has_moto: true,
-      has_moromi: true,
       ab_coef: 1.4,
       ab_expects: [],
     ).freeze

@@ -6,8 +6,6 @@ module Toji
   module Recipe
     attr_reader :steps
     attr_reader :actions
-    attr_reader :has_moto
-    attr_reader :has_moromi
     attr_reader :ab_coef
     attr_reader :ab_expects
 
