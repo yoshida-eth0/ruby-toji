@@ -7,6 +7,7 @@ class RecipeTest < Minitest::Test
     @recipe = Recipe.new(
       steps: [
         Step.new(
+          index: 0,
           kojis: [
             Koji.new(
               weight: 20,
@@ -57,6 +58,7 @@ class RecipeTest < Minitest::Test
           ],
         ),
         Step.new(
+          index: 1,
           kojis: [
             Koji.new(
               weight: 40,
@@ -97,6 +99,7 @@ class RecipeTest < Minitest::Test
           ],
         ),
         Step.new(
+          index: 2,
           kojis: [
             Koji.new(
               weight: 60,
@@ -137,6 +140,7 @@ class RecipeTest < Minitest::Test
           ],
         ),
         Step.new(
+          index: 3,
           kojis: [
             Koji.new(
               weight: 80,
@@ -177,6 +181,7 @@ class RecipeTest < Minitest::Test
           ],
         ),
         Step.new(
+          index: 4,
           kakes: [
             Kake.new(
               weight: 80,

@@ -86,7 +86,8 @@ module Example
   class Step
     include Toji::Recipe::Step
 
-    def initialize(kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
+    def initialize(index:, kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
+      @index = index
       @kojis = kojis
       @kakes = kakes
       @waters = waters
@@ -244,6 +245,7 @@ module Example
       sokujo_textbook: new(
         [
           Step.new(
+            index: 0,
             kojis: [
               Koji.new(
                 weight: 20,
@@ -294,6 +296,7 @@ module Example
             ]
           ),
           Step.new(
+            index: 1,
             kojis: [
               Koji.new(
                 weight: 40,
@@ -334,6 +337,7 @@ module Example
             ],
           ),
           Step.new(
+            index: 2,
             kojis: [
               Koji.new(
                 weight: 60,
@@ -374,6 +378,7 @@ module Example
             ],
           ),
           Step.new(
+            index: 3,
             kojis: [
               Koji.new(
                 weight: 80,
@@ -414,6 +419,7 @@ module Example
             ],
           ),
           Step.new(
+            index: 4,
             kakes: [
               Kake.new(
                 weight: 80,
@@ -440,6 +446,7 @@ module Example
       sokujo_nada: new(
         [
           Step.new(
+            index: 0,
             kojis: [
               Koji.new(
                 weight: 47,
@@ -490,6 +497,7 @@ module Example
             ],
           ),
           Step.new(
+            index: 1,
             kojis: [
               Koji.new(
                 weight: 99,
@@ -530,6 +538,7 @@ module Example
             ],
           ),
           Step.new(
+            index: 2,
             kojis: [
               Koji.new(
                 weight: 143,
@@ -570,6 +579,7 @@ module Example
             ],
           ),
           Step.new(
+            index: 3,
             kojis: [
               Koji.new(
                 weight: 165,
@@ -610,6 +620,7 @@ module Example
             ],
           ),
           Step.new(
+            index: 4,
             alcohols: [
               Alcohol.new(
                 weight: 900,
@@ -623,6 +634,7 @@ module Example
       simple_sokujo_himeno: new(
         [
           Step.new(
+            index: 0,
             kojis: [
               Koji.new(
                 weight: 70,
@@ -673,6 +685,7 @@ module Example
             ],
           ),
           Step.new(
+            index: 1,
             kojis: [
               Koji.new(
                 weight: 0,
@@ -713,6 +726,7 @@ module Example
             ],
           ),
           Step.new(
+            index: 1,
             kojis: [
               Koji.new(
                 weight: 100,
@@ -753,6 +767,7 @@ module Example
             ],
           ),
           Step.new(
+            index: 2,
             kojis: [
               Koji.new(
                 weight: 110,
@@ -793,6 +808,7 @@ module Example
             ],
           ),
           Step.new(
+            index: 3,
             waters: [
               Water.new(
                 weight: 255,

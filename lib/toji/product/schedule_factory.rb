@@ -15,10 +15,10 @@ module Toji
       end
 
       def koji_schedules
-        recipe.steps.each.with_index.inject([]) {|result, (step, i)|
+        recipe.steps.inject([]) {|result, step|
           step.kojis&.each {|koji|
             result << {
-              step_index: i,
+              step_index: step.index,
               date: base_date.next_day(koji.interval_days),
               koji: koji,
             }
@@ -38,10 +38,10 @@ module Toji
       end
 
       def kake_schedules
-        recipe.steps.each.with_index.inject([]) {|result, (step, i)|
+        recipe.steps.inject([]) {|result, step|
           step.kakes&.each {|kake|
             result << {
-              step_index: i,
+              step_index: step.index,
               date: base_date.next_day(kake.interval_days),
               kake: kake,
             }

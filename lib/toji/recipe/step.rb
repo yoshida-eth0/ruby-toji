@@ -1,6 +1,7 @@
 module Toji
   module Recipe
     module Step
+      attr_reader :index
       attr_accessor :kojis
       attr_accessor :kakes
       attr_accessor :waters

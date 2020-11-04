@@ -66,7 +66,8 @@ end
 class Step
   include Toji::Recipe::Step
 
-  def initialize(kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
+  def initialize(index:, kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
+    @index = index
     @kojis = kojis
     @kakes = kakes
     @waters = waters
@@ -76,12 +77,13 @@ class Step
   end
 
   def initialize_copy(obj)
-    self.kojis = obj.kojis&.deep_dup || []
-    self.kakes = obj.kakes&.deep_dup || []
-    self.waters = obj.waters&.deep_dup || []
-    self.lactic_acids = obj.lactic_acids&.deep_dup || []
-    self.alcohols = obj.alcohols&.deep_dup || []
-    self.yeasts = obj.yeasts&.deep_dup || []
+    @index = obj.index
+    @kojis = obj.kojis&.deep_dup || []
+    @kakes = obj.kakes&.deep_dup || []
+    @waters = obj.waters&.deep_dup || []
+    @lactic_acids = obj.lactic_acids&.deep_dup || []
+    @alcohols = obj.alcohols&.deep_dup || []
+    @yeasts = obj.yeasts&.deep_dup || []
   end
 end
 
@@ -89,20 +91,20 @@ class Koji
   include Toji::Ingredient::Koji
 
   def initialize(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
-      @weight = weight
-      @brand = brand
-      @polishing_ratio = polishing_ratio
-      @made_in = made_in
-      @year = year
-      @soaking_ratio = soaking_ratio
-      @steaming_ratio = steaming_ratio
-      @cooling_ratio = cooling_ratio
-      @tanekojis = tanekojis.map {|tanekoji|
-        tanekoji.koji = self
-        tanekoji
-      }
-      @dekoji_ratio = dekoji_ratio
-      @interval_days = interval_days
+    @weight = weight
+    @brand = brand
+    @polishing_ratio = polishing_ratio
+    @made_in = made_in
+    @year = year
+    @soaking_ratio = soaking_ratio
+    @steaming_ratio = steaming_ratio
+    @cooling_ratio = cooling_ratio
+    @tanekojis = tanekojis.map {|tanekoji|
+      tanekoji.koji = self
+      tanekoji
+    }
+    @dekoji_ratio = dekoji_ratio
+    @interval_days = interval_days
   end
 
   def initialize_copy(obj)
