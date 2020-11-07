@@ -32,8 +32,8 @@ module Toji
       kake_schedules = @products.map{|product| product.kake_schedules}.flatten
       schedules = koji_schedules + kake_schedules
 
-      koji_len = koji_schedules.map{|schedule| schedule.step_indexes.first}.max + 1
-      kake_len = kake_schedules.map{|schedule| schedule.step_indexes.first}.max + 1
+      koji_len = koji_schedules.map{|schedule| schedule.step_indexes.first[:index]}.max + 1
+      kake_len = kake_schedules.map{|schedule| schedule.step_indexes.first[:index]}.max + 1
       min_date = schedules.map(&:date).min
       max_date = schedules.map(&:date).max
 

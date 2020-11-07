@@ -18,7 +18,10 @@ module Toji
         recipe.steps.inject([]) {|result, step|
           step.kojis&.each {|koji|
             result << {
-              step_index: step.index,
+              step_index: {
+                index: step.index,
+                subindex: step.subindex,
+              },
               date: base_date.next_day(koji.interval_days),
               koji: koji,
             }
@@ -31,7 +34,7 @@ module Toji
         }.map {|(date, group_key), schedules|
           create_koji_schedule(
             date: date,
-            step_indexes: schedules.map {|schedule| schedule[:step_index]}.sort,
+            step_indexes: schedules.map {|schedule| schedule[:step_index]}.sort_by {|x| [x[:index], x[:subindex]]},
             kojis: schedules.map{|schedule| schedule[:koji]},
           )
         }
@@ -41,7 +44,10 @@ module Toji
         recipe.steps.inject([]) {|result, step|
           step.kakes&.each {|kake|
             result << {
-              step_index: step.index,
+              step_index: {
+                index: step.index,
+                subindex: step.subindex,
+              },
               date: base_date.next_day(kake.interval_days),
               kake: kake,
             }
@@ -50,11 +56,11 @@ module Toji
         }.select {|schedule|
           0<schedule[:kake]&.weight.to_f
         }.group_by {|schedule|
-          [schedule[:date], schedule[:kake].group_key]
-        }.map {|(date, group_key), schedules|
+          [schedule[:date], schedule[:kake].group_key, schedule[:step_index]]
+        }.map {|(date, group_key, step_index), schedules|
           create_kake_schedule(
             date: date,
-            step_indexes: schedules.map {|schedule| schedule[:step_index]}.sort,
+            step_indexes: schedules.map {|schedule| schedule[:step_index]}.sort_by {|x| [x[:index], x[:subindex]]},
             kakes: schedules.map{|schedule| schedule[:kake]},
           )
         }

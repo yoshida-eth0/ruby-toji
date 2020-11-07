@@ -8,6 +8,7 @@ class ProductTest < Minitest::Test
       steps: [
         Step.new(
           index: 0,
+          subindex: 0,
           kojis: [
             Koji.new(
               weight: 20,
@@ -59,6 +60,7 @@ class ProductTest < Minitest::Test
         ),
         Step.new(
           index: 1,
+          subindex: 0,
           kojis: [
             Koji.new(
               weight: 40,
@@ -100,6 +102,7 @@ class ProductTest < Minitest::Test
         ),
         Step.new(
           index: 2,
+          subindex: 0,
           kojis: [
             Koji.new(
               weight: 60,
@@ -141,6 +144,7 @@ class ProductTest < Minitest::Test
         ),
         Step.new(
           index: 3,
+          subindex: 0,
           kojis: [
             Koji.new(
               weight: 80,
@@ -182,6 +186,7 @@ class ProductTest < Minitest::Test
         ),
         Step.new(
           index: 4,
+          subindex: 0,
           kakes: [
             Kake.new(
               weight: 80,
@@ -231,11 +236,11 @@ class ProductTest < Minitest::Test
     assert_equal Time.mktime(2020, 2, 24), schedule1.date
     assert_equal :koji, schedule1.rice_type
     assert_equal 180, schedule1.expect.weight
-    assert_equal [1, 2, 3], schedule1.step_indexes
+    assert_equal [{index: 1, subindex: 0}, {index: 2, subindex: 0}, {index: 3, subindex: 0}], schedule1.step_indexes
 
     assert_equal Time.mktime(2020, 3, 3), schedule4.date
     assert_equal :kake, schedule4.rice_type
     assert_equal 215, schedule4.expect.weight
-    assert_equal [2], schedule4.step_indexes
+    assert_equal [{index: 2, subindex: 0}], schedule4.step_indexes
   end
 end

@@ -66,8 +66,9 @@ end
 class Step
   include Toji::Recipe::Step
 
-  def initialize(index:, kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
+  def initialize(index:, subindex:, kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
     @index = index
+    @subindex = subindex
     @kojis = kojis
     @kakes = kakes
     @waters = waters
@@ -78,6 +79,7 @@ class Step
 
   def initialize_copy(obj)
     @index = obj.index
+    @subindex = obj.subindex
     @kojis = obj.kojis&.deep_dup || []
     @kakes = obj.kakes&.deep_dup || []
     @waters = obj.waters&.deep_dup || []

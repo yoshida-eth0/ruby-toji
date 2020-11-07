@@ -14,11 +14,11 @@ module Toji
       def <<(schedule)
         case schedule.rice_type
         when :koji
-          index = schedule.step_indexes.first
+          index = schedule.step_indexes.first[:index]
           @kojis[index] ||= DateColumn.new
           @kojis[index] << schedule
         when :kake
-          index = schedule.step_indexes.first
+          index = schedule.step_indexes.first[:index]
           @kakes[index] ||= DateColumn.new
           @kakes[index] << schedule
         end
