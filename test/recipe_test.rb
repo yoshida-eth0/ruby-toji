@@ -223,7 +223,7 @@ class RecipeTest < Minitest::Test
           alcohol: 16.0,
           nihonshudo: 3.0,
         ),
-      ],
+      ].map(&:freeze).freeze,
     ).freeze
   end
 

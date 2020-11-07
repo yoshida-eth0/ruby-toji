@@ -222,16 +222,31 @@ module Example
     end
   end
 
+  class AbExpect
+    include Toji::Recipe::AbExpect
+
+    def initialize(alcohol:, nihonshudo:)
+      @alcohol = alcohol
+      @nihonshudo = nihonshudo
+    end
+  end
+
 
   class Recipe
     include Toji::Recipe
 
-    def initialize(steps)
+    def initialize(steps:, actions:, ab_coef:, ab_expects:)
       @steps = steps
+      @actions = actions
+      @ab_coef = ab_coef
+      @ab_expects = ab_expects
     end
 
     def initialize_copy(obj)
       @steps = obj.steps.deep_dup
+      @actions = obj.actions.deep_dup
+      @ab_coef = obj.ab_coef.dup
+      @ab_expects = obj.ab_expects.deep_dup
     end
 
     # 乳酸は汲水100L当たり比重1.21の乳酸(90%乳酸と称される)を650〜720ml添加する。
@@ -244,7 +259,7 @@ module Example
       # 酒造教本による標準型仕込配合
       # 出典: 酒造教本 P97
       sokujo_textbook: new(
-        [
+        steps: [
           Step.new(
             index: 0,
             subindex: 0,
@@ -445,12 +460,29 @@ module Example
               ),
             ],
           ),
-        ].map(&:freeze).freeze
+        ].map(&:freeze).freeze,
+        actions: [
+          Action.new(
+            type: :squeeze,
+            interval_days: 50,
+          ),
+        ].map(&:freeze).freeze,
+        ab_coef: 1.4,
+        ab_expects: [
+          AbExpect.new(
+            alcohol: 15.0,
+            nihonshudo: 0.0,
+          ),
+          AbExpect.new(
+            alcohol: 16.0,
+            nihonshudo: 3.0,
+          ),
+        ].map(&:freeze).freeze,
       ).freeze,
       # 灘における仕込配合の平均値
       # 出典: http://www.nada-ken.com/main/jp/index_shi/234.html
       sokujo_nada: new(
-        [
+        steps: [
           Step.new(
             index: 0,
             subindex: 0,
@@ -638,12 +670,29 @@ module Example
               ),
             ],
           ),
-        ].map(&:freeze).freeze
+        ].map(&:freeze).freeze,
+        actions: [
+          Action.new(
+            type: :squeeze,
+            interval_days: 50,
+          ),
+        ].map(&:freeze).freeze,
+        ab_coef: 1.4,
+        ab_expects: [
+          AbExpect.new(
+            alcohol: 15.0,
+            nihonshudo: 0.0,
+          ),
+          AbExpect.new(
+            alcohol: 16.0,
+            nihonshudo: 3.0,
+          ),
+        ].map(&:freeze).freeze,
       ).freeze,
       # 簡易酒母省略仕込
       # 出典: https://www.jstage.jst.go.jp/article/jbrewsocjapan1915/60/11/60_11_999/_article/-char/ja/
       simple_sokujo_himeno: new(
-        [
+        steps: [
           Step.new(
             index: 0,
             subindex: 0,
@@ -831,7 +880,24 @@ module Example
               ),
             ],
           ),
-        ].map(&:freeze).freeze
+        ].map(&:freeze).freeze,
+        actions: [
+          Action.new(
+            type: :squeeze,
+            interval_days: 50,
+          ),
+        ].map(&:freeze).freeze,
+        ab_coef: 1.4,
+        ab_expects: [
+          AbExpect.new(
+            alcohol: 15.0,
+            nihonshudo: 0.0,
+          ),
+          AbExpect.new(
+            alcohol: 16.0,
+            nihonshudo: 3.0,
+          ),
+        ].map(&:freeze).freeze,
       ).freeze,
     }.freeze
   end
