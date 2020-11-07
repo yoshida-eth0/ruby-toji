@@ -31,7 +31,7 @@ module Toji
           0<schedule[:koji]&.weight.to_f
         }.group_by {|schedule|
           [schedule[:date], schedule[:koji].group_key]
-        }.map {|(date, group_key), schedules|
+        }.map {|(date, _group_key), schedules|
           create_koji_schedule(
             date: date,
             step_indexes: schedules.map {|schedule| schedule[:step_index]}.sort_by {|x| [x[:index], x[:subindex]]},
@@ -57,7 +57,7 @@ module Toji
           0<schedule[:kake]&.weight.to_f
         }.group_by {|schedule|
           [schedule[:date], schedule[:kake].group_key, schedule[:step_index]]
-        }.map {|(date, group_key, step_index), schedules|
+        }.map {|(date, _group_key, _step_index), schedules|
           create_kake_schedule(
             date: date,
             step_indexes: schedules.map {|schedule| schedule[:step_index]}.sort_by {|x| [x[:index], x[:subindex]]},

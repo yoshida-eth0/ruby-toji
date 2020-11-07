@@ -206,6 +206,16 @@ class Action
   end
 end
 
+class AbExpect
+  include Toji::Recipe::AbExpect
+
+  def initialize(alcohol:, nihonshudo:)
+    @alcohol = alcohol
+    @nihonshudo = nihonshudo
+  end
+end
+
+
 class KojiSchedule
   include Toji::Schedule::KojiSchedule
 

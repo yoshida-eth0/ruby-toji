@@ -214,7 +214,16 @@ class RecipeTest < Minitest::Test
         ),
       ].map(&:freeze).freeze,
       ab_coef: 1.4,
-      ab_expects: [],
+      ab_expects: [
+        AbExpect.new(
+          alcohol: 15.0,
+          nihonshudo: 0.0,
+        ),
+        AbExpect.new(
+          alcohol: 16.0,
+          nihonshudo: 3.0,
+        ),
+      ],
     ).freeze
   end
 
@@ -326,5 +335,12 @@ class RecipeTest < Minitest::Test
 
     assert_equal 0.06571428571428571, recipe.moto_ratio
     assert_equal [1.0, 2.130434782608696, 4.173913043478261, 6.695652173913044, 1.2173913043478262], recipe.rice_ratios
+  end
+
+  def test_ab_expects
+    ab_expect0 = @recipe.ab_expects[0]
+
+    assert_equal 15.0, ab_expect0.alcohol
+    assert_equal 0.0, ab_expect0.nihonshudo
   end
 end
