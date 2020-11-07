@@ -717,17 +717,6 @@ module Example
               ),
             ],
             kakes: [
-              Kake.new(
-                weight: 0,
-                brand: :yamadanishiki,
-                polishing_ratio: 0.55,
-                made_in: :hyogo,
-                year: 2020,
-                soaking_ratio: 0.33,
-                steaming_ratio: 0.41,
-                cooling_ratio: 0.33,
-                interval_days: 6,
-              ),
             ],
             waters: [
               Water.new(
@@ -749,24 +738,6 @@ module Example
             index: 1,
             subindex: 0,
             kojis: [
-              Koji.new(
-                weight: 0,
-                brand: :yamadanishiki,
-                polishing_ratio: 0.55,
-                made_in: :hyogo,
-                year: 2020,
-                soaking_ratio: 0.33,
-                steaming_ratio: 0.41,
-                cooling_ratio: 0.33,
-                tanekojis: [
-                  Tanekoji.new(
-                    brand: :byakuya,
-                    ratio: 0.001,
-                  ),
-                ],
-                dekoji_ratio: 0.18,
-                interval_days: 0,
-              ),
             ],
             kakes: [
               Kake.new(
@@ -788,7 +759,7 @@ module Example
             ],
           ),
           Step.new(
-            index: 1,
+            index: 2,
             subindex: 0,
             kojis: [
               Koji.new(
@@ -830,7 +801,7 @@ module Example
             ],
           ),
           Step.new(
-            index: 2,
+            index: 3,
             subindex: 0,
             kojis: [
               Koji.new(
@@ -872,7 +843,7 @@ module Example
             ],
           ),
           Step.new(
-            index: 3,
+            index: 4,
             subindex: 0,
             waters: [
               Water.new(
