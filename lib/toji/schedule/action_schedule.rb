@@ -3,7 +3,7 @@ module Toji
     module ActionSchedule
       include Base
 
-      # @dynamic index
+      # @dynamic action_index
     end
   end
 end

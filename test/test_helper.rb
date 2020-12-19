@@ -5,6 +5,10 @@ class Product
   include Toji::Product
   include Toji::Product::ScheduleFactory
 
+  attr_reader :name
+  attr_reader :recipe
+  attr_reader :base_date
+
   def initialize(name, recipe, base_date)
     @name = name
     @recipe = recipe
@@ -48,6 +52,11 @@ end
 class Recipe
   include Toji::Recipe
 
+  attr_reader :steps
+  attr_reader :actions
+  attr_reader :ab_coef
+  attr_reader :ab_expects
+
   def initialize(steps:, actions:, ab_coef:, ab_expects:)
     @steps = steps
     @actions = actions
@@ -65,6 +74,15 @@ end
 
 class Step
   include Toji::Recipe::Step
+
+  attr_reader :index
+  attr_reader :subindex
+  attr_accessor :kojis
+  attr_accessor :kakes
+  attr_accessor :waters
+  attr_accessor :lactic_acids
+  attr_accessor :alcohols
+  attr_accessor :yeasts
 
   def initialize(index:, subindex:, kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
     @index = index
@@ -91,6 +109,18 @@ end
 
 class Koji
   include Toji::Ingredient::Koji
+
+  attr_accessor :weight
+  attr_reader :brand
+  attr_reader :polishing_ratio
+  attr_reader :made_in
+  attr_reader :year
+  attr_reader :soaking_ratio
+  attr_reader :steaming_ratio
+  attr_reader :cooling_ratio
+  attr_reader :tanekojis
+  attr_reader :dekoji_ratio
+  attr_reader :interval_days
 
   def initialize(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
     @weight = weight
@@ -134,6 +164,8 @@ class Tanekoji
   include Toji::Ingredient::Tanekoji
 
   attr_accessor :koji
+  attr_reader :brand
+  attr_reader :ratio
 
   def initialize(koji: nil, brand:, ratio:)
     @koji = koji
@@ -149,6 +181,16 @@ end
 
 class Kake
   include Toji::Ingredient::Kake
+
+  attr_accessor :weight
+  attr_reader :brand
+  attr_reader :polishing_ratio
+  attr_reader :made_in
+  attr_reader :year
+  attr_reader :soaking_ratio
+  attr_reader :steaming_ratio
+  attr_reader :cooling_ratio
+  attr_reader :interval_days
 
   def initialize(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
     @weight = weight
@@ -166,6 +208,10 @@ end
 class Water
   include Toji::Ingredient::Water
 
+  attr_accessor :weight
+  attr_reader :calcium_hardness
+  attr_reader :magnesium_hardness
+
   def initialize(weight:, calcium_hardness: nil, magnesium_hardness: nil)
     @weight = weight
     @calcium_hardness = calcium_hardness
@@ -176,6 +222,8 @@ end
 class LacticAcid
   include Toji::Ingredient::LacticAcid
 
+  attr_accessor :weight
+
   def initialize(weight:)
     @weight = weight
   end
@@ -183,6 +231,8 @@ end
 
 class Alcohol
   include Toji::Ingredient::Alcohol
+
+  attr_accessor :weight
 
   def initialize(weight:)
     @weight = weight
@@ -192,6 +242,10 @@ end
 class Yeast
   include Toji::Ingredient::Yeast
 
+  attr_accessor :weight
+  attr_reader :unit
+  attr_reader :brand
+
   def initialize(weight:)
     @weight = weight
   end
@@ -199,6 +253,9 @@ end
 
 class Action
   include Toji::Recipe::Action
+
+  attr_reader :type
+  attr_reader :interval_days
 
   def initialize(type:, interval_days:)
     @type = type
@@ -209,6 +266,9 @@ end
 class AbExpect
   include Toji::Recipe::AbExpect
 
+  attr_reader :alcohol
+  attr_reader :nihonshudo
+
   def initialize(alcohol:, nihonshudo:)
     @alcohol = alcohol
     @nihonshudo = nihonshudo
@@ -218,6 +278,13 @@ end
 
 class KojiSchedule
   include Toji::Schedule::KojiSchedule
+
+  attr_reader :product
+  attr_reader :date
+  attr_reader :type
+
+  attr_reader :step_indexes
+  attr_reader :expect
 
   def initialize(product:, date:, step_indexes:, expect:)
     @product = product
@@ -230,6 +297,13 @@ end
 class KakeSchedule
   include Toji::Schedule::KakeSchedule
 
+  attr_reader :product
+  attr_reader :date
+  attr_reader :type
+
+  attr_reader :step_indexes
+  attr_reader :expect
+
   def initialize(product:, date:, step_indexes:, expect:)
     @product = product
     @date = date
@@ -240,6 +314,12 @@ end
 
 class ActionSchedule
   include Toji::Schedule::ActionSchedule
+
+  attr_reader :product
+  attr_reader :date
+  attr_reader :type
+
+  attr_reader :action_index
 
   def initialize(product:, date:, type:, action_index:)
     @product = product
@@ -368,11 +448,15 @@ end
 class KojiProgress
   include Toji::Progress::KojiProgress
 
+  attr_reader :states
+  attr_reader :date_line
+
   def initialize(states:)
     @states = states.map {|state|
       state.progress = self
       state
     }.sort_by(&:time)
+    @date_line = 0
   end
 
   def base_time
@@ -386,6 +470,16 @@ end
 
 class KojiState
   include Toji::Progress::KojiState
+
+  attr_accessor :progress
+  attr_accessor :time
+  attr_accessor :mark
+
+  attr_accessor :temps
+  attr_accessor :preset_temp
+  attr_accessor :room_temp
+  attr_accessor :room_psychrometry
+  attr_accessor :note
 
   KEYS = [
     :progress,
@@ -413,8 +507,11 @@ end
 class MotoProgress
   include Toji::Progress::MotoProgress
 
-  def states
-    [
+  attr_reader :states
+  attr_reader :date_line
+
+  def initialize
+    @states = [
       MotoState.create({
         progress: self,
         time: Time.mktime(2020, 1, 1),
@@ -437,7 +534,8 @@ class MotoProgress
         baume: 15.0,
         acid: 13.0,
       }),
-    ]
+    ].sort_by(&:time)
+    @date_line = 0
   end
 
   def base_time
@@ -451,6 +549,19 @@ end
 
 class MotoState
   include Toji::Progress::MotoState
+
+  attr_accessor :progress
+  attr_accessor :time
+  attr_accessor :mark
+
+  attr_accessor :temps
+  attr_accessor :preset_temp
+  attr_accessor :room_temp
+  attr_accessor :room_psychrometry
+  attr_accessor :baume
+  attr_accessor :acid
+  attr_accessor :warmings
+  attr_accessor :note
 
   KEYS = [
     :progress,
@@ -481,12 +592,12 @@ end
 class MoromiProgress
   include Toji::Progress::MoromiProgress
 
-  def prefix_day_labels
-    ["添", "踊", "踊", "仲", "留"]
-  end
+  attr_reader :states
+  attr_reader :date_line
+  attr_reader :prefix_day_labels
 
-  def states
-    [
+  def initialize
+    @states = [
       MoromiState.create({
         progress: self,
         time: Time.mktime(2020, 1, 16),
@@ -532,7 +643,9 @@ class MoromiProgress
         temps: 8.1,
         room_temp: 6,
       }),
-    ]
+    ].sort_by(&:time)
+    @date_line = 0
+    @prefix_day_labels = ["添", "踊", "踊", "仲", "留"]
   end
 
   def base_time
@@ -547,6 +660,21 @@ end
 class MoromiState
   include Toji::Progress::MoromiState
   include Toji::Progress::State::BaumeToNihonshudo
+
+  attr_accessor :progress
+  attr_accessor :time
+  attr_accessor :mark
+
+  attr_accessor :temps
+  attr_accessor :preset_temp
+  attr_accessor :room_temp
+  attr_accessor :room_psychrometry
+  attr_accessor :baume
+  attr_accessor :acid
+  attr_accessor :amino_acid
+  attr_accessor :alcohol
+  attr_accessor :warmings
+  attr_accessor :note
 
   KEYS = [
     :progress,

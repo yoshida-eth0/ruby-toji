@@ -9,6 +9,7 @@ module Toji
       # @dynamic days
       # @dynamic day_labels
 
+      # @dynamic all_keys
       # @dynamic has_keys
     end
   end
