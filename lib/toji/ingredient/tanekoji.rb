@@ -4,10 +4,10 @@ module Toji
       include Base
 
       # 麹 (belongs_to: Toji::Ingredient::Koji)
-      attr_reader :koji
+      # @dynamic koji
 
       # 種麹の種類
-      attr_reader :brand
+      # @dynamic brand
 
       # 種麹
       #
@@ -15,7 +15,7 @@ module Toji
       # 突き破精麹を造るには、種麹の量を麹米100kgあたり種麹80gとする
       #
       # 出典: 酒造教本 P66
-      attr_reader :ratio
+      # @dynamic ratio
 
       def weight
         koji.weight * ratio

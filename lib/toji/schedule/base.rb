@@ -1,9 +1,9 @@
 module Toji
   module Schedule
     module Base
-      attr_reader :product
-      attr_reader :date
-      attr_reader :type
+      # @dynamic product
+      # @dynamic date
+      # @dynamic type
     end
   end
 end

@@ -4,14 +4,14 @@ module Toji
       include Rice
 
       # 種麹 (has_many: Toji::Ingredient::Tanekoji)
-      attr_reader :tanekojis
+      # @dynamic tanekojis
 
       # 出麹歩合
       #
       # 出麹歩合17〜19%のものが麹菌の繁殖のほどよい麹である
       #
       # 出典: 酒造教本 P67
-      attr_reader :dekoji_ratio
+      # @dynamic dekoji_ratio
 
       def dekoji
         weight + weight * dekoji_ratio

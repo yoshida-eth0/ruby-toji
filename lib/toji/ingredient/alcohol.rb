@@ -4,7 +4,7 @@ module Toji
       include Base
 
       # 醸造用アルコール
-      attr_accessor :weight
+      # @dynamic weight
 
       def group_key
         ""

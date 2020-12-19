@@ -2,10 +2,11 @@ module Toji
   module Ingredient
     module Base
       # 重量
-      attr_accessor :weight
+      # @dynamic weight
+      # @dynamic weight=
 
       # グループ識別子
-      attr_reader :group_key
+      # @dynamic group_key
     end
   end
 end

@@ -22,19 +22,19 @@ module Toji
         :note,
       ].freeze
 
-      attr_accessor :temps
-      attr_accessor :preset_temp
-      attr_accessor :room_temp
-      attr_accessor :room_psychrometry
+      # @dynamic temps
+      # @dynamic preset_temp
+      # @dynamic room_temp
+      # @dynamic room_psychrometry
 
-      attr_accessor :baume
-      attr_accessor :nihonshudo
-      attr_accessor :acid
-      attr_accessor :amino_acid
-      attr_accessor :alcohol
+      # @dynamic baume
+      # @dynamic nihonshudo
+      # @dynamic acid
+      # @dynamic amino_acid
+      # @dynamic alcohol
 
-      attr_accessor :warmings
-      attr_accessor :note
+      # @dynamic warmings
+      # @dynamic note
 
       def moromi_day
         _tome_day = progress.moromi_tome_day

@@ -1,14 +1,21 @@
 module Toji
   module Recipe
     module Step
-      attr_reader :index
-      attr_reader :subindex
-      attr_accessor :kojis
-      attr_accessor :kakes
-      attr_accessor :waters
-      attr_accessor :lactic_acids
-      attr_accessor :alcohols
-      attr_accessor :yeasts
+      # @dynamic index
+      # @dynamic subindex
+
+      # @dynamic kojis
+      # @dynamic kojis=
+      # @dynamic kakes
+      # @dynamic kakes=
+      # @dynamic waters
+      # @dynamic waters=
+      # @dynamic lactic_acids
+      # @dynamic lactic_acids=
+      # @dynamic alcohols
+      # @dynamic alcohols=
+      # @dynamic yeasts
+      # @dynamic yeasts=
 
       # 麹米
       def koji_total

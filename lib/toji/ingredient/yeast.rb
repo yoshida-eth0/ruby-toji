@@ -4,13 +4,14 @@ module Toji
       include Base
 
       # 酵母
-      attr_accessor :weight
+      # @dynamic weight
+      # @dynamic weight=
 
       # 単位 (ex: ampoule, gram, ml)
-      attr_reader :unit
+      # @dynamic unit
 
       # 酵母名、協会酵母番号
-      attr_reader :brand
+      # @dynamic brand
 
       def group_key
         [brand, unit].join(":")

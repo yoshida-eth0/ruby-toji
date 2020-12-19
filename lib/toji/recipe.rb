@@ -4,13 +4,13 @@ require 'toji/recipe/ab_expect'
 
 module Toji
   module Recipe
-    attr_reader :steps
-    attr_reader :actions
-    attr_reader :ab_coef
-    attr_reader :ab_expects
+    # @dynamic steps
+    # @dynamic actions
+    # @dynamic ab_coef
+    # @dynamic ab_expects
 
     def scale_rice_total(rice_total)
-      ratio = rice_total / steps.map(&:rice_total).sum
+      ratio = rice_total.to_f / steps.map(&:rice_total).sum
       scale(ratio)
     end
 

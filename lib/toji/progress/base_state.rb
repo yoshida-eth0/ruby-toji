@@ -1,6 +1,8 @@
 module Toji
   module Progress
     module BaseState
+      include State
+
       REQUIRED_KEYS = [
         :time,
         :elapsed_time,
@@ -9,11 +11,6 @@ module Toji
         :display_time,
         :mark,
       ].freeze
-
-      attr_accessor :progress
-
-      attr_accessor :time
-      attr_accessor :mark
 
       def elapsed_time
         time - progress.base_time

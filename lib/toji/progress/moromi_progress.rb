@@ -3,7 +3,7 @@ module Toji
     module MoromiProgress
       include BaseProgress
 
-      attr_accessor :prefix_day_labels
+      # @dynamic prefix_day_labels
 
       def moromi_tome_day
         prefix_day_labels&.length

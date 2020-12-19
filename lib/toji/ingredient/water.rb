@@ -4,11 +4,11 @@ module Toji
       include Base
 
       # 汲水
-      attr_accessor :weight
+      # @dynamic weight
 
       # 硬度
-      attr_reader :calcium_hardness
-      attr_reader :magnesium_hardness
+      # @dynamic calcium_hardness
+      # @dynamic magnesium_hardness
 
       def group_key
         [calcium_hardness, magnesium_hardness].join(":")

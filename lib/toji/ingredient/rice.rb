@@ -4,20 +4,21 @@ module Toji
       include Base
 
       # 白米
-      attr_accessor :weight
+      # @dynamic weight
+      # @dynamic weight=
 
       # 品種、精米歩合、産地、年度
-      attr_reader :brand
-      attr_reader :polishing_ratio
-      attr_reader :made_in
-      attr_reader :year
+      # @dynamic brand
+      # @dynamic polishing_ratio
+      # @dynamic made_in
+      # @dynamic year
 
       # 浸漬米吸水率
       #
       # 標準的な白米吸水率は掛米で30〜35%、麹米で33%前後で許容範囲はかなり狭い
       #
       # 出典: 酒造教本 P38
-      attr_reader :soaking_ratio
+      # @dynamic soaking_ratio
 
       def soaked
         weight + weight * soaking_ratio
@@ -30,7 +31,7 @@ module Toji
       # 蒸米吸水率は麹米及び酒母米で41〜43%、掛米は39〜40%で、吟醸造りの場合は数%低い
       #
       # 出典: 酒造教本 P48
-      attr_reader :steaming_ratio
+      # @dynamic steaming_ratio
 
       def steamed
         weight + weight * steaming_ratio
@@ -43,14 +44,14 @@ module Toji
       #
       # 麹を造るのに適した蒸米は、引込時の吸水率が33%を理想とし、許容幅はプラスマイナス1%である
       # 出典: 酒造教本 P59
-      attr_reader :cooling_ratio
+      # @dynamic cooling_ratio
 
       def cooled
         weight + weight * cooling_ratio
       end
 
       # Product.base_dateからの日数差
-      attr_reader :interval_days
+      # @dynamic interval_days
     end
   end
 end

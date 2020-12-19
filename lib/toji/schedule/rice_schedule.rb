@@ -3,10 +3,10 @@ module Toji
     module RiceSchedule
       include Base
 
-      attr_reader :rice_type
-      attr_reader :step_indexes
+      # @dynamic rice_type
+      # @dynamic step_indexes
 
-      attr_reader :expect
+      # @dynamic expect
 
       def type
         :rice

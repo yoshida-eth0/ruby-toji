@@ -4,7 +4,7 @@ module Toji
       include Base
 
       # 乳酸
-      attr_accessor :weight
+      # @dynamic weight
 
       def group_key
         ""

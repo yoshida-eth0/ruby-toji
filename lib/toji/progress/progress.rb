@@ -1,15 +1,15 @@
 module Toji
   module Progress
     module Progress
-      attr_reader :states
-      attr_reader :date_line
+      # @dynamic states
+      # @dynamic date_line
 
-      attr_reader :base_time
-      attr_reader :day_offset
-      attr_reader :days
-      attr_reader :day_labels
+      # @dynamic base_time
+      # @dynamic day_offset
+      # @dynamic days
+      # @dynamic day_labels
 
-      attr_reader :all_keys
+      # @dynamic has_keys
     end
   end
 end

@@ -58,13 +58,13 @@ module Toji
         def min_baume
           @actuals.map {|moromi, name|
             moromi.states.map(&:baume).compact.min
-          }.compact.min || 0
+          }.compact.min || 0.0
         end
 
         def max_baume
           @actuals.map {|moromi, name|
             moromi.states.map(&:baume).compact.max
-          }.compact.max || 0
+          }.compact.max || 0.0
         end
 
         def plot

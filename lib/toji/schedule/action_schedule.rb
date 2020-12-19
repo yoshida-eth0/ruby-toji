@@ -3,7 +3,7 @@ module Toji
     module ActionSchedule
       include Base
 
-      attr_reader :index
+      # @dynamic index
     end
   end
 end
