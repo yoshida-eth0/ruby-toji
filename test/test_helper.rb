@@ -281,7 +281,6 @@ class KojiSchedule
 
   attr_reader :product
   attr_reader :date
-  attr_reader :type
 
   attr_reader :step_indexes
   attr_reader :expect
@@ -299,7 +298,6 @@ class KakeSchedule
 
   attr_reader :product
   attr_reader :date
-  attr_reader :type
 
   attr_reader :step_indexes
   attr_reader :expect

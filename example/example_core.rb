@@ -8,8 +8,12 @@ module Example
     include Toji::Product
     include Toji::Product::ScheduleFactory
 
-    attr_accessor :description
-    attr_accessor :color
+    attr_reader :name
+    attr_reader :recipe
+    attr_reader :base_date
+
+    attr_reader :description
+    attr_reader :color
 
     def initialize(id, name, description, recipe, base_date, color=nil)
       @id = id
@@ -86,6 +90,15 @@ module Example
   class Step
     include Toji::Recipe::Step
 
+    attr_reader :index
+    attr_reader :subindex
+    attr_accessor :kojis
+    attr_accessor :kakes
+    attr_accessor :waters
+    attr_accessor :lactic_acids
+    attr_accessor :alcohols
+    attr_accessor :yeasts
+
     def initialize(index:, subindex:, kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
       @index = index
       @subindex = subindex
@@ -109,6 +122,18 @@ module Example
 
   class Koji
     include Toji::Ingredient::Koji
+
+    attr_accessor :weight
+    attr_reader :brand
+    attr_reader :polishing_ratio
+    attr_reader :made_in
+    attr_reader :year
+    attr_reader :soaking_ratio
+    attr_reader :steaming_ratio
+    attr_reader :cooling_ratio
+    attr_reader :tanekojis
+    attr_reader :dekoji_ratio
+    attr_reader :interval_days
 
     def initialize(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
       @weight = weight
@@ -152,6 +177,8 @@ module Example
     include Toji::Ingredient::Tanekoji
 
     attr_accessor :koji
+    attr_reader :brand
+    attr_reader :ratio
 
     def initialize(koji: nil, brand:, ratio:)
       @brand = brand
@@ -166,6 +193,16 @@ module Example
 
   class Kake
     include Toji::Ingredient::Kake
+
+    attr_accessor :weight
+    attr_reader :brand
+    attr_reader :polishing_ratio
+    attr_reader :made_in
+    attr_reader :year
+    attr_reader :soaking_ratio
+    attr_reader :steaming_ratio
+    attr_reader :cooling_ratio
+    attr_reader :interval_days
 
     def initialize(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
       @weight = weight
@@ -183,6 +220,10 @@ module Example
   class Water
     include Toji::Ingredient::Water
 
+    attr_accessor :weight
+    attr_reader :calcium_hardness
+    attr_reader :magnesium_hardness
+
     def initialize(weight:)
       @weight = weight
     end
@@ -190,6 +231,8 @@ module Example
 
   class LacticAcid
     include Toji::Ingredient::LacticAcid
+
+    attr_accessor :weight
 
     def initialize(weight:)
       @weight = weight
@@ -199,6 +242,8 @@ module Example
   class Alcohol
     include Toji::Ingredient::Alcohol
 
+    attr_accessor :weight
+
     def initialize(weight:)
       @weight = weight
     end
@@ -206,6 +251,10 @@ module Example
 
   class Yeast
     include Toji::Ingredient::Yeast
+
+    attr_accessor :weight
+    attr_reader :unit
+    attr_reader :brand
 
     def initialize(weight:)
       @weight = weight
@@ -216,6 +265,9 @@ module Example
   class Action
     include Toji::Recipe::Action
 
+    attr_reader :type
+    attr_reader :interval_days
+
     def initialize(type:, interval_days:)
       @type = type
       @interval_days = interval_days
@@ -224,6 +276,9 @@ module Example
 
   class AbExpect
     include Toji::Recipe::AbExpect
+
+    attr_reader :alcohol
+    attr_reader :nihonshudo
 
     def initialize(alcohol:, nihonshudo:)
       @alcohol = alcohol
@@ -234,6 +289,11 @@ module Example
 
   class Recipe
     include Toji::Recipe
+
+    attr_reader :steps
+    attr_reader :actions
+    attr_reader :ab_coef
+    attr_reader :ab_expects
 
     def initialize(steps:, actions:, ab_coef:, ab_expects:)
       @steps = steps
@@ -877,6 +937,12 @@ module Example
   class KojiSchedule
     include Toji::Schedule::KojiSchedule
 
+    attr_reader :product
+    attr_reader :date
+
+    attr_reader :step_indexes
+    attr_reader :expect
+
     def initialize(product:, date:, step_indexes:, expect:)
       @product = product
       @date = date
@@ -888,6 +954,12 @@ module Example
   class KakeSchedule
     include Toji::Schedule::KakeSchedule
 
+    attr_reader :product
+    attr_reader :date
+
+    attr_reader :step_indexes
+    attr_reader :expect
+
     def initialize(product:, date:, step_indexes:, expect:)
       @product = product
       @date = date
@@ -898,6 +970,12 @@ module Example
 
   class ActionSchedule
     include Toji::Schedule::ActionSchedule
+
+    attr_reader :product
+    attr_reader :date
+    attr_reader :type
+
+    attr_reader :index_index
 
     def initialize(product:, date:, type:, action_index:)
       @product = product
@@ -941,6 +1019,16 @@ module Example
     class KojiState
       include Toji::Progress::KojiState
 
+      attr_accessor :progress
+      attr_accessor :time
+      attr_accessor :mark
+
+      attr_accessor :temps
+      attr_accessor :preset_temp
+      attr_accessor :room_temp
+      attr_accessor :room_psychrometry
+      attr_accessor :note
+
       def self.create(args)
         new.tap {|s|
           s.progress = args[:progress]
@@ -969,6 +1057,19 @@ module Example
 
     class MotoState
       include Toji::Progress::MotoState
+
+      attr_accessor :progress
+      attr_accessor :time
+      attr_accessor :mark
+
+      attr_accessor :temps
+      attr_accessor :preset_temp
+      attr_accessor :room_temp
+      attr_accessor :room_psychrometry
+      attr_accessor :baume
+      attr_accessor :acid
+      attr_accessor :warmings
+      attr_accessor :note
 
       def self.create(args)
         new.tap {|s|
@@ -1004,6 +1105,21 @@ module Example
     class MoromiState
       include Toji::Progress::MoromiState
       include Toji::Progress::State::BaumeToNihonshudo
+
+      attr_accessor :progress
+      attr_accessor :time
+      attr_accessor :mark
+
+      attr_accessor :temps
+      attr_accessor :preset_temp
+      attr_accessor :room_temp
+      attr_accessor :room_psychrometry
+      attr_accessor :baume
+      attr_accessor :acid
+      attr_accessor :amino_acid
+      attr_accessor :alcohol
+      attr_accessor :warmings
+      attr_accessor :note
 
       def self.create(args)
         new.tap {|s|
