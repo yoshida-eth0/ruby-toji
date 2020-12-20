@@ -75,6 +75,14 @@ module Toji
           )
         }
       end
+
+      def rice_schedules
+        koji_schedules + kake_schedules
+      end
+
+      def schedules
+        rice_schedules + action_schedules
+      end
     end
   end
 end
