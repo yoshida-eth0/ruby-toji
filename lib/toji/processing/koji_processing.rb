@@ -4,7 +4,7 @@ module Toji
       include RiceProcessing
 
       # 出麹実績値 (Toji::Processing::Dekoji)
-      attr_reader :dekoji
+      # @dynamic dekoji
     end
   end
 end

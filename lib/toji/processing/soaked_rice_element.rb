@@ -2,13 +2,13 @@ module Toji
   module Processing
     module SoakedRiceElement
       # 白米重量
-      attr_reader :weight
+      # @dynamic weight
 
       # 浸漬時間
-      attr_reader :soaking_time
+      # @dynamic soaking_time
 
       # 浸漬米重量
-      attr_reader :soaked
+      # @dynamic soaked
 
       def soaking_ratio
         (soaked.to_f - weight.to_f) / weight.to_f

@@ -331,6 +331,13 @@ end
 class KojiProcessing
   include Toji::Processing::KojiProcessing
 
+  attr_reader :date
+  attr_reader :expect
+  attr_reader :soaked_rice
+  attr_reader :steamed_rice
+  attr_reader :cooled_rice
+  attr_reader :dekoji
+
   attr_reader :koji_progress
 
   def initialize(date:, expect:, soaked_rice:, steamed_rice:, cooled_rice:, koji_progress:, dekoji:)
@@ -351,6 +358,12 @@ end
 class KakeProcessing
   include Toji::Processing::KakeProcessing
 
+  attr_reader :date
+  attr_reader :expect
+  attr_reader :soaked_rice
+  attr_reader :steamed_rice
+  attr_reader :cooled_rice
+
   def initialize(date:, expect:, soaked_rice:, steamed_rice:, cooled_rice:)
     @date = date
     @expect = expect
@@ -366,7 +379,13 @@ end
 class SoakedRice
   include Toji::Processing::SoakedRice
 
+  attr_reader :room_temp
+  attr_reader :outside_temp
+  attr_reader :rice_water_content
+  attr_reader :washing_water_temp
+  attr_reader :soaking_water_temp
   attr_accessor :processing
+  attr_reader :elements
 
   def initialize(room_temp:, outside_temp:, rice_water_content:, washing_water_temp:, soaking_water_temp:, elements: [])
     @room_temp = room_temp
@@ -381,6 +400,10 @@ end
 class SoakedRiceElement
   include Toji::Processing::SoakedRiceElement
 
+  attr_reader :weight
+  attr_reader :soaking_time
+  attr_reader :soaked
+
   def initialize(weight:, soaking_time:, soaked:)
     @weight = weight
     @soaking_time = soaking_time
@@ -392,6 +415,7 @@ class SteamedRice
   include Toji::Processing::SteamedRice
 
   attr_accessor :processing
+  attr_reader :elements
 
   def initialize(elements: [])
     @elements = elements
@@ -400,6 +424,8 @@ end
 
 class SteamedRiceElement
   include Toji::Processing::SteamedRiceElement
+
+  attr_reader :weight
 
   def initialize(weight:)
     @weight = weight
@@ -410,6 +436,7 @@ class CooledRice
   include Toji::Processing::CooledRice
 
   attr_accessor :processing
+  attr_reader :elements
 
   def initialize(elements: [])
     @elements = elements
@@ -418,6 +445,8 @@ end
 
 class CooledRiceElement
   include Toji::Processing::CooledRiceElement
+
+  attr_reader :weight
 
   def initialize(weight:)
     @weight = weight
@@ -428,6 +457,7 @@ class Dekoji
   include Toji::Processing::Dekoji
 
   attr_accessor :processing
+  attr_reader :elements
 
   def initialize(elements: [])
     @elements = elements
@@ -436,6 +466,8 @@ end
 
 class DekojiElement
   include Toji::Processing::DekojiElement
+
+  attr_reader :weight
 
   def initialize(weight:)
     @weight = weight

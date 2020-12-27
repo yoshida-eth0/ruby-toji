@@ -2,10 +2,10 @@ module Toji
   module Processing
     module CooledRice
       # 親 (belongs_to: Toji::Processing::RiceProcessing)
-      attr_reader :processing
+      # @dynamic processing
 
       # 要素 (has_many: Toji::Processing::CooledRiceElement)
-      attr_reader :elements
+      # @dynamic elements
 
       # 放冷後蒸米総重量
       def weight

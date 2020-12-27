@@ -2,10 +2,10 @@ module Toji
   module Processing
     module Dekoji
       # 親 (belongs_to: Toji::Processing::RiceProcessing)
-      attr_reader :processing
+      # @dynamic processing
 
       # 要素 (has_many: Toji::Processing::DekojiElement)
-      attr_reader :elements
+      # @dynamic elements
 
       # 出麹総重量
       def weight

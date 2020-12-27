@@ -2,25 +2,25 @@ module Toji
   module Processing
     module SoakedRice
       # 室内温度
-      attr_reader :room_temp
+      # @dynamic room_temp
 
       # 外気温
-      attr_reader :outside_temp
+      # @dynamic outside_temp
 
       # 白米の含水率
-      attr_reader :rice_water_content
+      # @dynamic rice_water_content
 
       # 洗米に用いる水の温度
-      attr_reader :washing_water_temp
+      # @dynamic washing_water_temp
 
       # 浸漬に用いる水の温度
-      attr_reader :soaking_water_temp
+      # @dynamic soaking_water_temp
 
       # 親 (belongs_to: Toji::Processing::RiceProcessing)
-      attr_reader :processing
+      # @dynamic processing
 
       # 要素 (has_many: Toji::Processing::SoakedRiceElement)
-      attr_reader :elements
+      # @dynamic elements
 
       # 白米総重量
       def weight

@@ -1,7 +1,7 @@
 module Toji
   module Processing
     module Base
-      attr_reader :date
+      # @dynamic date
     end
   end
 end
