@@ -54,7 +54,7 @@ module Toji
     # 酒母歩合の累計
     def cumulative_moto_ratios
       rice_total = steps.map(&:rice_total)
-      moto = rice_total.first
+      moto = steps.select(&:moto?).map(&:rice_total).sum.to_f
 
       rice_total.map.with_index {|x,i|
         moto / rice_total[0..i].inject(&:+)
@@ -80,8 +80,10 @@ module Toji
     #
     # 出典: 酒造教本 P95
     def rice_ratios
+      moto = steps.select(&:moto?).map(&:rice_total).sum.to_f
+
       steps.map {|step|
-        step.rice_total / steps.first.rice_total
+        step.rice_total / moto
       }
     end
 

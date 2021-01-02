@@ -17,6 +17,10 @@ module Toji
       # @dynamic yeasts
       # @dynamic yeasts=
 
+      def moto?
+        index==0
+      end
+
       # 麹米
       def koji_total
         (kojis || []).map(&:weight).map(&:to_f).sum.to_f
