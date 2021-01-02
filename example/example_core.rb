@@ -24,26 +24,26 @@ module Example
       @color = color
     end
 
-    def create_koji_schedule(date:, step_indexes:, kojis:)
+    def create_koji_schedule(date:, step_weights:, kojis:)
       expect = kojis.first.dup
       expect.weight = kojis.map(&:weight).sum
 
       KojiSchedule.new(
         product: self,
         date: date,
-        step_indexes: step_indexes,
+        step_weights: step_weights,
         expect: expect,
       )
     end
 
-    def create_kake_schedule(date:, step_indexes:, kakes:)
+    def create_kake_schedule(date:, step_weights:, kakes:)
       expect = kakes.first.dup
       expect.weight = kakes.map(&:weight).sum
 
       KakeSchedule.new(
         product: self,
         date: date,
-        step_indexes: step_indexes,
+        step_weights: step_weights,
         expect: expect,
       )
     end
@@ -940,13 +940,13 @@ module Example
     attr_reader :product
     attr_reader :date
 
-    attr_reader :step_indexes
+    attr_reader :step_weights
     attr_reader :expect
 
-    def initialize(product:, date:, step_indexes:, expect:)
+    def initialize(product:, date:, step_weights:, expect:)
       @product = product
       @date = date
-      @step_indexes = step_indexes
+      @step_weights = step_weights
       @expect = expect
     end
   end
@@ -957,13 +957,13 @@ module Example
     attr_reader :product
     attr_reader :date
 
-    attr_reader :step_indexes
+    attr_reader :step_weights
     attr_reader :expect
 
-    def initialize(product:, date:, step_indexes:, expect:)
+    def initialize(product:, date:, step_weights:, expect:)
       @product = product
       @date = date
-      @step_indexes = step_indexes
+      @step_weights = step_weights
       @expect = expect
     end
   end

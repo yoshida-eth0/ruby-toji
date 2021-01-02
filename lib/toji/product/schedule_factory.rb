@@ -2,11 +2,11 @@ module Toji
   module Product
     module ScheduleFactory
 
-      def create_koji_schedule(date:, step_indexes:, kojis:)
+      def create_koji_schedule(date:, step_weights:, kojis:)
         raise Error, "implement required: create_koji_schedule"
       end
 
-      def create_kake_schedule(date:, step_indexes:, kakes:)
+      def create_kake_schedule(date:, step_weights:, kakes:)
         raise Error, "implement required: create_kake_schedule"
       end
 
@@ -18,9 +18,10 @@ module Toji
         recipe.steps.inject([]) {|result, step|
           step.kojis&.each {|koji|
             result << {
-              step_index: {
+              step_weight: {
                 index: step.index,
                 subindex: step.subindex,
+                weight: koji.weight,
               },
               date: base_date.next_day(koji.interval_days),
               koji: koji,
@@ -34,7 +35,7 @@ module Toji
         }.map {|(date, _group_key), schedules|
           create_koji_schedule(
             date: date,
-            step_indexes: schedules.map {|schedule| schedule[:step_index]}.sort_by {|x| [x[:index], x[:subindex]]},
+            step_weights: schedules.map {|schedule| schedule[:step_weight]}.sort_by {|x| [x[:index], x[:subindex]]},
             kojis: schedules.map{|schedule| schedule[:koji]},
           )
         }
@@ -44,9 +45,10 @@ module Toji
         recipe.steps.inject([]) {|result, step|
           step.kakes&.each {|kake|
             result << {
-              step_index: {
+              step_weight: {
                 index: step.index,
                 subindex: step.subindex,
+                weight: kake.weight,
               },
               date: base_date.next_day(kake.interval_days),
               kake: kake,
@@ -56,11 +58,11 @@ module Toji
         }.select {|schedule|
           0<schedule[:kake]&.weight.to_f
         }.group_by {|schedule|
-          [schedule[:date], schedule[:kake].group_key, schedule[:step_index]]
-        }.map {|(date, _group_key, _step_index), schedules|
+          [schedule[:date], schedule[:kake].group_key, schedule[:step_weight]]
+        }.map {|(date, _group_key, _step_weight), schedules|
           create_kake_schedule(
             date: date,
-            step_indexes: schedules.map {|schedule| schedule[:step_index]}.sort_by {|x| [x[:index], x[:subindex]]},
+            step_weights: schedules.map {|schedule| schedule[:step_weight]}.sort_by {|x| [x[:index], x[:subindex]]},
             kakes: schedules.map{|schedule| schedule[:kake]},
           )
         }

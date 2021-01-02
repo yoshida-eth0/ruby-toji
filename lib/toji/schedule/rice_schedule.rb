@@ -4,7 +4,7 @@ module Toji
       include Base
 
       # @dynamic rice_type
-      # @dynamic step_indexes
+      # @dynamic step_weights
 
       # @dynamic expect
 
