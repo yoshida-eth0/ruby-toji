@@ -52,6 +52,9 @@ module Toji
 
       # Product.base_dateからの日数差
       # @dynamic interval_days
+
+      # グループ識別子
+      # @dynamic process_group
     end
   end
 end

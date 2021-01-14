@@ -7,7 +7,7 @@ module Toji
       # @dynamic weight
 
       def group_key
-        ""
+        [].join(":")
       end
     end
   end

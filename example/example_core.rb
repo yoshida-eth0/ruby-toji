@@ -134,6 +134,7 @@ module Example
     attr_reader :tanekojis
     attr_reader :dekoji_ratio
     attr_reader :interval_days
+    attr_reader :process_group
 
     def initialize(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
       @weight = weight
@@ -203,6 +204,7 @@ module Example
     attr_reader :steaming_ratio
     attr_reader :cooling_ratio
     attr_reader :interval_days
+    attr_reader :process_group
 
     def initialize(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
       @weight = weight
