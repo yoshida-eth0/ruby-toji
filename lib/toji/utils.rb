@@ -20,20 +20,20 @@ module Toji
       result = {}
 
       ingredients1&.each {|src|
-        dst = result[src.group_key]
+        dst = result[src.ingredient_key]
         if dst
           dst.weight = dst.weight.to_f + src.weight.to_f
         else
-          result[src.group_key] = src
+          result[src.ingredient_key] = src
         end
       }
 
       ingredients2&.each {|src|
-        dst = result[src.group_key]
+        dst = result[src.ingredient_key]
         if dst
           dst.weight = dst.weight.to_f + src.weight.to_f
         else
-          result[src.group_key] = src.dup
+          result[src.ingredient_key] = src.dup
         end
       }
 

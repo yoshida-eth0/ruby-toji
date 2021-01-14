@@ -2,11 +2,14 @@ module Toji
   module Product
     module ScheduleFactory
 
-      def create_koji_schedule(date:, step_weights:, kojis:)
+      # @dynamic recipe
+      # @dynamic base_date
+
+      def create_koji_schedule(date:, group_key:, step_weights:, kojis:)
         raise Error, "implement required: create_koji_schedule"
       end
 
-      def create_kake_schedule(date:, step_weights:, kakes:)
+      def create_kake_schedule(date:, group_key:, step_weights:, kakes:)
         raise Error, "implement required: create_kake_schedule"
       end
 
@@ -32,9 +35,10 @@ module Toji
           0<schedule[:koji]&.weight.to_f
         }.group_by {|schedule|
           [schedule[:date], schedule[:koji].group_key]
-        }.map {|(date, _group_key), schedules|
+        }.map {|(date, group_key), schedules|
           create_koji_schedule(
             date: date,
+            group_key: group_key,
             step_weights: schedules.map {|schedule| schedule[:step_weight]}.sort_by {|x| [x[:index], x[:subindex]]},
             kojis: schedules.map{|schedule| schedule[:koji]},
           )
@@ -58,10 +62,11 @@ module Toji
         }.select {|schedule|
           0<schedule[:kake]&.weight.to_f
         }.group_by {|schedule|
-          [schedule[:date], schedule[:kake].group_key, schedule[:step_weight]]
-        }.map {|(date, _group_key, _step_weight), schedules|
+          [schedule[:date], schedule[:kake].group_key]
+        }.map {|(date, group_key), schedules|
           create_kake_schedule(
             date: date,
+            group_key: group_key,
             step_weights: schedules.map {|schedule| schedule[:step_weight]}.sort_by {|x| [x[:index], x[:subindex]]},
             kakes: schedules.map{|schedule| schedule[:kake]},
           )

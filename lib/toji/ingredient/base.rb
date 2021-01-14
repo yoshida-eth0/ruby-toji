@@ -6,7 +6,7 @@ module Toji
       # @dynamic weight=
 
       # グループ識別子
-      # @dynamic group_key
+      # @dynamic ingredient_key
     end
   end
 end

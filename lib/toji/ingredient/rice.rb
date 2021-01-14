@@ -55,6 +55,14 @@ module Toji
 
       # グループ識別子
       # @dynamic process_group
+      # @dyanmic default_process_group
+
+      def group_key
+        [
+          ingredient_key,
+          process_group.presence || default_process_group,
+        ].join(":")
+      end
     end
   end
 end

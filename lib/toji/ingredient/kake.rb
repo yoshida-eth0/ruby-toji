@@ -3,8 +3,12 @@ module Toji
     module Kake
       include Rice
 
-      def group_key
-        [brand, polishing_ratio, made_in, year, soaking_ratio, steaming_ratio, cooling_ratio, process_group].join(":")
+      def ingredient_key
+        [brand, polishing_ratio, made_in, year, soaking_ratio, steaming_ratio, cooling_ratio].join(":")
+      end
+
+      def default_process_group
+        self.hash
       end
     end
   end

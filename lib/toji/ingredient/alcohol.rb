@@ -6,7 +6,7 @@ module Toji
       # 醸造用アルコール
       # @dynamic weight
 
-      def group_key
+      def ingredient_key
         [].join(":")
       end
     end

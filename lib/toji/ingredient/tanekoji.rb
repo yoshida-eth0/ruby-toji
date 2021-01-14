@@ -21,7 +21,7 @@ module Toji
         koji.weight * ratio
       end
 
-      def group_key
+      def ingredient_key
         [brand, ratio].join(":")
       end
     end

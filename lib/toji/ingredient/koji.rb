@@ -18,10 +18,14 @@ module Toji
       end
 
       # Scheduleへのグループ識別子
-      def group_key
-        keys1 = [brand, polishing_ratio, made_in, year, soaking_ratio, steaming_ratio, cooling_ratio, dekoji_ratio, process_group]
-        keys2 = tanekojis&.map(&:group_key)&.sort || []
+      def ingredient_key
+        keys1 = [brand, polishing_ratio, made_in, year, soaking_ratio, steaming_ratio, cooling_ratio, dekoji_ratio]
+        keys2 = tanekojis&.map(&:ingredient_key)&.sort || []
         (keys1 + keys2).join(":")
+      end
+
+      def default_process_group
+        ""
       end
     end
   end

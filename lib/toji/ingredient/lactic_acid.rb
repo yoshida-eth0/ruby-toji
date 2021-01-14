@@ -6,7 +6,7 @@ module Toji
       # 乳酸
       # @dynamic weight
 
-      def group_key
+      def ingredient_key
         [].join(":")
       end
     end

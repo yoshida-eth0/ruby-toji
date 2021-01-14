@@ -10,7 +10,7 @@ module Toji
       # @dynamic calcium_hardness
       # @dynamic magnesium_hardness
 
-      def group_key
+      def ingredient_key
         [calcium_hardness, magnesium_hardness].join(":")
       end
     end

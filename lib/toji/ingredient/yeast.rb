@@ -13,7 +13,7 @@ module Toji
       # 酵母名、協会酵母番号
       # @dynamic brand
 
-      def group_key
+      def ingredient_key
         [brand, unit].join(":")
       end
     end

@@ -15,25 +15,27 @@ class Product
     @base_date = base_date
   end
 
-  def create_koji_schedule(date:, step_weights:, kojis:)
+  def create_koji_schedule(date:, group_key:, step_weights:, kojis:)
     expect = kojis.first.dup
     expect.weight = kojis.map(&:weight).sum
 
     KojiSchedule.new(
       product: self,
       date: date,
+      group_key: group_key,
       step_weights: step_weights,
       expect: expect,
     )
   end
 
-  def create_kake_schedule(date:, step_weights:, kakes:)
+  def create_kake_schedule(date:, group_key:, step_weights:, kakes:)
     expect = kakes.first.dup
     expect.weight = kakes.map(&:weight).sum
 
     KakeSchedule.new(
       product: self,
       date: date,
+      group_key: group_key,
       step_weights: step_weights,
       expect: expect,
     )
@@ -283,13 +285,15 @@ class KojiSchedule
 
   attr_reader :product
   attr_reader :date
+  attr_reader :group_key
 
   attr_reader :step_weights
   attr_reader :expect
 
-  def initialize(product:, date:, step_weights:, expect:)
+  def initialize(product:, date:, group_key:, step_weights:, expect:)
     @product = product
     @date = date
+    @group_key = group_key
     @step_weights = step_weights
     @expect = expect
   end
@@ -300,13 +304,15 @@ class KakeSchedule
 
   attr_reader :product
   attr_reader :date
+  attr_reader :group_key
 
   attr_reader :step_weights
   attr_reader :expect
 
-  def initialize(product:, date:, step_weights:, expect:)
+  def initialize(product:, date:, group_key:, step_weights:, expect:)
     @product = product
     @date = date
+    @group_key = group_key
     @step_weights = step_weights
     @expect = expect
   end
