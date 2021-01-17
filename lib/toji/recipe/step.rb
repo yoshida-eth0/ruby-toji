@@ -65,24 +65,32 @@ module Toji
         val.nan? ? 0.0 : val
       end
 
+      def ingredients(&block)
+        Enumerator.new do|y|
+          kojis&.each {|koji|
+            y << koji
+          }
+          kakes&.each {|kake|
+            y << kake
+          }
+          waters&.each {|water|
+            y << water
+          }
+          lactic_acids&.each {|lactic_acid|
+            y << lactic_acid
+          }
+          alcohols&.each {|alcohol|
+            y << alcohol
+          }
+          yeasts&.each {|yeast|
+            y << yeast
+          }
+        end.each(&block)
+      end
+
       def scale!(ratio)
-        kojis&.each {|koji|
-          koji.weight *= ratio
-        }
-        kakes&.each {|kake|
-          kake.weight *= ratio
-        }
-        waters&.each {|water|
-          water.weight *= ratio
-        }
-        lactic_acids&.each {|lactic_acid|
-          lactic_acid.weight *= ratio
-        }
-        alcohols&.each {|alcohol|
-          alcohol.weight *= ratio
-        }
-        yeasts&.each {|yeast|
-          yeast.weight *= ratio
+        ingredients.each {|ingredient|
+          ingredient.weight *= ratio
         }
         self
       end

@@ -9,6 +9,16 @@ module Toji
     # @dynamic ab_coef
     # @dynamic ab_expects
 
+    def ingredients(&block)
+      Enumerator.new do|y|
+        steps&.each {|step|
+          step.ingredients.each {|ingredient|
+            y << [step, ingredient]
+          }
+        }
+      end.each(&block)
+    end
+
     def scale_rice_total(rice_total)
       ratio = rice_total.to_f / steps.map(&:rice_total).sum
       scale(ratio)
