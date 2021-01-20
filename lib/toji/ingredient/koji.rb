@@ -19,7 +19,7 @@ module Toji
 
       # Scheduleへのグループ識別子
       def ingredient_key
-        keys1 = [brand, polishing_ratio, made_in, year, soaking_ratio, steaming_ratio, cooling_ratio, dekoji_ratio]
+        keys1 = [brand, polishing_ratio, made_in, farmer, rice_year, soaking_ratio, steaming_ratio, cooling_ratio, dekoji_ratio]
         keys2 = tanekojis&.map(&:ingredient_key)&.sort || []
         (keys1 + keys2).join(":")
       end

@@ -129,7 +129,8 @@ module Example
     attr_reader :brand
     attr_reader :polishing_ratio
     attr_reader :made_in
-    attr_reader :year
+    attr_reader :farmer
+    attr_reader :rice_year
     attr_reader :soaking_ratio
     attr_reader :steaming_ratio
     attr_reader :cooling_ratio
@@ -138,12 +139,13 @@ module Example
     attr_reader :interval_days
     attr_reader :process_group
 
-    def initialize(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
+    def initialize(weight:, brand:, polishing_ratio:, made_in:, farmer:, rice_year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
       @weight = weight
       @brand = brand
       @polishing_ratio = polishing_ratio
       @made_in = made_in
-      @year = year
+      @farmer = farmer
+      @rice_year = rice_year
       @soaking_ratio = soaking_ratio
       @steaming_ratio = steaming_ratio
       @cooling_ratio = cooling_ratio
@@ -160,7 +162,8 @@ module Example
       @brand = obj.brand.dup
       @polishing_ratio = obj.polishing_ratio.dup
       @made_in = obj.made_in.dup
-      @year = obj.year.dup
+      @farmer = obj.farmer.dup
+      @rice_year = obj.rice_year.dup
       @soaking_ratio = obj.soaking_ratio.dup
       @steaming_ratio = obj.steaming_ratio.dup
       @cooling_ratio = obj.cooling_ratio.dup
@@ -201,19 +204,21 @@ module Example
     attr_reader :brand
     attr_reader :polishing_ratio
     attr_reader :made_in
-    attr_reader :year
+    attr_reader :farmer
+    attr_reader :rice_year
     attr_reader :soaking_ratio
     attr_reader :steaming_ratio
     attr_reader :cooling_ratio
     attr_reader :interval_days
     attr_reader :process_group
 
-    def initialize(weight:, brand:, polishing_ratio:, made_in:, year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
+    def initialize(weight:, brand:, polishing_ratio:, made_in:, farmer:, rice_year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
       @weight = weight
       @brand = brand
       @polishing_ratio = polishing_ratio
       @made_in = made_in
-      @year = year
+      @farmer = farmer
+      @rice_year = rice_year
       @soaking_ratio = soaking_ratio
       @steaming_ratio = steaming_ratio
       @cooling_ratio = cooling_ratio
@@ -333,7 +338,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -353,7 +359,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -385,7 +392,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -405,7 +413,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -427,7 +436,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -447,7 +457,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -469,7 +480,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -489,7 +501,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -511,7 +524,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -556,7 +570,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -576,7 +591,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -608,7 +624,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -628,7 +645,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -650,7 +668,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -670,7 +689,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -692,7 +712,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -712,7 +733,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -766,7 +788,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -809,7 +832,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -831,7 +855,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -851,7 +876,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -873,7 +899,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,
@@ -893,7 +920,8 @@ module Example
                 brand: :yamadanishiki,
                 polishing_ratio: 0.55,
                 made_in: :hyogo,
-                year: 2020,
+                farmer: nil,
+                rice_year: 2020,
                 soaking_ratio: 0.33,
                 steaming_ratio: 0.41,
                 cooling_ratio: 0.33,

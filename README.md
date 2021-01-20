@@ -1,6 +1,6 @@
 # Toji
 
-Management tools for brewing japanese sake.
+Data models for brewing japanese sake.
 
 - 仕込み配合表の生成。
 - 仕込み日程表の生成。

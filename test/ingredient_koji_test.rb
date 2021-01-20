@@ -7,7 +7,8 @@ class IngredientKojiTest < Minitest::Test
       brand: :yamadanishiki,
       polishing_ratio: 0.55,
       made_in: :hyogo,
-      year: 2020,
+      farmer: :tanaka,
+      rice_year: 2020,
       soaking_ratio: 0.33,
       steaming_ratio: 0.41,
       cooling_ratio: 0.33,
@@ -28,7 +29,8 @@ class IngredientKojiTest < Minitest::Test
     assert_equal :yamadanishiki, @koji.brand
     assert_equal 0.55, @koji.polishing_ratio
     assert_equal :hyogo, @koji.made_in
-    assert_equal 2020, @koji.year
+    assert_equal :tanaka, @koji.farmer
+    assert_equal 2020, @koji.rice_year
 
     assert_equal 0.33, @koji.soaking_ratio
     assert_equal 133, @koji.soaked

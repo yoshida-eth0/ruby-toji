@@ -11,7 +11,8 @@ module Toji
       # @dynamic brand
       # @dynamic polishing_ratio
       # @dynamic made_in
-      # @dynamic year
+      # @dynamic farmer
+      # @dynamic rice_year
 
       # 浸漬米吸水率
       #

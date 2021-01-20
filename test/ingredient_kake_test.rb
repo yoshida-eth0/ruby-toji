@@ -7,7 +7,8 @@ class IngredientKakeTest < Minitest::Test
       brand: :yamadanishiki,
       polishing_ratio: 0.55,
       made_in: :hyogo,
-      year: 2020,
+      farmer: :tanaka,
+      rice_year: 2020,
       soaking_ratio: 0.33,
       steaming_ratio: 0.41,
       cooling_ratio: 0.33,
@@ -21,7 +22,8 @@ class IngredientKakeTest < Minitest::Test
     assert_equal :yamadanishiki, @kake.brand
     assert_equal 0.55, @kake.polishing_ratio
     assert_equal :hyogo, @kake.made_in
-    assert_equal 2020, @kake.year
+    assert_equal :tanaka, @kake.farmer
+    assert_equal 2020, @kake.rice_year
 
     assert_equal 0.33, @kake.soaking_ratio
     assert_equal 133, @kake.soaked

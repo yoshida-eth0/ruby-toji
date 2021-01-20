@@ -9,7 +9,8 @@ class ProcessingKakeTest < Minitest::Test
         brand: :yamadanishiki,
         polishing_ratio: 0.55,
         made_in: :hyogo,
-        year: 2020,
+        farmer: :tanaka,
+        rice_year: 2020,
         soaking_ratio: 0.33,
         steaming_ratio: 0.41,
         cooling_ratio: 0.33,
@@ -92,7 +93,8 @@ class ProcessingKakeTest < Minitest::Test
     assert_equal :yamadanishiki, @processing.expect.brand
     assert_equal 0.55, @processing.expect.polishing_ratio
     assert_equal :hyogo, @processing.expect.made_in
-    assert_equal 2020, @processing.expect.year
+    assert_equal :tanaka, @processing.expect.farmer
+    assert_equal 2020, @processing.expect.rice_year
 
     assert_equal 0.33, @processing.expect.soaking_ratio
     assert_equal 66.5, @processing.expect.soaked
