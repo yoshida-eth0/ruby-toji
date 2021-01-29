@@ -14,9 +14,9 @@ module Toji
 
       def text
         @rice_schedules.map {|schedule|
-          name = schedule.product.name
+          serial_num = schedule.product.serial_num
           weight = "%.17g" % schedule.expect.weight
-          "#{name}: #{weight}"
+          "#{serial_num}: #{weight}"
         }.join("<br>")
       end
     end

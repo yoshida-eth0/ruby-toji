@@ -8,16 +8,16 @@ module Example
     include Toji::Product
     include Toji::Product::ScheduleFactory
 
-    attr_reader :name
+    attr_reader :serial_num
     attr_reader :recipe
     attr_reader :base_date
 
     attr_reader :description
     attr_reader :color
 
-    def initialize(id, name, description, recipe, base_date, color=nil)
+    def initialize(id, serial_num, description, recipe, base_date, color=nil)
       @id = id
-      @name = name
+      @serial_num = serial_num
       @description = description
       @recipe = recipe
       @base_date = base_date
@@ -76,7 +76,7 @@ module Example
 
         new(
           args[:id],
-          args[:name],
+          args[:serial_num],
           args[:description],
           recipe,
           args[:base_date],

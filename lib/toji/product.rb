@@ -2,7 +2,7 @@ require 'toji/product/schedule_factory'
 
 module Toji
   module Product
-    # @dynamic name
+    # @dynamic serial_num
     # @dynamic recipe
     # @dynamic base_date
 

@@ -5,12 +5,12 @@ class Product
   include Toji::Product
   include Toji::Product::ScheduleFactory
 
-  attr_reader :name
+  attr_reader :serial_num
   attr_reader :recipe
   attr_reader :base_date
 
-  def initialize(name, recipe, base_date)
-    @name = name
+  def initialize(serial_num, recipe, base_date)
+    @serial_num = serial_num
     @recipe = recipe
     @base_date = base_date
   end

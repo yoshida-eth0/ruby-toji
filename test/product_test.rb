@@ -230,7 +230,7 @@ class ProductTest < Minitest::Test
   end
 
   def test_basic
-    assert_equal "仕1", @product.name
+    assert_equal "仕1", @product.serial_num
     assert_equal @recipe, @product.recipe
     assert_equal Time.mktime(2020, 2, 10), @product.base_date
   end
