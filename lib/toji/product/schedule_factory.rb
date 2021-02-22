@@ -38,7 +38,7 @@ module Toji
         }.map {|(date, group_key), schedules|
           create_koji_schedule(
             date: date,
-            group_key: group_key,
+            group_key: "Koji:#{date.strftime('%Y%m%d')}:#{group_key}",
             step_weights: schedules.map {|schedule| schedule[:step_weight]}.sort_by {|x| [x[:index], x[:subindex]]},
             kojis: schedules.map{|schedule| schedule[:koji]},
           )
@@ -66,7 +66,7 @@ module Toji
         }.map {|(date, group_key), schedules|
           create_kake_schedule(
             date: date,
-            group_key: group_key,
+            group_key: "Kake:#{date.strftime('%Y%m%d')}:#{group_key}",
             step_weights: schedules.map {|schedule| schedule[:step_weight]}.sort_by {|x| [x[:index], x[:subindex]]},
             kakes: schedules.map{|schedule| schedule[:kake]},
           )

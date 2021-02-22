@@ -126,7 +126,7 @@ class Koji
   attr_reader :interval_days
   attr_reader :process_group
 
-  def initialize(weight:, brand:, polishing_ratio:, made_in:, farmer:, rice_year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
+  def initialize(weight:, brand:, polishing_ratio:, made_in:, farmer:, rice_year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:, process_group: nil)
     @weight = weight
     @brand = brand
     @polishing_ratio = polishing_ratio
@@ -142,6 +142,7 @@ class Koji
     }
     @dekoji_ratio = dekoji_ratio
     @interval_days = interval_days
+    @process_group = process_group
   end
 
   def initialize_copy(obj)
@@ -200,7 +201,7 @@ class Kake
   attr_reader :interval_days
   attr_reader :process_group
 
-  def initialize(weight:, brand:, polishing_ratio:, made_in:, farmer:, rice_year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
+  def initialize(weight:, brand:, polishing_ratio:, made_in:, farmer:, rice_year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:, process_group: nil)
     @weight = weight
     @brand = brand
     @polishing_ratio = polishing_ratio
@@ -211,6 +212,7 @@ class Kake
     @steaming_ratio = steaming_ratio
     @cooling_ratio = cooling_ratio
     @interval_days = interval_days
+    @process_group = process_group
   end
 end
 

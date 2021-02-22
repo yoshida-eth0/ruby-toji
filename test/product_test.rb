@@ -140,6 +140,7 @@ class ProductTest < Minitest::Test
               steaming_ratio: 0.41,
               cooling_ratio: 0.33,
               interval_days: 22,
+              process_group: "process1"
             ),
           ],
           waters: [
@@ -243,11 +244,13 @@ class ProductTest < Minitest::Test
     assert_equal 7, rice_schedules.length
 
     assert_equal Time.mktime(2020, 2, 24), schedule1.date
+    assert_equal "Koji:20200224:yamadanishiki:0.55:hyogo:tanaka:2020:0.33:0.41:0.33:0.18:byakuya:0.001:", schedule1.group_key
     assert_equal :koji, schedule1.rice_type
     assert_equal 180, schedule1.expect.weight
     assert_equal [{index: 1, subindex: 0, weight: 40}, {index: 2, subindex: 0, weight: 60}, {index: 3, subindex: 0, weight: 80}], schedule1.step_weights
 
     assert_equal Time.mktime(2020, 3, 3), schedule4.date
+    assert_equal "Kake:20200303:yamadanishiki:0.55:hyogo:tanaka:2020:0.33:0.41:0.33:process1", schedule4.group_key
     assert_equal :kake, schedule4.rice_type
     assert_equal 215, schedule4.expect.weight
     assert_equal [{index: 2, subindex: 0, weight: 215}], schedule4.step_weights
