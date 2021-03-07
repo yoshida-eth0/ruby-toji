@@ -52,6 +52,23 @@ module Toji
       dst.round!(ndigit, mini_ndigit, half: half)
     end
 
+    def compact!
+      steps.map(&:compact!)
+      steps.select! {|step| 0<step.ingredients.to_a.length}
+
+      ab_expects.select! {|ab| ab.alcohol && ab.nihonshudo}
+      ab_expects.uniq! {|ab| [ab.alcohol, ab.nihonshudo]}
+
+      self
+    end
+
+    def compact
+      Utils.check_dup(self)
+
+      dst = self.dup
+      dst.compact!
+    end
+
 
     # 仕込み全体の集計値
 

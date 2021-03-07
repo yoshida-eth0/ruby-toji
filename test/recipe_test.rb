@@ -215,6 +215,29 @@ class RecipeTest < Minitest::Test
             ),
           ],
         ),
+        Step.new( # empty step
+          index: 5,
+          subindex: 0,
+          kakes: [
+            Kake.new(
+              weight: 0,
+              brand: :yamadanishiki,
+              polishing_ratio: 0.55,
+              made_in: :hyogo,
+              farmer: :tanaka,
+              rice_year: 2020,
+              soaking_ratio: 0.33,
+              steaming_ratio: 0.41,
+              cooling_ratio: 0.33,
+              interval_days: 48,
+            ),
+          ],
+          waters: [
+            Water.new(
+              weight: 0,
+            ),
+          ],
+        ),
       ].map(&:freeze).freeze,
       actions: [
         Action.new(
@@ -229,6 +252,14 @@ class RecipeTest < Minitest::Test
           nihonshudo: 0.0,
         ),
         AbExpect.new(
+          alcohol: 16.0,
+          nihonshudo: 3.0,
+        ),
+        AbExpect.new( # non presented
+          alcohol: nil,
+          nihonshudo: 3.0,
+        ),
+        AbExpect.new( # duplicated
           alcohol: 16.0,
           nihonshudo: 3.0,
         ),
@@ -327,8 +358,6 @@ class RecipeTest < Minitest::Test
   end
 
   def test_recipe_basic
-    assert_equal 5, @recipe.steps.length
-
     assert_equal 1000.0, @recipe.rice_total
     assert_equal 0.2, @recipe.koji_ratio
     assert_equal 1.28, @recipe.water_ratio
@@ -336,17 +365,19 @@ class RecipeTest < Minitest::Test
     assert_equal 0.55, @recipe.koji_polishing_ratio
     assert_equal 0.55, @recipe.kake_polishing_ratio
 
-    assert_equal [65.0, 205.0, 480.0, 920.0, 1000.0], @recipe.cumulative_rice_totals
-    assert_equal [0.3076923076923077, 0.2926829268292683, 0.25, 0.21739130434782608, 0.2], @recipe.cumulative_koji_ratios
-    assert_equal [1.0769230769230769, 0.975609756097561, 1.1041666666666667, 1.2608695652173914, 1.28], @recipe.cumulative_water_ratios
+    compact_recipe = @recipe.compact
 
-    assert_equal [1.0, 2.1538461538461537, 4.230769230769231, 6.769230769230769, 1.2307692307692308], @recipe.rice_ratios
-    assert_equal [0.065, 0.14, 0.275, 0.44, 0.08], @recipe.rice_total_percentages
-    assert_equal [1.0, 0.3170731707317073, 0.13541666666666666, 0.07065217391304347, 0.065], @recipe.moto_ratios
+    assert_equal [65.0, 205.0, 480.0, 920.0, 1000.0], compact_recipe.cumulative_rice_totals
+    assert_equal [0.3076923076923077, 0.2926829268292683, 0.25, 0.21739130434782608, 0.2], compact_recipe.cumulative_koji_ratios
+    assert_equal [1.0769230769230769, 0.975609756097561, 1.1041666666666667, 1.2608695652173914, 1.28], compact_recipe.cumulative_water_ratios
+
+    assert_equal [1.0, 2.1538461538461537, 4.230769230769231, 6.769230769230769, 1.2307692307692308], compact_recipe.rice_ratios
+    assert_equal [0.065, 0.14, 0.275, 0.44, 0.08], compact_recipe.rice_total_percentages
+    assert_equal [1.0, 0.3170731707317073, 0.13541666666666666, 0.07065217391304347, 0.065], compact_recipe.moto_ratios
   end
 
   def test_recipe_scale_rice_total
-    recipe = @recipe.scale_rice_total(350)
+    recipe = @recipe.compact.scale_rice_total(350)
   
     assert_equal [22.75, 71.75, 168.0, 322.0, 350.0], recipe.cumulative_rice_totals
     assert_equal [1.0, 0.3170731707317073, 0.13541666666666666, 0.07065217391304347, 0.065], recipe.moto_ratios
@@ -356,13 +387,23 @@ class RecipeTest < Minitest::Test
   end
 
   def test_recipe_round
-    recipe = @recipe.scale_rice_total(350).round
+    recipe = @recipe.compact.scale_rice_total(350).round
   
     assert_equal [23.0, 72.0, 168.0, 322.0, 350.0], recipe.cumulative_rice_totals
     assert_equal [1.0, 0.3194444444444444, 0.13690476190476192, 0.07142857142857142, 0.06571428571428571], recipe.moto_ratios
 
     assert_equal 0.06571428571428571, recipe.moto_ratio
     assert_equal [1.0, 2.130434782608696, 4.173913043478261, 6.695652173913044, 1.2173913043478262], recipe.rice_ratios
+  end
+
+  def test_recipe_compact
+    compact_recipe = @recipe.compact
+
+    assert_equal 6, @recipe.steps.length
+    assert_equal 5, compact_recipe.steps.length
+
+    assert_equal 4, @recipe.ab_expects.length
+    assert_equal 2, compact_recipe.ab_expects.length
   end
 
   def test_ab_expects

@@ -134,6 +134,27 @@ module Toji
         dst.round!(ndigit, mini_ndigit, half: half)
       end
 
+      def compact!
+        kojis.select! {|koji| 0<koji.weight.to_f}
+        kojis.each {|koji|
+          koji.tanekojis.select! {|tanekoji| 0<tanekoji.ratio.to_f}
+        }
+        kakes.select! {|kake| 0<kake.weight.to_f}
+        waters.select! {|water| 0<water.weight.to_f}
+        lactic_acids.select! {|lactic_acid| 0<lactic_acid.weight.to_f}
+        alcohols.select! {|alcohol| 0<alcohol.weight.to_f}
+        yeasts.select! {|yeast| 0<yeast.weight.to_f}
+
+        self
+      end
+
+      def compact
+        Utils.check_dup(self)
+
+        dst = self.dup
+        dst.compact!
+      end
+
       def +(other)
         if Step===other
           Utils.check_dup(self)
