@@ -237,6 +237,20 @@ class RecipeTest < Minitest::Test
   end
 
   def test_step_basic
+    step = @recipe.steps[0]
+
+    assert_equal 20.0, step.koji_total
+    assert_equal 45.0, step.kake_total
+    assert_equal 65.0, step.rice_total
+    assert_equal 70.0, step.water_total
+    assert_equal 0.4795, step.lactic_acid_total
+    assert_equal 0.0, step.alcohol_total
+
+    assert_in_delta 0.3076923076923077, step.koji_ratio
+    assert_in_delta 1.0769230769230769, step.water_ratio
+  end
+
+  def test_step_basic2
     moto = @recipe.steps[0]
 
     assert_equal 20, moto.kojis[0].weight
@@ -249,10 +263,6 @@ class RecipeTest < Minitest::Test
     assert_in_delta 0.4795, moto.lactic_acids[0].weight
     assert_nil moto.alcohols[0]
     assert_in_delta 0.975, moto.yeasts[0].weight
-
-    assert_equal 65, moto.rice_total
-    assert_in_delta 0.3076923076923077, moto.koji_ratio
-    assert_in_delta 1.0769230769230769, moto.water_ratio
   end
 
   def test_step_add
@@ -319,18 +329,27 @@ class RecipeTest < Minitest::Test
   def test_recipe_basic
     assert_equal 5, @recipe.steps.length
 
-    assert_equal [65.0, 205.0, 480.0, 920.0, 1000.0], @recipe.cumulative_rice_totals
-    assert_equal [1.0, 0.3170731707317073, 0.13541666666666666, 0.07065217391304347, 0.065], @recipe.cumulative_moto_ratios
-
+    assert_equal 1000.0, @recipe.rice_total
+    assert_equal 0.2, @recipe.koji_ratio
+    assert_equal 1.28, @recipe.water_ratio
     assert_equal 0.065, @recipe.moto_ratio
+    assert_equal 0.55, @recipe.koji_polishing_ratio
+    assert_equal 0.55, @recipe.kake_polishing_ratio
+
+    assert_equal [65.0, 205.0, 480.0, 920.0, 1000.0], @recipe.cumulative_rice_totals
+    assert_equal [0.3076923076923077, 0.2926829268292683, 0.25, 0.21739130434782608, 0.2], @recipe.cumulative_koji_ratios
+    assert_equal [1.0769230769230769, 0.975609756097561, 1.1041666666666667, 1.2608695652173914, 1.28], @recipe.cumulative_water_ratios
+
     assert_equal [1.0, 2.1538461538461537, 4.230769230769231, 6.769230769230769, 1.2307692307692308], @recipe.rice_ratios
+    assert_equal [0.065, 0.14, 0.275, 0.44, 0.08], @recipe.rice_total_percentages
+    assert_equal [1.0, 0.3170731707317073, 0.13541666666666666, 0.07065217391304347, 0.065], @recipe.moto_ratios
   end
 
   def test_recipe_scale_rice_total
     recipe = @recipe.scale_rice_total(350)
   
     assert_equal [22.75, 71.75, 168.0, 322.0, 350.0], recipe.cumulative_rice_totals
-    assert_equal [1.0, 0.3170731707317073, 0.13541666666666666, 0.07065217391304347, 0.065], recipe.cumulative_moto_ratios
+    assert_equal [1.0, 0.3170731707317073, 0.13541666666666666, 0.07065217391304347, 0.065], recipe.moto_ratios
 
     assert_equal 0.065, recipe.moto_ratio
     assert_equal [1.0, 2.1538461538461537, 4.230769230769231, 6.769230769230769, 1.2307692307692308], recipe.rice_ratios
@@ -340,7 +359,7 @@ class RecipeTest < Minitest::Test
     recipe = @recipe.scale_rice_total(350).round
   
     assert_equal [23.0, 72.0, 168.0, 322.0, 350.0], recipe.cumulative_rice_totals
-    assert_equal [1.0, 0.3194444444444444, 0.13690476190476192, 0.07142857142857142, 0.06571428571428571], recipe.cumulative_moto_ratios
+    assert_equal [1.0, 0.3194444444444444, 0.13690476190476192, 0.07142857142857142, 0.06571428571428571], recipe.moto_ratios
 
     assert_equal 0.06571428571428571, recipe.moto_ratio
     assert_equal [1.0, 2.130434782608696, 4.173913043478261, 6.695652173913044, 1.2173913043478262], recipe.rice_ratios

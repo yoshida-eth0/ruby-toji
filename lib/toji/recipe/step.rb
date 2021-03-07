@@ -41,25 +41,23 @@ module Toji
         (waters || []).map(&:weight).map(&:to_f).sum.to_f
       end
 
+      # 乳酸
+      def lactic_acid_total
+        (lactic_acids || []).map(&:weight).map(&:to_f).sum.to_f
+      end
+
+      # 醸造アルコール
+      def alcohol_total
+        (alcohols || []).map(&:weight).map(&:to_f).sum.to_f
+      end
+
       # 麹歩合
-      # 原料白米に占める麹米の割合
-      # 留め仕込みまでの総米重量の20〜22%が標準である
-      # なお、留め仕込みまでの麹歩合が20%を下回ると蒸米の溶解糖化に影響が出るので注意がいる
-      # 出典: 酒造教本 P95
       def koji_ratio
         val = koji_total / rice_total
         val.nan? ? 0.0 : val
       end
 
       # 汲水歩合
-      #
-      # 酒母: 110%が標準、高温糖化酒母は150〜180%
-      # 添:   85〜100%の範囲で90%が標準、湧き進め型は歩合が高い
-      # 仲:   120%が標準
-      # 留:   130〜150%の範囲
-      # 全体: 留までの総米に対し120〜130%、標準は125%、高級酒は130〜145%である
-      #
-      # 出典: 酒造教本 P96
       def water_ratio
         val = water_total / rice_total
         val.nan? ? 0.0 : val

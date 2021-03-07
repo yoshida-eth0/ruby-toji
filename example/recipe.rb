@@ -25,7 +25,7 @@ table = Terminal::Table.new do |t|
   t << ["[累計]"]
   t << ["総米(g)"] + recipe.cumulative_rice_totals
   t << ["白米比率"] + recipe.rice_ratios.map{|v| v&.round(2)}
-  t << ["酒母歩合(%)"] + recipe.cumulative_moto_ratios.map{|s| s * 100}.map{|v| v&.round(2)}
+  t << ["酒母歩合(%)"] + recipe.moto_ratios.map{|s| s * 100}.map{|v| v&.round(2)}
   t << ["タンク内容量(ml)"] + recipe.steps.map {|s|
     s.yeasts.map(&:weight).sum + s.lactic_acids.map(&:weight).sum + s.kakes.map(&:steamed).sum + s.kojis.map(&:dekoji).sum + s.waters.map(&:weight).sum + s.alcohols.map(&:weight).sum
   }.then {|a|
