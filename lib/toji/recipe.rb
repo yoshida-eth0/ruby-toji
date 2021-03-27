@@ -56,6 +56,12 @@ module Toji
       steps.map(&:compact!)
       steps.select! {|step| 0<step.ingredients.to_a.length}
 
+      indexes = steps.map{|step| {index: step.index, subindex: step.subindex}}
+      duplicates = indexes - indexes.uniq
+      if 0<duplicates.length
+        raise DuplicateStepIndexError.new(duplicates)
+      end
+
       ab_expects.select! {|ab| ab.alcohol && ab.nihonshudo}
       ab_expects.uniq! {|ab| [ab.alcohol, ab.nihonshudo]}
 
