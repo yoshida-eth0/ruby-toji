@@ -10,7 +10,7 @@ table = Terminal::Table.new do |t|
   t << :separator
   koji.states.each {|s|
     temp = s.temps.map(&:to_s).join(" / ")
-    t << [s.mark, s.day_label, temp, s.room_temp, s.room_psychrometry, s.elapsed_time, s.display_time]
+    t << [s.mark, s.day_label, temp, s.room_dry_temp, s.room_wet_temp, s.elapsed_time, s.display_time]
   }
 end
 puts table

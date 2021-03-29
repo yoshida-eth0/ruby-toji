@@ -18,7 +18,7 @@ class ProgressMoromiTest < Minitest::Test
   def test_progress
     table_data = @moromi.progress_note.table_data
 
-    assert_equal [:day_label, :display_time, :mark, :temps, :room_temp, :display_baume, :alcohol, :bmd], table_data[:header]
+    assert_equal [:day_label, :display_time, :mark, :temps, :room_dry_temp, :display_baume, :alcohol, :bmd], table_data[:header]
     assert_equal ["添", "01/16 00:00", "添", "14.8, 11.0", "9", "", "", ""], table_data[:rows][0]
     assert_equal ["6", "01/25 00:00", "", "13.1", "8", "7.2", "6.75", "43.2"], table_data[:rows][2]
     assert_equal 6, table_data[:rows].length

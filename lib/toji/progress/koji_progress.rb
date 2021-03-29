@@ -4,7 +4,7 @@ module Toji
       include BaseProgress
 
       def all_keys
-        KojiState::REQUIRED_KEYS + KojiState::OPTIONAL_KEYS
+        KojiState::KEYS
       end
 
       def progress_note(name: nil, dash: :solid, enable_annotations: true)

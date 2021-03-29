@@ -24,7 +24,7 @@ class ProcessingKojiTest < Minitest::Test
         interval_days: nil
       ),
       soaked_rice: SoakedRice.new(
-        room_temp: 3.0,
+        room_dry_temp: 3.0,
         outside_temp: 3.0,
         rice_water_content: 11.0,
         washing_water_temp: 10.0,
@@ -95,19 +95,19 @@ class ProcessingKojiTest < Minitest::Test
             time: Time.mktime(2020, 10, 30, 9, 0),
             mark: "引込み",
             temps: 35.0,
-            room_temp: 28.0,
+            room_dry_temp: 28.0,
           }),
           KojiState.create({
             time: Time.mktime(2020, 10, 30, 10, 0),
             mark: "床揉み",
             temps: 32.0,
-            room_temp: 28.0,
+            room_dry_temp: 28.0,
           }),
           KojiState.create({
             time: Time.mktime(2020, 10, 30, 19, 0),
             mark: "切返し",
             temps: [32.0, 31.0],
-            room_temp: 28.0,
+            room_dry_temp: 28.0,
           }),
         ],
       ),
@@ -164,7 +164,7 @@ class ProcessingKojiTest < Minitest::Test
   end
 
   def test_soaked_rice
-    assert_equal 3.0, @processing.soaked_rice.room_temp
+    assert_equal 3.0, @processing.soaked_rice.room_dry_temp
     assert_equal 3.0, @processing.soaked_rice.outside_temp
     assert_equal 11.0, @processing.soaked_rice.rice_water_content
     assert_equal 10.0, @processing.soaked_rice.washing_water_temp
@@ -197,7 +197,7 @@ class ProcessingKojiTest < Minitest::Test
 
     table_data = @processing.koji_progress.progress_note.table_data
 
-    assert_equal [:day_label, :display_time, :mark, :temps, :room_temp], table_data[:header]
+    assert_equal [:day_label, :display_time, :mark, :temps, :room_dry_temp], table_data[:header]
     assert_equal ["1", "10/30 09:00", "引込み", "35.0", "28.0"], table_data[:rows][0]
     assert_equal 3, table_data[:rows].length
   end

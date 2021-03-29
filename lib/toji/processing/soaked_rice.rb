@@ -2,7 +2,7 @@ module Toji
   module Processing
     module SoakedRice
       # 室内温度
-      # @dynamic room_temp
+      # @dynamic room_dry_temp
 
       # 外気温
       # @dynamic outside_temp

@@ -9,6 +9,8 @@ require 'toji/calendar'
 require 'toji/schedule'
 require 'toji/product'
 require 'toji/processing'
+require 'toji/swvp'
+require 'toji/psychrometry_to_relative_humidity'
 require 'toji/utils'
 
 module Toji

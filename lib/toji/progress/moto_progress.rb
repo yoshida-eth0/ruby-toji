@@ -4,7 +4,7 @@ module Toji
       include BaseProgress
 
       def all_keys
-        MotoState::REQUIRED_KEYS + MotoState::OPTIONAL_KEYS
+        MotoState::KEYS
       end
 
       def progress_note(name: nil, dash: :solid, enable_annotations: true)

@@ -1061,8 +1061,9 @@ module Example
 
       attr_accessor :temps
       attr_accessor :preset_temp
-      attr_accessor :room_temp
-      attr_accessor :room_psychrometry
+      attr_accessor :room_dry_temp
+      attr_accessor :room_wet_temp
+      attr_accessor :room_relative_humidity
       attr_accessor :note
 
       def self.create(args)
@@ -1072,8 +1073,9 @@ module Example
           s.mark = args[:mark]
           s.temps = [args[:temps]].flatten.compact
           s.preset_temp = args[:preset_temp]
-          s.room_temp = args[:room_temp]
-          s.room_psychrometry = args[:room_psychrometry]
+          s.room_dry_temp = args[:room_dry_temp]
+          s.room_wet_temp = args[:room_wet_temp]
+          s.room_relative_humidity = args[:room_relative_humidity]
           s.note = args[:note]
         }
       end
@@ -1100,8 +1102,9 @@ module Example
 
       attr_accessor :temps
       attr_accessor :preset_temp
-      attr_accessor :room_temp
-      attr_accessor :room_psychrometry
+      attr_accessor :room_dry_temp
+      attr_accessor :room_wet_temp
+      attr_accessor :room_relative_humidity
       attr_accessor :baume
       attr_accessor :acid
       attr_accessor :warmings
@@ -1114,8 +1117,9 @@ module Example
           s.mark = args[:mark]
           s.temps = [args[:temps]].flatten.compact
           s.preset_temp = args[:preset_temp]
-          s.room_temp = args[:room_temp]
-          s.room_psychrometry = args[:room_psychrometry]
+          s.room_dry_temp = args[:room_dry_temp]
+          s.room_wet_temp = args[:room_wet_temp]
+          s.room_relative_humidity = args[:room_relative_humidity]
           s.baume = args[:baume]
           s.acid = args[:acid]
           s.warmings = [args[:warmings]].flatten.compact
@@ -1148,8 +1152,9 @@ module Example
 
       attr_accessor :temps
       attr_accessor :preset_temp
-      attr_accessor :room_temp
-      attr_accessor :room_psychrometry
+      attr_accessor :room_dry_temp
+      attr_accessor :room_wet_temp
+      attr_accessor :room_relative_humidity
       attr_accessor :baume
       attr_accessor :acid
       attr_accessor :amino_acid
@@ -1164,8 +1169,9 @@ module Example
           s.mark = args[:mark]
           s.temps = [args[:temps]].flatten.compact
           s.preset_temp = args[:preset_temp]
-          s.room_temp = args[:room_temp]
-          s.room_psychrometry = args[:room_psychrometry]
+          s.room_dry_temp = args[:room_dry_temp]
+          s.room_wet_temp = args[:room_wet_temp]
+          s.room_relative_humidity = args[:room_relative_humidity]
           if args[:baume]
             s.baume = args[:baume]
           else

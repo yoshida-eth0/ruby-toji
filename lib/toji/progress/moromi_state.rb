@@ -3,13 +3,8 @@ module Toji
     module MoromiState
       include BaseState
 
-      OPTIONAL_KEYS = [
+      KEYS = (BaseState::KEYS + [
         :moromi_day,
-        :temps,
-        :preset_temp,
-        :room_temp,
-        :room_psychrometry,
-
         :baume,
         :nihonshudo,
         :display_baume,
@@ -17,24 +12,15 @@ module Toji
         :amino_acid,
         :alcohol,
         :bmd,
-
         :warmings,
-        :note,
-      ].freeze
-
-      # @dynamic temps
-      # @dynamic preset_temp
-      # @dynamic room_temp
-      # @dynamic room_psychrometry
+      ]).freeze
 
       # @dynamic baume
       # @dynamic nihonshudo
       # @dynamic acid
       # @dynamic amino_acid
       # @dynamic alcohol
-
       # @dynamic warmings
-      # @dynamic note
 
       def moromi_day
         _tome_day = progress.moromi_tome_day

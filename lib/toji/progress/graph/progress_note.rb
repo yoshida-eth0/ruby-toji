@@ -3,7 +3,7 @@ module Toji
     module Graph
       class ProgressNote
 
-        PLOT_KEYS = [:temps, :preset_temp, :room_temp, :room_psychrometry, :baume, :acid, :amino_acid, :alcohol, :bmd].freeze
+        PLOT_KEYS = [:temps, :preset_temp, :room_dry_temp, :room_wet_temp, :room_relative_humidity_from_dry_and_wet, :room_relative_humidity, :baume, :acid, :amino_acid, :alcohol, :bmd].freeze
 
         COLORS = [
           '#1f77b4',  # muted blue

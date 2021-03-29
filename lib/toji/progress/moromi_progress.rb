@@ -29,7 +29,7 @@ module Toji
       end
 
       def all_keys
-        MoromiState::REQUIRED_KEYS + MoromiState::OPTIONAL_KEYS
+        MoromiState::KEYS
       end
 
       def progress_note(name: nil, dash: :solid, enable_annotations: true)

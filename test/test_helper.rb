@@ -394,7 +394,7 @@ end
 class SoakedRice
   include Toji::Processing::SoakedRice
 
-  attr_reader :room_temp
+  attr_reader :room_dry_temp
   attr_reader :outside_temp
   attr_reader :rice_water_content
   attr_reader :washing_water_temp
@@ -402,8 +402,8 @@ class SoakedRice
   attr_accessor :processing
   attr_reader :elements
 
-  def initialize(room_temp:, outside_temp:, rice_water_content:, washing_water_temp:, soaking_water_temp:, elements: [])
-    @room_temp = room_temp
+  def initialize(room_dry_temp:, outside_temp:, rice_water_content:, washing_water_temp:, soaking_water_temp:, elements: [])
+    @room_dry_temp = room_dry_temp
     @outside_temp = outside_temp
     @rice_water_content = rice_water_content
     @washing_water_temp = washing_water_temp
@@ -522,24 +522,25 @@ class KojiState
 
   attr_accessor :temps
   attr_accessor :preset_temp
-  attr_accessor :room_temp
-  attr_accessor :room_psychrometry
+  attr_accessor :room_dry_temp
+  attr_accessor :room_wet_temp
+  attr_accessor :room_relative_humidity
   attr_accessor :note
 
-  KEYS = [
+  ATTRS = [
     :progress,
     :time,
     :mark,
     :temps,
     :preset_temp,
-    :room_temp,
-    :room_psychrometry,
+    :room_dry_temp,
+    :room_wet_temp,
     :note,
   ]
 
   def self.create(val)
     s = new
-    KEYS.each {|k|
+    ATTRS.each {|k|
       if val.has_key?(k)
         s.send("#{k}=", val[k])
       end
@@ -601,21 +602,22 @@ class MotoState
 
   attr_accessor :temps
   attr_accessor :preset_temp
-  attr_accessor :room_temp
-  attr_accessor :room_psychrometry
+  attr_accessor :room_dry_temp
+  attr_accessor :room_wet_temp
+  attr_accessor :room_relative_humidity
   attr_accessor :baume
   attr_accessor :acid
   attr_accessor :warmings
   attr_accessor :note
 
-  KEYS = [
+  ATTRS = [
     :progress,
     :time,
     :mark,
     :temps,
     :preset_temp,
-    :room_temp,
-    :room_psychrometry,
+    :room_dry_temp,
+    :room_wet_temp,
     :baume,
     :acid,
     :warmings,
@@ -624,7 +626,7 @@ class MotoState
 
   def self.create(val)
     s = new
-    KEYS.each {|k|
+    ATTRS.each {|k|
       if val.has_key?(k)
         s.send("#{k}=", val[k])
       end
@@ -648,13 +650,13 @@ class MoromiProgress
         time: Time.mktime(2020, 1, 16),
         mark: "添",
         temps: [14.8, 11.0],
-        room_temp: 9,
+        room_dry_temp: 9,
       }),
       MoromiState.create({
         progress: self,
         time: Time.mktime(2020, 1, 24),
         temps: 12.3,
-        room_temp: 8,
+        room_dry_temp: 8,
         baume: 8.0,
         alcohol: 4.8,
       }),
@@ -662,7 +664,7 @@ class MoromiProgress
         progress: self,
         time: Time.mktime(2020, 1, 25),
         temps: 13.1,
-        room_temp: 8,
+        room_dry_temp: 8,
         baume: 7.2,
         alcohol: 6.75,
       }),
@@ -670,7 +672,7 @@ class MoromiProgress
         progress: self,
         time: Time.mktime(2020, 1, 31),
         temps: 12.0,
-        room_temp: 7,
+        room_dry_temp: 7,
         nihonshudo: -21,
         alcohol: 13.7,
       }),
@@ -678,7 +680,7 @@ class MoromiProgress
         progress: self,
         time: Time.mktime(2020, 2, 6),
         temps: 8.4,
-        room_temp: 5,
+        room_dry_temp: 5,
         nihonshudo: -3,
         alcohol: 16.3,
       }),
@@ -686,7 +688,7 @@ class MoromiProgress
         progress: self,
         time: Time.mktime(2020, 2, 9),
         temps: 8.1,
-        room_temp: 6,
+        room_dry_temp: 6,
       }),
     ].sort_by(&:time)
     @date_line = 0
@@ -712,8 +714,9 @@ class MoromiState
 
   attr_accessor :temps
   attr_accessor :preset_temp
-  attr_accessor :room_temp
-  attr_accessor :room_psychrometry
+  attr_accessor :room_dry_temp
+  attr_accessor :room_wet_temp
+  attr_accessor :room_relative_humidity
   attr_accessor :baume
   attr_accessor :acid
   attr_accessor :amino_acid
@@ -721,14 +724,14 @@ class MoromiState
   attr_accessor :warmings
   attr_accessor :note
 
-  KEYS = [
+  ATTRS = [
     :progress,
     :time,
     :mark,
     :temps,
     :preset_temp,
-    :room_temp,
-    :room_psychrometry,
+    :room_dry_temp,
+    :room_wet_temp,
     :baume,
     :nihonshudo,
     :acid,
@@ -740,7 +743,7 @@ class MoromiState
 
   def self.create(val)
     s = new
-    KEYS.each {|k|
+    ATTRS.each {|k|
       if val.has_key?(k)
         s.send("#{k}=", val[k])
       end

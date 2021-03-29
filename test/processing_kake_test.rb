@@ -17,7 +17,7 @@ class ProcessingKakeTest < Minitest::Test
         interval_days: nil
       ),
       soaked_rice: SoakedRice.new(
-        room_temp: 3.0,
+        room_dry_temp: 3.0,
         outside_temp: 3.0,
         rice_water_content: 11.0,
         washing_water_temp: 10.0,
@@ -109,7 +109,7 @@ class ProcessingKakeTest < Minitest::Test
   end
 
   def test_soaked_rice
-    assert_equal 3.0, @processing.soaked_rice.room_temp
+    assert_equal 3.0, @processing.soaked_rice.room_dry_temp
     assert_equal 3.0, @processing.soaked_rice.outside_temp
     assert_equal 11.0, @processing.soaked_rice.rice_water_content
     assert_equal 10.0, @processing.soaked_rice.washing_water_temp

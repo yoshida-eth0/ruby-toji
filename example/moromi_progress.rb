@@ -11,7 +11,7 @@ table = Terminal::Table.new do |t|
   t << :separator
   moromi.states.each {|s|
     temp = s.temps.map(&:to_s).join(" / ")
-    t << [s.mark, s.day_label, temp, s.room_temp, s.display_baume, s.alcohol, s.bmd&.round(2), s.expected_alcohol(16.5, +3, 1.5)&.round(2), s.elapsed_time, s.display_time]
+    t << [s.mark, s.day_label, temp, s.room_dry_temp, s.display_baume, s.alcohol, s.bmd&.round(2), s.expected_alcohol(16.5, +3, 1.5)&.round(2), s.elapsed_time, s.display_time]
   }
 end
 puts table

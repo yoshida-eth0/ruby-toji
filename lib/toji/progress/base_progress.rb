@@ -24,7 +24,7 @@ module Toji
       end
 
       def all_keys
-        BaseState::REQUIRED_KEYS
+        BaseState::KEYS
       end
 
       def has_keys
