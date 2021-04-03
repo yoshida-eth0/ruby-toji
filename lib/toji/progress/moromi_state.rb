@@ -12,6 +12,7 @@ module Toji
         :amino_acid,
         :alcohol,
         :bmd,
+        :glucose,
         :warmings,
       ]).freeze
 
@@ -20,6 +21,7 @@ module Toji
       # @dynamic acid
       # @dynamic amino_acid
       # @dynamic alcohol
+      # @dynamic glucose
       # @dynamic warmings
 
       def moromi_day

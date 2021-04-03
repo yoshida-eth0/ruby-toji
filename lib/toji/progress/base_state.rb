@@ -18,6 +18,7 @@ module Toji
         :room_psychrometry,
         :room_relative_humidity_from_dry_and_wet,
         :room_relative_humidity,
+        :room_preset_temp,
 
         :note,
       ].freeze
@@ -47,6 +48,7 @@ module Toji
       # @dynamic room_dry_temp
       # @dynamic room_wet_temp
       # @dynamic room_relative_humidity
+      # @dynamic room_preset_temp
       # @dynamic note
 
       # 乾湿差
