@@ -8,19 +8,19 @@ module Toji
         :baume,
         :nihonshudo,
         :display_baume,
-        :acid,
-        :amino_acid,
         :alcohol,
         :bmd,
+        :acid,
+        :amino_acid,
         :glucose,
         :warmings,
       ]).freeze
 
       # @dynamic baume
       # @dynamic nihonshudo
+      # @dynamic alcohol
       # @dynamic acid
       # @dynamic amino_acid
-      # @dynamic alcohol
       # @dynamic glucose
       # @dynamic warmings
 

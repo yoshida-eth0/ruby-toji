@@ -63,6 +63,17 @@ module Toji
         val.nan? ? 0.0 : val
       end
 
+      def rices(&block)
+        Enumerator.new do|y|
+          kojis&.each {|koji|
+            y << koji
+          }
+          kakes&.each {|kake|
+            y << kake
+          }
+        end.each(&block)
+      end
+
       def ingredients(&block)
         Enumerator.new do|y|
           kojis&.each {|koji|
