@@ -1064,6 +1064,7 @@ module Example
       attr_accessor :room_dry_temp
       attr_accessor :room_wet_temp
       attr_accessor :room_relative_humidity
+      attr_accessor :room_preset_temp
       attr_accessor :note
 
       def self.create(args)
@@ -1076,6 +1077,7 @@ module Example
           s.room_dry_temp = args[:room_dry_temp]
           s.room_wet_temp = args[:room_wet_temp]
           s.room_relative_humidity = args[:room_relative_humidity]
+          s.room_preset_temp = args[:room_preset_temp]
           s.note = args[:note]
         }
       end
@@ -1105,6 +1107,7 @@ module Example
       attr_accessor :room_dry_temp
       attr_accessor :room_wet_temp
       attr_accessor :room_relative_humidity
+      attr_accessor :room_preset_temp
       attr_accessor :baume
       attr_accessor :acid
       attr_accessor :warmings
@@ -1120,6 +1123,7 @@ module Example
           s.room_dry_temp = args[:room_dry_temp]
           s.room_wet_temp = args[:room_wet_temp]
           s.room_relative_humidity = args[:room_relative_humidity]
+          s.room_preset_temp = args[:room_preset_temp]
           s.baume = args[:baume]
           s.acid = args[:acid]
           s.warmings = [args[:warmings]].flatten.compact
@@ -1155,9 +1159,11 @@ module Example
       attr_accessor :room_dry_temp
       attr_accessor :room_wet_temp
       attr_accessor :room_relative_humidity
+      attr_accessor :room_preset_temp
       attr_accessor :baume
       attr_accessor :acid
       attr_accessor :amino_acid
+      attr_accessor :glucose
       attr_accessor :alcohol
       attr_accessor :warmings
       attr_accessor :note
@@ -1172,6 +1178,7 @@ module Example
           s.room_dry_temp = args[:room_dry_temp]
           s.room_wet_temp = args[:room_wet_temp]
           s.room_relative_humidity = args[:room_relative_humidity]
+          s.room_preset_temp = args[:room_preset_temp]
           if args[:baume]
             s.baume = args[:baume]
           else
@@ -1179,6 +1186,7 @@ module Example
           end
           s.acid = args[:acid]
           s.amino_acid = args[:amino_acid]
+          s.glucose = args[:glucose]
           s.alcohol = args[:alcohol]
           s.warmings = [args[:warmings]].flatten.compact
           s.note = args[:note]

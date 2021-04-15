@@ -525,6 +525,7 @@ class KojiState
   attr_accessor :room_dry_temp
   attr_accessor :room_wet_temp
   attr_accessor :room_relative_humidity
+  attr_accessor :room_preset_temp
   attr_accessor :note
 
   ATTRS = [
@@ -535,6 +536,7 @@ class KojiState
     :preset_temp,
     :room_dry_temp,
     :room_wet_temp,
+    :room_preset_temp,
     :note,
   ]
 
@@ -605,6 +607,7 @@ class MotoState
   attr_accessor :room_dry_temp
   attr_accessor :room_wet_temp
   attr_accessor :room_relative_humidity
+  attr_accessor :room_preset_temp
   attr_accessor :baume
   attr_accessor :acid
   attr_accessor :warmings
@@ -618,6 +621,7 @@ class MotoState
     :preset_temp,
     :room_dry_temp,
     :room_wet_temp,
+    :room_preset_temp,
     :baume,
     :acid,
     :warmings,
@@ -717,9 +721,11 @@ class MoromiState
   attr_accessor :room_dry_temp
   attr_accessor :room_wet_temp
   attr_accessor :room_relative_humidity
+  attr_accessor :room_preset_temp
   attr_accessor :baume
   attr_accessor :acid
   attr_accessor :amino_acid
+  attr_accessor :glucose
   attr_accessor :alcohol
   attr_accessor :warmings
   attr_accessor :note
@@ -732,10 +738,12 @@ class MoromiState
     :preset_temp,
     :room_dry_temp,
     :room_wet_temp,
+    :room_preset_temp,
     :baume,
     :nihonshudo,
     :acid,
     :amino_acid,
+    :glucose,
     :alcohol,
     :warmings,
     :note,
