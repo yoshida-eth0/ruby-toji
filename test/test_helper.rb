@@ -7,12 +7,18 @@ class Product
 
   attr_reader :serial_num
   attr_reader :recipe
-  attr_reader :base_date
+  attr_accessor :base_date
 
   def initialize(serial_num, recipe, base_date)
     @serial_num = serial_num
     @recipe = recipe
     @base_date = base_date
+  end
+
+  def initialize_copy(obj)
+    @serial_num = obj.serial_num
+    @recipe = obj.recipe.dup
+    @base_date = obj.base_date.dup
   end
 
   def create_koji_schedule(date:, group_key:, step_weights:, kojis:)
@@ -79,6 +85,7 @@ class Step
 
   attr_reader :index
   attr_reader :subindex
+  attr_accessor :interval_days
   attr_accessor :kojis
   attr_accessor :kakes
   attr_accessor :waters
@@ -86,9 +93,10 @@ class Step
   attr_accessor :alcohols
   attr_accessor :yeasts
 
-  def initialize(index:, subindex:, kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
+  def initialize(index:, subindex:, interval_days:, kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
     @index = index
     @subindex = subindex
+    @interval_days = interval_days
     @kojis = kojis
     @kakes = kakes
     @waters = waters
@@ -100,6 +108,7 @@ class Step
   def initialize_copy(obj)
     @index = obj.index
     @subindex = obj.subindex
+    @interval_days = obj.interval_days
     @kojis = obj.kojis&.deep_dup || []
     @kakes = obj.kakes&.deep_dup || []
     @waters = obj.waters&.deep_dup || []
@@ -123,7 +132,7 @@ class Koji
   attr_reader :cooling_ratio
   attr_reader :tanekojis
   attr_reader :dekoji_ratio
-  attr_reader :interval_days
+  attr_accessor :interval_days
   attr_reader :process_group
 
   def initialize(weight:, brand:, polishing_ratio:, made_in:, farmer:, rice_year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:, process_group: nil)
@@ -198,7 +207,7 @@ class Kake
   attr_reader :soaking_ratio
   attr_reader :steaming_ratio
   attr_reader :cooling_ratio
-  attr_reader :interval_days
+  attr_accessor :interval_days
   attr_reader :process_group
 
   def initialize(weight:, brand:, polishing_ratio:, made_in:, farmer:, rice_year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:, process_group: nil)
@@ -266,7 +275,7 @@ class Action
   include Toji::Recipe::Action
 
   attr_reader :type
-  attr_reader :interval_days
+  attr_accessor :interval_days
 
   def initialize(type:, interval_days:)
     @type = type

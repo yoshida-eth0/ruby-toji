@@ -9,6 +9,7 @@ class ProductTest < Minitest::Test
         Step.new(
           index: 0,
           subindex: 0,
+          interval_days: 5,
           kojis: [
             Koji.new(
               weight: 20,
@@ -27,7 +28,7 @@ class ProductTest < Minitest::Test
                 ),
               ],
               dekoji_ratio: 0.18,
-              interval_days: 0,
+              interval_days: 1,
             ),
           ],
           kakes: [
@@ -63,6 +64,7 @@ class ProductTest < Minitest::Test
         Step.new(
           index: 1,
           subindex: 0,
+          interval_days: 20,
           kojis: [
             Koji.new(
               weight: 40,
@@ -107,6 +109,7 @@ class ProductTest < Minitest::Test
         Step.new(
           index: 2,
           subindex: 0,
+          interval_days: 22,
           kojis: [
             Koji.new(
               weight: 60,
@@ -152,6 +155,7 @@ class ProductTest < Minitest::Test
         Step.new(
           index: 3,
           subindex: 0,
+          interval_days: 23,
           kojis: [
             Koji.new(
               weight: 80,
@@ -196,6 +200,7 @@ class ProductTest < Minitest::Test
         Step.new(
           index: 4,
           subindex: 0,
+          interval_days: 40,
           kakes: [
             Kake.new(
               weight: 80,
@@ -254,5 +259,25 @@ class ProductTest < Minitest::Test
     assert_equal :kake, schedule4.rice_type
     assert_equal 215, schedule4.expect.weight
     assert_equal [{index: 2, subindex: 0, weight: 215}], schedule4.step_weights
+  end
+
+  def test_compact
+    compact_product = @product.compact
+
+    assert_equal Time.mktime(2020, 2, 10), @product.base_date
+    assert_equal Time.mktime(2020, 2, 11), compact_product.base_date
+
+    assert_equal 5, @product.recipe.steps[0].interval_days
+    assert_equal 4, compact_product.recipe.steps[0].interval_days
+
+    assert_equal 1, @product.recipe.steps[0].kojis[0].interval_days
+    assert_equal 0, compact_product.recipe.steps[0].kojis[0].interval_days
+
+    rice_schedules = compact_product.rice_schedules
+    schedule1 = rice_schedules[1]
+    schedule4 = rice_schedules[4]
+
+    assert_equal Time.mktime(2020, 2, 24), schedule1.date
+    assert_equal Time.mktime(2020, 3, 3), schedule4.date
   end
 end

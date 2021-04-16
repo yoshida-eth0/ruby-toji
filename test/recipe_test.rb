@@ -9,6 +9,7 @@ class RecipeTest < Minitest::Test
         Step.new(
           index: 0,
           subindex: 0,
+          interval_days: 0,
           kojis: [
             Koji.new(
               weight: 20,
@@ -63,6 +64,7 @@ class RecipeTest < Minitest::Test
         Step.new(
           index: 1,
           subindex: 0,
+          interval_days: 20,
           kojis: [
             Koji.new(
               weight: 40,
@@ -107,6 +109,7 @@ class RecipeTest < Minitest::Test
         Step.new(
           index: 2,
           subindex: 0,
+          interval_days: 22,
           kojis: [
             Koji.new(
               weight: 60,
@@ -151,6 +154,7 @@ class RecipeTest < Minitest::Test
         Step.new(
           index: 3,
           subindex: 0,
+          interval_days: 23,
           kojis: [
             Koji.new(
               weight: 80,
@@ -195,6 +199,7 @@ class RecipeTest < Minitest::Test
         Step.new(
           index: 4,
           subindex: 0,
+          interval_days: 48,
           kakes: [
             Kake.new(
               weight: 80,
@@ -218,6 +223,7 @@ class RecipeTest < Minitest::Test
         Step.new( # empty step
           index: 5,
           subindex: 0,
+          interval_days: 48,
           kakes: [
             Kake.new(
               weight: 0,

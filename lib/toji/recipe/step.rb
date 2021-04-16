@@ -3,6 +3,8 @@ module Toji
     module Step
       # @dynamic index
       # @dynamic subindex
+      # @dynamic interval_days
+      # @dynamic interval_days=
 
       # @dynamic kojis
       # @dynamic kojis=

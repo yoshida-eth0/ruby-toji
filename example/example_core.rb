@@ -10,7 +10,7 @@ module Example
 
     attr_reader :serial_num
     attr_reader :recipe
-    attr_reader :base_date
+    attr_accessor :base_date
 
     attr_reader :description
     attr_reader :color
@@ -94,6 +94,7 @@ module Example
 
     attr_reader :index
     attr_reader :subindex
+    attr_accessor :interval_days
     attr_accessor :kojis
     attr_accessor :kakes
     attr_accessor :waters
@@ -101,9 +102,10 @@ module Example
     attr_accessor :alcohols
     attr_accessor :yeasts
 
-    def initialize(index:, subindex:, kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
+    def initialize(index:, subindex:, interval_days:, kojis: [], kakes: [], waters: [], lactic_acids: [], alcohols: [], yeasts: [])
       @index = index
       @subindex = subindex
+      @interval_days = interval_days
       @kojis = kojis
       @kakes = kakes
       @waters = waters
@@ -113,6 +115,9 @@ module Example
     end
 
     def initialize_copy(obj)
+      @index = obj.index
+      @subindex = obj.subindex
+      @interval_days = obj.interval_days
       @kojis = obj.kojis.deep_dup
       @kakes = obj.kakes.deep_dup
       @waters = obj.waters.deep_dup
@@ -136,7 +141,7 @@ module Example
     attr_reader :cooling_ratio
     attr_reader :tanekojis
     attr_reader :dekoji_ratio
-    attr_reader :interval_days
+    attr_accessor :interval_days
     attr_reader :process_group
 
     def initialize(weight:, brand:, polishing_ratio:, made_in:, farmer:, rice_year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, tanekojis:, dekoji_ratio:, interval_days:)
@@ -209,7 +214,7 @@ module Example
     attr_reader :soaking_ratio
     attr_reader :steaming_ratio
     attr_reader :cooling_ratio
-    attr_reader :interval_days
+    attr_accessor :interval_days
     attr_reader :process_group
 
     def initialize(weight:, brand:, polishing_ratio:, made_in:, farmer:, rice_year:, soaking_ratio:, steaming_ratio:, cooling_ratio:, interval_days:)
@@ -275,7 +280,7 @@ module Example
     include Toji::Recipe::Action
 
     attr_reader :type
-    attr_reader :interval_days
+    attr_accessor :interval_days
 
     def initialize(type:, interval_days:)
       @type = type
@@ -332,6 +337,7 @@ module Example
           Step.new(
             index: 0,
             subindex: 0,
+            interval_days: 0,
             kojis: [
               Koji.new(
                 weight: 20,
@@ -386,6 +392,7 @@ module Example
           Step.new(
             index: 1,
             subindex: 0,
+            interval_days: 20,
             kojis: [
               Koji.new(
                 weight: 40,
@@ -430,6 +437,7 @@ module Example
           Step.new(
             index: 2,
             subindex: 0,
+            interval_days: 22,
             kojis: [
               Koji.new(
                 weight: 60,
@@ -474,6 +482,7 @@ module Example
           Step.new(
             index: 3,
             subindex: 0,
+            interval_days: 23,
             kojis: [
               Koji.new(
                 weight: 80,
@@ -518,6 +527,7 @@ module Example
           Step.new(
             index: 4,
             subindex: 0,
+            interval_days: 48,
             kakes: [
               Kake.new(
                 weight: 80,
