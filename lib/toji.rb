@@ -15,13 +15,4 @@ require 'toji/utils'
 
 module Toji
   class Error < StandardError; end
-
-  class DuplicateStepIndexError < Error
-    attr_reader :indexes
-
-    def initialize(indexes)
-      super("step indexes is deuplicated: #{indexes.inject}")
-      @indexes = indexes
-    end
-  end
 end
