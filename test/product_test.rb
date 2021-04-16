@@ -273,6 +273,9 @@ class ProductTest < Minitest::Test
     assert_equal 1, @product.recipe.steps[0].kojis[0].interval_days
     assert_equal 0, compact_product.recipe.steps[0].kojis[0].interval_days
 
+    assert_equal 50, @product.recipe.max_interval_days
+    assert_equal 49, compact_product.recipe.max_interval_days
+
     rice_schedules = compact_product.rice_schedules
     schedule1 = rice_schedules[1]
     schedule4 = rice_schedules[4]

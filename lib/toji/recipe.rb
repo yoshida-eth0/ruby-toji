@@ -75,6 +75,14 @@ module Toji
       dst.compact!
     end
 
+    def max_interval_days
+      [
+        steps&.map(&:interval_days)&.max,
+        steps&.flat_map{|step| step.rices.to_a}&.map(&:interval_days)&.max,
+        actions&.map(&:interval_days)&.max,
+      ].compact.max
+    end
+
 
     # 仕込み全体の集計値
 
